@@ -1,0 +1,33 @@
+{
+  "name": "ЯДРО: Мультизадачность",
+  "desc": "Балансирую между проектами.",
+  "children": [
+    {
+      "name": "Видео",
+      "children": [
+        {
+          "name": "Монтаж",
+          "desc": "Сборка мастер-секвенции и эффекты.",
+          "media": [
+            { "type": "image", "url": "https://placehold.co/600x400/8957e5/FFF?text=Скриншот+таймлайна" },
+            { "type": "video", "url": "https://www.w3schools.com/html/mov_bbb.mp4" },
+            { "type": "link", "url": "https://vk.com/", "text": "Смотреть пост с бэкстейджем в паблике" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Лайф",
+      "children": [
+        {
+          "name": "Доска событий",
+          "desc": "Мои хайлайты за прошлый месяц.",
+          "media": [
+            { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Событие+1" },
+            { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Событие+2" }
+          ]
+        }
+      ]
+    }
+  ]
+}

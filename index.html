@@ -14,7 +14,6 @@
             overflow: hidden; 
         }
 
-        /* Система частиц на фоне */
         #spores-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
         
         #canvas-container { 
@@ -43,7 +42,6 @@
         }
         #welcome-btn:hover { background-color: #47ff69; box-shadow: 0 0 30px rgba(71, 255, 105, 0.8); transform: translateY(-2px); }
 
-        /* Ветви и свечение */
         .branch { fill: none; filter: url(#glow); stroke-linecap: round; }
         .data-branch { stroke: #6ded51; }
         .dec-branch { stroke: #3bb02e; opacity: 0.5; }
@@ -52,7 +50,6 @@
         .node circle:hover { filter: brightness(1.5) drop-shadow(0 0 15px #87ff47); r: 16; }
         .node text { pointer-events: none; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 0 15px #000, 0 0 25px rgba(0,0,0,0.9); }
 
-        /* Анимации биологической активности */
         @keyframes heartbeat {
             0% { transform: scale(1); filter: brightness(1); }
             15% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 20px #de886a); }
@@ -76,7 +73,6 @@
         .floating-node > * { animation: floatNode 5s ease-in-out infinite; }
         .floating-node:nth-child(even) > * { animation-delay: -2s; animation-duration: 6s; }
 
-        /* Модальное окно */
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; }
         #modal.active { display: block; }
         #modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; color: #5a7560; font-size: 24px; font-weight: bold; }
@@ -106,12 +102,10 @@
     </div>
 
     <script>
-        // Частицы на фоне (споры)
         const canvas = document.getElementById('spores-canvas');
         const ctx = canvas.getContext('2d');
         let w = canvas.width = window.innerWidth;
         let h = canvas.height = window.innerHeight;
-        
         window.addEventListener('resize', () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
 
         const particles = Array.from({length: 100}, () => ({
@@ -161,14 +155,34 @@
         d3.json("data.json").then(data => {
             const root = d3.hierarchy(data);
             
-            // Возвращен оригинальный радиальный граф D3 (идеальное сглаживание)
-            const tree = d3.tree().size([2 * Math.PI, 400]); 
-            tree(root);
+            // --- КАСТОМНАЯ ИДЕАЛЬНАЯ СИММЕТРИЯ (Вместо d3.tree) ---
+            root.eachBefore(d => {
+                if (d.depth === 0) {
+                    d.x = 0; d.y = 0;
+                } else if (d.depth === 1) {
+                    // Равномерно распределяем главные ветки по кругу (360 градусов)
+                    const count = d.parent.children.length;
+                    const i = d.parent.children.indexOf(d);
+                    d.x = (i / count) * 2 * Math.PI;
+                    d.y = 220; // Идеальная круговая орбита 1
+                } else {
+                    // Под-ветки раскрываются симметричным веером
+                    const count = d.parent.children.length;
+                    const i = d.parent.children.indexOf(d);
+                    const spread = Math.PI / 2.5; // Угол веера
+                    d.x = count === 1 ? d.parent.x : d.parent.x - spread/2 + (i / (count - 1)) * spread;
+                    d.y = d.depth * 220; // Идеальная круговая орбита 2
+                }
+                
+                // Перевод в декартовы координаты
+                d.cartX = Math.cos(d.x - Math.PI/2) * d.y;
+                d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
+            });
+            // ------------------------------------------------------
 
-            // Оригинальный генератор гладких радиальных линий
             const linkGenerator = d3.linkRadial().angle(d => d.x).radius(d => d.y);
 
-            // Генерация декоративных веток (теперь они используют ту же идеальную математику)
+            // Декоративные ветки
             const decPaths = [];
             root.descendants().forEach(node => {
                 if (node.depth > 1) return; 
@@ -196,15 +210,10 @@
                 .attr("d", linkGenerator)
                 .style("stroke-width", d => Math.max(2, 8 - (d.target.depth * 2)) + "px");
 
-            // Отрисовка узлов с вычислением декартовых координат (для точного размещения без поломки текста)
             const node = treeLayer.selectAll(".node")
                 .data(root.descendants()).join("g")
                 .attr("class", d => "node " + (d.depth > 0 ? "floating-node" : ""))
-                .attr("transform", d => {
-                    const cartX = Math.cos(d.x - Math.PI/2) * d.y;
-                    const cartY = Math.sin(d.x - Math.PI/2) * d.y;
-                    return `translate(${cartX},${cartY})`;
-                })
+                .attr("transform", d => `translate(${d.cartX},${d.cartY})`)
                 .style("opacity", 0);
 
             node.append("circle")
@@ -215,14 +224,8 @@
 
             node.append("text")
                 .attr("dy", d => d.depth === 0 ? "40px" : "0.31em")
-                .attr("x", d => {
-                    const cartX = Math.cos(d.x - Math.PI/2) * d.y;
-                    return d.depth === 0 ? 0 : (cartX > 0 ? 25 : -25);
-                })
-                .attr("text-anchor", d => {
-                    const cartX = Math.cos(d.x - Math.PI/2) * d.y;
-                    return d.depth === 0 ? "middle" : (cartX > 0 ? "start" : "end");
-                })
+                .attr("x", d => d.depth === 0 ? 0 : (d.cartX > 0 ? 25 : -25))
+                .attr("text-anchor", d => d.depth === 0 ? "middle" : (d.cartX > 0 ? "start" : "end"))
                 .text(d => d.depth === 0 ? "Я" : d.data.name)
                 .style("font-size", d => d.depth === 0 ? "36px" : (d.depth === 1 ? "22px" : "16px"))
                 .style("fill", d => d.depth === 0 ? "#de886a" : "#f0f5f1")

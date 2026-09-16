@@ -13,7 +13,15 @@
             font-family: system-ui, -apple-system, sans-serif; 
             overflow: hidden; 
         }
+
+        /* Холст с частицами (на фоне) */
+        #spores-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 0;
+        }
+
         #canvas-container { 
+            position: relative; z-index: 1; /* Поверх частиц */
             width: 100vw; height: 100vh; cursor: grab; 
             filter: blur(15px); transform: scale(1.05); 
             transition: filter 1.5s ease, transform 1.5s ease; 
@@ -46,15 +54,40 @@
         
         .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
         .node circle:hover { filter: brightness(1.5) drop-shadow(0 0 10px #87ff47); r: 14; }
-        
-        /* Обновленные стили текста с жесткой обводкой */
         .node text { 
             pointer-events: none; 
-            text-shadow: 
-                2px 2px 0 #000, -2px -2px 0 #000, 
-                2px -2px 0 #000, -2px 2px 0 #000, 
-                0 0 15px #000, 0 0 25px rgba(0,0,0,0.9); 
+            text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 0 15px #000, 0 0 25px rgba(0,0,0,0.9); 
         }
+
+        /* --- АНИМАЦИИ ЖИВОГО ОРГАНИЗМА --- */
+        
+        /* 1. Пульс главного ядра */
+        @keyframes heartbeat {
+            0% { transform: scale(1); filter: brightness(1); }
+            15% { transform: scale(1.1); filter: brightness(1.3) drop-shadow(0 0 15px #de886a); }
+            30% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        .core-circle { animation: heartbeat 4s infinite; }
+
+        /* 2. Дыхание/покачивание всей корневой системы от центра (0,0) */
+        @keyframes treeBreathe {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.02) rotate(1deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .tree-layer { animation: treeBreathe 12s ease-in-out infinite; transform-origin: 0px 0px; }
+
+        /* 3. Левитация узелков-почек */
+        @keyframes floatNode {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating-node > * { animation: floatNode 5s ease-in-out infinite; }
+        .floating-node:nth-child(even) > * { animation-delay: -2s; animation-duration: 6s; }
+        .floating-node:nth-child(3n) > * { animation-delay: -1s; animation-duration: 4.5s; }
+        /* --------------------------------- */
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; }
         #modal.active { display: block; }
@@ -66,6 +99,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Система частиц (Споры) -->
+    <canvas id="spores-canvas"></canvas>
 
     <div id="welcome-screen">
         <h1>Творческое убежище</h1>
@@ -84,6 +120,46 @@
     </div>
 
     <script>
+        // --- ЛОГИКА СИСТЕМЫ ЧАСТИЦ (Спор) ---
+        const canvas = document.getElementById('spores-canvas');
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+        
+        window.addEventListener('resize', () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        const particles = Array.from({length: 120}, () => ({
+            x: Math.random() * w, y: Math.random() * h,
+            r: Math.random() * 2 + 0.5,
+            dx: (Math.random() - 0.5) * 0.2, 
+            dy: (Math.random() - 0.5) * 0.2 - 0.2, // Легкий дрейф вверх
+            alpha: Math.random() * Math.PI * 2,
+            speed: Math.random() * 0.02 + 0.01
+        }));
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => {
+                p.x += p.dx; p.y += p.dy; p.alpha += p.speed;
+                if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+                if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+                
+                // Пульсация альфа-канала (свечение)
+                const currentAlpha = (Math.sin(p.alpha) + 1) / 2 * 0.5;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(135, 255, 71, ${currentAlpha})`;
+                ctx.shadowBlur = 5; ctx.shadowColor = "#87ff47";
+                ctx.fill();
+            });
+            requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+        // ------------------------------------
+
         let isGrown = false;
 
         function enterUniverse() {
@@ -92,9 +168,9 @@
             if (!isGrown) { animateGrowth(); isGrown = true; }
         }
 
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        const svg = d3.select("#canvas-container").append("svg").attr("width", width).attr("height", height);
+        const widthD3 = window.innerWidth;
+        const heightD3 = window.innerHeight;
+        const svg = d3.select("#canvas-container").append("svg").attr("width", widthD3).attr("height", heightD3);
         
         const defs = svg.append("defs");
         const filter = defs.append("filter").attr("id", "glow");
@@ -104,34 +180,29 @@
         feMerge.append("feMergeNode").attr("in", "SourceGraphic");
 
         const g = svg.append("g");
-        
         const zoom = d3.zoom().scaleExtent([0.2, 4]).on("zoom", (event) => { g.attr("transform", event.transform); });
         svg.call(zoom);
-        svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, height / 2).scale(0.8));
+        svg.call(zoom.transform, d3.zoomIdentity.translate(widthD3 / 2, heightD3 / 2).scale(0.8));
+
+        // Новый слой анимации дыхания (внутри зума)
+        const treeLayer = g.append("g").attr("class", "tree-layer");
 
         const lineGen = d3.line().x(d => d[0]).y(d => d[1]).curve(d3.curveCatmullRom.alpha(0.5));
         function getOrganicPath(x1, y1, x2, y2, jitter) {
             let points = [[x1, y1]];
             let dist = Math.hypot(x2 - x1, y2 - y1);
             let segments = Math.max(2, Math.floor(dist / 25));
-            let dx = x2 - x1;
-            let dy = y2 - y1;
-            
+            let dx = x2 - x1; let dy = y2 - y1;
             let curveDir = Math.random() > 0.5 ? 1 : -1;
             let curveIntensity = dist * (0.1 + Math.random() * 0.15);
 
             for(let i=1; i<segments; i++) {
                 let t = i / segments;
-                let perpX = -dy / dist;
-                let perpY = dx / dist;
+                let perpX = -dy / dist; let perpY = dx / dist;
                 let bow = Math.sin(t * Math.PI) * curveDir * curveIntensity;
-                
-                let bx = x1 + dx * t + perpX * bow;
-                let by = y1 + dy * t + perpY * bow;
-
                 points.push([
-                    bx + (Math.random() - 0.5) * jitter,
-                    by + (Math.random() - 0.5) * jitter
+                    x1 + dx * t + perpX * bow + (Math.random() - 0.5) * jitter,
+                    y1 + dy * t + perpY * bow + (Math.random() - 0.5) * jitter
                 ]);
             }
             points.push([x2, y2]);
@@ -154,48 +225,46 @@
                 for(let i=0; i < numSprouts; i++) {
                     const angle = node.x + (Math.random() - 0.5) * 2; 
                     const len = Math.random() * 200 + 50;
-                    const endX = node.cartX + Math.cos(angle - Math.PI/2) * len;
-                    const endY = node.cartY + Math.sin(angle - Math.PI/2) * len;
-                    decPaths.push({ d: getOrganicPath(node.cartX, node.cartY, endX, endY, 20), depth: node.depth });
+                    decPaths.push({ 
+                        d: getOrganicPath(node.cartX, node.cartY, node.cartX + Math.cos(angle - Math.PI/2) * len, node.cartY + Math.sin(angle - Math.PI/2) * len, 20), 
+                        depth: node.depth 
+                    });
                 }
             });
 
-            g.selectAll(".dec-branch")
+            // Прикрепляем пути к 'treeLayer', а не 'g'
+            treeLayer.selectAll(".dec-branch")
                 .data(decPaths).join("path")
                 .attr("class", "branch dec-branch")
                 .attr("d", d => d.d)
                 .style("stroke-width", d => Math.max(1, 4 - d.depth) + "px");
 
-            g.selectAll(".data-branch")
+            treeLayer.selectAll(".data-branch")
                 .data(root.links()).join("path")
                 .attr("class", "branch data-branch")
                 .attr("d", d => getOrganicPath(d.source.cartX, d.source.cartY, d.target.cartX, d.target.cartY, 15))
                 .style("stroke-width", d => Math.max(2, 8 - (d.target.depth * 2)) + "px");
 
-            const node = g.selectAll(".node")
+            const node = treeLayer.selectAll(".node")
                 .data(root.descendants()).join("g")
-                .attr("class", "node")
+                // Добавляем классы левитации в зависимости от глубины узла
+                .attr("class", d => "node " + (d.depth > 0 ? "floating-node" : ""))
                 .attr("transform", d => `translate(${d.cartX},${d.cartY})`)
                 .style("opacity", 0);
 
             node.append("circle")
+                // Сердцебиение для ядра
+                .attr("class", d => d.depth === 0 ? "core-circle" : "")
                 .attr("r", d => d.depth === 0 ? 20 : (d.depth === 1 ? 9 : 6))
                 .style("fill", d => d.depth === 0 ? "#9e5c43" : (d.children ? "#2ea043" : "#baf5a9"))
                 .on("click", (event, d) => showModal(d.data));
 
-            // Обновленная логика генерации текста
             node.append("text")
-                // Для ядра сдвигаем текст вниз (35px), для остальных центрируем по вертикали
                 .attr("dy", d => d.depth === 0 ? "35px" : "0.31em")
-                // Для ядра позиция X по центру (0), для остальных отодвигаем на 25px
                 .attr("x", d => d.depth === 0 ? 0 : (d.cartX > 0 ? 25 : -25))
-                // Ядро центрируется (middle), остальные привязываются к краям
                 .attr("text-anchor", d => d.depth === 0 ? "middle" : (d.cartX > 0 ? "start" : "end"))
-                // Заменяем имя нулевого узла на "Я"
                 .text(d => d.depth === 0 ? "Я" : d.data.name)
-                // Каскадное изменение размеров шрифта
                 .style("font-size", d => d.depth === 0 ? "36px" : (d.depth === 1 ? "22px" : "15px"))
-                // Делаем цвет шрифта чуть белее для контраста, а для ядра — терракотовый
                 .style("fill", d => d.depth === 0 ? "#de886a" : "#f0f5f1")
                 .style("font-weight", d => d.depth === 0 ? "900" : "700");
 

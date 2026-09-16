@@ -6,40 +6,17 @@
     <title>Творческое убежище</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        body { 
-            margin: 0; 
-            background: radial-gradient(circle at center, #111a14 0%, #000000 80%);
-            color: #c9d1d9; 
-            font-family: system-ui, -apple-system, sans-serif; 
-            overflow: hidden; 
-        }
-
+        body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000000 80%); color: #c9d1d9; font-family: system-ui, -apple-system, sans-serif; overflow: hidden; }
         #spores-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
-        
-        #canvas-container { 
-            position: relative; z-index: 1; 
-            width: 100vw; height: 100vh; cursor: grab; 
-            filter: blur(15px); transform: scale(1.05); 
-            transition: filter 1.5s ease, transform 1.5s ease; 
-        }
+        #canvas-container { position: relative; z-index: 1; width: 100vw; height: 100vh; cursor: grab; filter: blur(15px); transform: scale(1.05); transition: filter 1.5s ease, transform 1.5s ease; }
         #canvas-container:active { cursor: grabbing; }
         #canvas-container.ready { filter: blur(0px); transform: scale(1); }
 
-        #welcome-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 1000; text-align: center;
-            transition: opacity 0.8s ease, visibility 0.8s;
-        }
+        #welcome-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; text-align: center; transition: opacity 0.8s ease, visibility 0.8s; }
         #welcome-screen.hidden { opacity: 0; visibility: hidden; }
         #welcome-screen h1 { color: #87ff47; font-size: 3rem; margin-bottom: 10px; font-weight: 900; text-shadow: 0 0 20px rgba(135, 255, 71, 0.5); text-transform: uppercase; letter-spacing: 2px;}
         #welcome-screen p { max-width: 600px; font-size: 1.2rem; line-height: 1.6; margin-bottom: 40px; color: #a3b8a8; }
-        #welcome-btn {
-            padding: 15px 40px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase;
-            background-color: #2ea043; color: #000; border: none; border-radius: 30px;
-            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 20px rgba(46, 160, 67, 0.6);
-        }
+        #welcome-btn { padding: 15px 40px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; background-color: #2ea043; color: #000; border: none; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 20px rgba(46, 160, 67, 0.6); }
         #welcome-btn:hover { background-color: #47ff69; box-shadow: 0 0 30px rgba(71, 255, 105, 0.8); transform: translateY(-2px); }
 
         .branch { fill: none; filter: url(#glow); stroke-linecap: round; }
@@ -50,26 +27,11 @@
         .node circle:hover { filter: brightness(1.5) drop-shadow(0 0 15px #87ff47); r: 16; }
         .node text { pointer-events: none; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 0 15px #000, 0 0 25px rgba(0,0,0,0.9); }
 
-        @keyframes heartbeat {
-            0% { transform: scale(1); filter: brightness(1); }
-            15% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 20px #de886a); }
-            30% { transform: scale(1); filter: brightness(1); }
-            100% { transform: scale(1); filter: brightness(1); }
-        }
+        @keyframes heartbeat { 0% { transform: scale(1); filter: brightness(1); } 15% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 20px #de886a); } 30% { transform: scale(1); filter: brightness(1); } 100% { transform: scale(1); filter: brightness(1); } }
         .core-circle { animation: heartbeat 4s infinite; }
-        
-        @keyframes treeBreathe {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.02) rotate(0.5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
+        @keyframes treeBreathe { 0% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.02) rotate(0.5deg); } 100% { transform: scale(1) rotate(0deg); } }
         .tree-layer { animation: treeBreathe 14s ease-in-out infinite; transform-origin: 0px 0px; }
-
-        @keyframes floatNode {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-4px); }
-            100% { transform: translateY(0px); }
-        }
+        @keyframes floatNode { 0% { transform: translateY(0px); } 50% { transform: translateY(-4px); } 100% { transform: translateY(0px); } }
         .floating-node > * { animation: floatNode 5s ease-in-out infinite; }
         .floating-node:nth-child(even) > * { animation-delay: -2s; animation-duration: 6s; }
 
@@ -155,32 +117,35 @@
         d3.json("data.json").then(data => {
             const root = d3.hierarchy(data);
             
-            // --- КАСТОМНАЯ ИДЕАЛЬНАЯ СИММЕТРИЯ (Вместо d3.tree) ---
+            // Фиксация симметричных орбит
             root.eachBefore(d => {
                 if (d.depth === 0) {
                     d.x = 0; d.y = 0;
                 } else if (d.depth === 1) {
-                    // Равномерно распределяем главные ветки по кругу (360 градусов)
                     const count = d.parent.children.length;
                     const i = d.parent.children.indexOf(d);
                     d.x = (i / count) * 2 * Math.PI;
-                    d.y = 220; // Идеальная круговая орбита 1
+                    d.y = 220; 
                 } else {
-                    // Под-ветки раскрываются симметричным веером
                     const count = d.parent.children.length;
                     const i = d.parent.children.indexOf(d);
-                    const spread = Math.PI / 2.5; // Угол веера
+                    const spread = Math.PI / 2.5; 
                     d.x = count === 1 ? d.parent.x : d.parent.x - spread/2 + (i / (count - 1)) * spread;
-                    d.y = d.depth * 220; // Идеальная круговая орбита 2
+                    d.y = d.depth * 220; 
                 }
                 
-                // Перевод в декартовы координаты
                 d.cartX = Math.cos(d.x - Math.PI/2) * d.y;
                 d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
             });
-            // ------------------------------------------------------
 
-            const linkGenerator = d3.linkRadial().angle(d => d.x).radius(d => d.y);
+            // ПАТЧ КРИВЫХ БЕЗЬЕ: Переопределяем источник (source) для веток из ядра.
+            // Если стартуем из центра (depth 0), подменяем угол на угол цели, 
+            // чтобы линия радиально шла прямиком в сторону цели без искажений.
+            const linkGenerator = d3.linkRadial()
+                .angle(d => d.x)
+                .radius(d => d.y)
+                .source(d => d.source.depth === 0 ? {x: d.target.x, y: d.source.y, depth: d.source.depth} : d.source)
+                .target(d => d.target);
 
             // Декоративные ветки
             const decPaths = [];
@@ -191,7 +156,7 @@
                     let targetAngle = node.x + (Math.random() - 0.5) * 1.5; 
                     let targetRadius = node.y + (Math.random() * 100 + 40);
                     decPaths.push({ 
-                        source: { x: node.x, y: node.y }, 
+                        source: { x: node.depth === 0 ? targetAngle : node.x, y: node.y, depth: node.depth }, 
                         target: { x: targetAngle, y: targetRadius },
                         depth: node.depth
                     });

@@ -1,66 +1,151 @@
 {
   "name": "ЯДРО: Мультизадачность",
-  "desc": "Симбиоз навыков и проектов.",
+  "desc": "Симбиоз навыков, проектов и сомнительных жизненных решений.",
   "media": [
-    { "type": "image", "url": "https://placehold.co/600x600/ff7b72/FFF?text=Аватар" }
+    { "type": "image", "url": "https://placehold.co/600x600/ff7b72/FFF?text=Аватар+Ядра" }
   ],
   "children": [
     {
       "name": "Видеопродакшн",
+      "desc": "Свет, камера, мотор и бесконечные правки от заказчиков, от которых дергается глаз.",
       "children": [
-        { "name": "Свет", "desc": "Постановка киноосвещения.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }] },
-        { "name": "Съемка", "desc": "Операторская работа.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }] },
-        { "name": "Монтаж", "desc": "Сборка, ритм.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }] },
-        { "name": "Нейросети", "desc": "Генерация, апскейл.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }] }
+        {
+          "name": "Свет",
+          "desc": "Выставляю так, чтобы тени скрывали экзистенциальный кризис.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }]
+        },
+        {
+          "name": "Съемка",
+          "desc": "Ловлю кадры до того, как техника скажет «ошибка карты памяти».",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }]
+        },
+        {
+          "name": "Монтаж",
+          "desc": "Режу правду матку и лишние 40 дублей молчания на таймлайне.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }]
+        },
+        {
+          "name": "Нейросети",
+          "desc": "Пытаюсь заставить искусственный интеллект работать за меня, пока я сплю.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }]
+        },
+        {
+          "name": "3D",
+          "desc": "Готовый продукт прямо из Unreal. Реально рабочий пайплайн и мотивирующий стеб.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=3D+Unreal" }]
+        }
       ]
     },
     {
       "name": "Ремонтник",
+      "desc": "Оживляю мертвецов из кремния и пластика. Паяю то, что по идее должно было сгореть навсегда.",
       "children": [
-        { "name": "Компы", "desc": "Сборка ПК, пайка.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Компы" }] },
-        { "name": "Телефоны", "desc": "Модульный ремонт, экраны.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Телефоны" }] },
-        { "name": "ТВ", "desc": "Ремонт подсветки и плат.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=ТВ" }] },
-        { "name": "Сисадмин", "desc": "Настройка сетей и серверов.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Сисадмин" }] }
+        {
+          "name": "Компы",
+          "desc": "Сборка ПК, кабель-менеджмент уровня «Бог» и чистка от трехлетней пыли.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Компы+Жесть" }]
+        },
+        {
+          "name": "Телефоны",
+          "desc": "Замена экранов без лишних запчастей на столе (почти).",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Телефоны" }]
+        },
+        {
+          "name": "ТВ",
+          "desc": "Ремонт подсветки и плат. Когда черный экран — это еще не конец.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Ремонт+ТВ" }]
+        },
+        {
+          "name": "Сисадмин",
+          "desc": "Протру вам экран, куплю тряпочки, почищу ваш сервер и сделаю вид, что так и надо.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Сисадмин+За+Работой" }]
+        }
       ]
     },
     {
       "name": "Перформанс",
+      "desc": "Творю какую-то лютую дичь, которую лучше не видеть бабушке, дедушке и будущей девушке.",
       "children": [
-        { "name": "Косплейщик", "desc": "Крафт костюмов и отыгрыш.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Косплей" }] },
-        { "name": "Модель", "desc": "Позирование, работа на камеру.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Модель" }] },
-        { "name": "Визажист", "desc": "Бьюти-мейкап.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Мейкап" }] },
-        { "name": "Гример", "desc": "Пластический грим, шрамы.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Грим" }] }
+        {
+          "name": "Косплейщик",
+          "desc": "Крафт костюмов, парики и полный отрыв от реальности в образе персонажей.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Косплей" }]
+        },
+        {
+          "name": "Модель",
+          "desc": "Модельное, эстетичное, немного дерзкое позирование перед объективом.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Модель" }]
+        },
+        {
+          "name": "Визажист",
+          "desc": "Крупный план классного мейка, который меняет лицо до неузнаваемости.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Визаж" }]
+        },
+        {
+          "name": "Гример",
+          "desc": "Жесткий пластический грим, шрамы и спецэффекты, от которых стынет кровь.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=SFX+Грим" }]
+        }
       ]
     },
     {
       "name": "Фотограф",
+      "desc": "Останавливаю мгновения, пока они не убежали.",
       "children": [
-        { "name": "Портреты", "desc": "Студийная съемка.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Портреты" }] },
-        { "name": "Репортаж", "desc": "Событийная фотография.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Репортаж" }] }
+        {
+          "name": "Портреты",
+          "desc": "Красивые портреты друзей и коллег по цеху.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Портреты" }]
+        },
+        {
+          "name": "Природа",
+          "desc": "Пейзажи и атмосферные коллажи окружающего мира.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Природа+Коллаж" }]
+        }
       ]
     },
     {
       "name": "Кодинг",
+      "desc": "Попытка наебать судьбу с помощью синтаксиса, которая почему-то работает.",
       "children": [
-        { "name": "Web / JS", "desc": "Интерактивные интерфейсы.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/d29922/FFF?text=Код" }] }
+        {
+          "name": "Web / JS",
+          "desc": "Интерактивные интерфейсы и кастомные портфолио.",
+          "media": [{ "type": "link", "url": "https://github.com", "text": "Открыть репозиторий ↗" }]
+        }
       ]
     },
     {
       "name": "Музыка",
+      "desc": "Звуковые эксперименты и переосмысление прекрасного.",
       "children": [
-        { "name": "Релизы", "desc": "Сведение и звук.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Музыка" }] }
+        {
+          "name": "Кавера",
+          "desc": "Собственные переосмысления и живые адаптации известных треков.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Кавера" }]
+        }
       ]
     },
     {
       "name": "Психология",
+      "desc": "Балуюсь с маккартами и всякой странной метафорической хернёй.",
       "children": [
-        { "name": "Инсайты", "desc": "Важные мысли.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/d2a8ff/000?text=Инсайты" }] }
+        {
+          "name": "Инсайты",
+          "desc": "Странные мысли о жизни, людях и устройстве этого мира.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/d2a8ff/000?text=Инсайты" }]
+        }
       ]
     },
     {
-      "name": "Лайф",
+      "name": "Готовка",
+      "desc": "Создаю съедобные шедевры, пока кухня не превратилась в полигон.",
       "children": [
-        { "name": "События", "desc": "Хайлайты.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/1f6feb/FFF?text=События" }] }
+        {
+          "name": "Выпечка",
+          "desc": "Тесто, мука, магия духовки и результат, который приятно жрать.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/1f6feb/FFF?text=Выпечка" }]
+        }
       ]
     }
   ]

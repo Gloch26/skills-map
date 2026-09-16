@@ -101,43 +101,46 @@
         const svg = d3.select("#canvas-container").append("svg").attr("width", widthD3).attr("height", heightD3);
         
         const defs = svg.append("defs");
-        const filter = defs.append("filter").attr("id", "glow");
+        // ПАТЧ ФИЛЬТРА: userSpaceOnUse гарантирует, что фильтр не пропадет при нулевом BoundingBox
+        const filter = defs.append("filter")
+            .attr("id", "glow")
+            .attr("filterUnits", "userSpaceOnUse")
+            .attr("x", "-50vw").attr("y", "-50vh")
+            .attr("width", "200vw").attr("height", "200vh");
         filter.append("feGaussianBlur").attr("stdDeviation", "4").attr("result", "coloredBlur");
         const feMerge = filter.append("feMerge");
         feMerge.append("feMergeNode").attr("in", "coloredBlur");
         feMerge.append("feMergeNode").attr("in", "SourceGraphic");
 
         const g = svg.append("g");
-        const zoom = d3.zoom().scaleExtent([0.3, 4]).on("zoom", (event) => { g.attr("transform", event.transform); });
+        const zoom = d3.zoom().scaleExtent([0.2, 4]).on("zoom", (event) => { g.attr("transform", event.transform); });
         svg.call(zoom);
-        svg.call(zoom.transform, d3.zoomIdentity.translate(widthD3 / 2, heightD3 / 2).scale(0.85));
+        // Камера отъехала чуть дальше (0.65), чтобы граф влез на любой монитор
+        svg.call(zoom.transform, d3.zoomIdentity.translate(widthD3 / 2, heightD3 / 2).scale(0.65)); 
 
         const treeLayer = g.append("g").attr("class", "tree-layer");
 
         d3.json("data.json").then(data => {
             const root = d3.hierarchy(data);
             
-            // --- ДИНАМИЧЕСКИЙ РАСЧЕТ ОРБИТ И ЗАЩИТА ОТ ПЕРЕСЕЧЕНИЙ ---
             root.eachBefore(d => {
                 if (d.depth === 0) {
                     d.x = 0; d.y = 0;
                 } else if (d.depth === 1) {
                     const count = d.parent.children.length;
                     const i = d.parent.children.indexOf(d);
-                    d.x = (i / count) * 2 * Math.PI;
+                    // ПАТЧ ГЕОМЕТРИИ: Добавлено смещение +0.001 радиана для сбоя SVG-схлапывания
+                    d.x = (i / count) * 2 * Math.PI + 0.001; 
                     d.y = 220; 
                 } else {
                     const count = d.parent.children.length;
                     const i = d.parent.children.indexOf(d);
-                    
-                    // Узнаем, сколько всего главных веток (в твоем случае 8)
                     const rootSiblingsCount = d.parent.parent.children.length; 
-                    // Вычисляем доступный сектор для одной ветви (360 градусов / 8 = 45 градусов)
                     const availableSector = (2 * Math.PI) / rootSiblingsCount;
-                    // Забираем только 75% сектора, оставляя 25% пустого пространства между соседями
                     const spread = availableSector * 0.75; 
                     
                     d.x = count === 1 ? d.parent.x : d.parent.x - spread/2 + (i / (count - 1)) * spread;
+                    d.x += 0.001; // Смещение для дочерних веток
                     d.y = d.depth * 220; 
                 }
                 
@@ -145,20 +148,23 @@
                 d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
             });
 
-            const linkGenerator = d3.linkRadial()
-                .angle(d => d.x)
-                .radius(d => d.y)
-                .source(d => d.source.depth === 0 ? {x: d.target.x, y: d.source.y, depth: d.source.depth} : d.source)
-                .target(d => d.target);
+            const linkGenerator = d3.linkRadial().angle(d => d.x).radius(d => d.y);
 
-            // Декоративные ветки (уменьшен разброс, чтобы не перекрывали текст)
+            // Функция, принудительно направляющая линии ядра строго в цель
+            function getPath(d) {
+                if (d.source.depth === 0) {
+                    return linkGenerator({ source: {x: d.target.x, y: d.source.y}, target: d.target });
+                }
+                return linkGenerator(d);
+            }
+
             const decPaths = [];
             root.descendants().forEach(node => {
                 if (node.depth > 1) return; 
                 const numSprouts = node.depth === 0 ? 15 : 6; 
                 for(let i=0; i < numSprouts; i++) {
-                    let targetAngle = node.x + (Math.random() - 0.5) * 0.9; // Сужен угол разброса
-                    let targetRadius = node.y + (Math.random() * 80 + 30); // Укорочены усики
+                    let targetAngle = node.x + (Math.random() - 0.5) * 0.9; 
+                    let targetRadius = node.y + (Math.random() * 80 + 30); 
                     decPaths.push({ 
                         source: { x: node.depth === 0 ? targetAngle : node.x, y: node.y, depth: node.depth }, 
                         target: { x: targetAngle, y: targetRadius },
@@ -170,13 +176,18 @@
             treeLayer.selectAll(".dec-branch")
                 .data(decPaths).join("path")
                 .attr("class", "branch dec-branch")
-                .attr("d", linkGenerator)
+                .attr("d", d => {
+                    if (d.source.depth === 0) {
+                        return linkGenerator({ source: {x: d.target.x, y: d.source.y}, target: d.target });
+                    }
+                    return linkGenerator(d);
+                })
                 .style("stroke-width", d => Math.max(1, 3 - d.depth) + "px");
 
             treeLayer.selectAll(".data-branch")
                 .data(root.links()).join("path")
                 .attr("class", "branch data-branch")
-                .attr("d", linkGenerator)
+                .attr("d", getPath)
                 .style("stroke-width", d => Math.max(2, 8 - (d.target.depth * 2)) + "px");
 
             const node = treeLayer.selectAll(".node")
@@ -193,7 +204,7 @@
 
             node.append("text")
                 .attr("dy", d => d.depth === 0 ? "40px" : "0.31em")
-                .attr("x", d => d.depth === 0 ? 0 : (d.cartX > 0 ? 30 : -30)) // Чуть отодвинул текст от узлов
+                .attr("x", d => d.depth === 0 ? 0 : (d.cartX > 0 ? 30 : -30))
                 .attr("text-anchor", d => d.depth === 0 ? "middle" : (d.cartX > 0 ? "start" : "end"))
                 .text(d => d.depth === 0 ? "Я" : d.data.name)
                 .style("font-size", d => d.depth === 0 ? "36px" : (d.depth === 1 ? "22px" : "16px"))

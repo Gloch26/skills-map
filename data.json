@@ -8,121 +8,59 @@
     {
       "name": "Видеопродакшн",
       "children": [
-        {
-          "name": "Свет",
-          "desc": "Постановка киноосвещения.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }]
-        },
-        {
-          "name": "Съемка",
-          "desc": "Операторская работа.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }]
-        },
-        {
-          "name": "Монтаж",
-          "desc": "Сборка, ритм.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }]
-        },
-        {
-          "name": "Нейросети",
-          "desc": "Генерация, апскейл.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }]
-        }
+        { "name": "Свет", "desc": "Постановка киноосвещения.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }] },
+        { "name": "Съемка", "desc": "Операторская работа.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }] },
+        { "name": "Монтаж", "desc": "Сборка, ритм.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }] },
+        { "name": "Нейросети", "desc": "Генерация, апскейл.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }] }
       ]
     },
     {
       "name": "Ремонтник",
       "children": [
-        {
-          "name": "Компы",
-          "desc": "Сборка ПК, пайка, хардвер.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Компы" }]
-        },
-        {
-          "name": "Телефоны",
-          "desc": "Модульный ремонт, экраны.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Телефоны" }]
-        },
-        {
-          "name": "ТВ",
-          "desc": "Ремонт подсветки и плат.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=ТВ" }]
-        },
-        {
-          "name": "Сисадмин",
-          "desc": "Настройка сетей и серверов.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Сисадмин" }]
-        }
+        { "name": "Компы", "desc": "Сборка ПК, пайка.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Компы" }] },
+        { "name": "Телефоны", "desc": "Модульный ремонт, экраны.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Телефоны" }] },
+        { "name": "ТВ", "desc": "Ремонт подсветки и плат.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=ТВ" }] },
+        { "name": "Сисадмин", "desc": "Настройка сетей и серверов.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Сисадмин" }] }
       ]
     },
     {
-      "name": "Косплейщик",
+      "name": "Перформанс",
       "children": [
-        {
-          "name": "Визажист",
-          "desc": "Бьюти-мейкап.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Мейкап" }]
-        },
-        {
-          "name": "Гример",
-          "desc": "Пластический грим, шрамы.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Грим" }]
-        }
+        { "name": "Косплейщик", "desc": "Крафт костюмов и отыгрыш.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Косплей" }] },
+        { "name": "Модель", "desc": "Позирование, работа на камеру.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Модель" }] },
+        { "name": "Визажист", "desc": "Бьюти-мейкап.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Мейкап" }] },
+        { "name": "Гример", "desc": "Пластический грим, шрамы.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Грим" }] }
       ]
     },
     {
       "name": "Фотограф",
       "children": [
-        {
-          "name": "Портреты",
-          "desc": "Студийная съемка.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Портреты" }]
-        },
-        {
-          "name": "Репортаж",
-          "desc": "Событийная фотография.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Репортаж" }]
-        }
+        { "name": "Портреты", "desc": "Студийная съемка.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Портреты" }] },
+        { "name": "Репортаж", "desc": "Событийная фотография.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Репортаж" }] }
       ]
     },
     {
       "name": "Кодинг",
       "children": [
-        {
-          "name": "Web / JS",
-          "desc": "Интерактивные интерфейсы.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/d29922/FFF?text=Код" }]
-        }
+        { "name": "Web / JS", "desc": "Интерактивные интерфейсы.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/d29922/FFF?text=Код" }] }
       ]
     },
     {
       "name": "Музыка",
       "children": [
-        {
-          "name": "Релизы",
-          "desc": "Сведение и звук.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Музыка" }]
-        }
+        { "name": "Релизы", "desc": "Сведение и звук.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Музыка" }] }
       ]
     },
     {
       "name": "Психология",
       "children": [
-        {
-          "name": "Инсайты",
-          "desc": "Важные мысли.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/d2a8ff/000?text=Инсайты" }]
-        }
+        { "name": "Инсайты", "desc": "Важные мысли.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/d2a8ff/000?text=Инсайты" }] }
       ]
     },
     {
       "name": "Лайф",
       "children": [
-        {
-          "name": "События",
-          "desc": "Хайлайты.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/1f6feb/FFF?text=События" }]
-        }
+        { "name": "События", "desc": "Хайлайты.", "media": [{ "type": "image", "url": "https://placehold.co/600x350/1f6feb/FFF?text=События" }] }
       ]
     }
   ]

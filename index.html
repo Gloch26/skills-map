@@ -118,14 +118,11 @@
 
         const treeLayer = g.append("g").attr("class", "tree-layer");
 
-        // Математика органических S-образных кривых с контрольными точками
         const lineGen = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
         function getOrganicPath(x1, y1, x2, y2) {
             let dx = x2 - x1; let dy = y2 - y1;
             let dist = Math.hypot(dx, dy);
             let perpX = -dy / dist; let perpY = dx / dist;
-
-            // Естественный изгиб стебля
             let bow = dist * 0.12 * (Math.sin(x1 * 0.05) > 0 ? 1 : -1);
 
             let p1x = x1 + dx * 0.35 + perpX * bow;
@@ -139,7 +136,6 @@
         d3.json("data.json").then(data => {
             const root = data instanceof Object ? d3.hierarchy(data) : data;
             
-            // Расчет симметричных позиций
             root.eachBefore(d => {
                 if (d.depth === 0) {
                     d.x = 0; d.y = 0;
@@ -160,13 +156,12 @@
                     
                     d.x = count === 1 ? d.parent.x : d.parent.x - spread/2 + (i / (count - 1)) * spread;
                     d.x += 0.001;
-                    d.y = d.parent.y + 160; // Фиксированный шаг наружу от родителя
+                    d.y = d.parent.y + 160;
                     d.cartX = Math.cos(d.x - Math.PI/2) * d.y;
                     d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
                 }
             });
 
-            // Отрисовка основных ветвей через органические сплайны
             const links = root.links();
             treeLayer.selectAll(".data-branch")
                 .data(links).join("path")
@@ -174,20 +169,33 @@
                 .attr("d", d => getOrganicPath(d.source.cartX, d.source.cartY, d.target.cartX, d.target.cartY))
                 .style("stroke-width", d => Math.max(2, 8 - (d.target.depth * 2)) + "px");
 
-            // Декоративные фоновые усики
+            // ИСПРАВЛЕНИЕ: Равномерное распределение фоновых усиков вокруг ядра по всем 360 градусам
             const decPaths = [];
+            const totalDec = 35; // Количество фоновых побегов вокруг ядра
+            for(let i=0; i < totalDec; i++) {
+                let angle = (i / totalDec) * 2 * Math.PI + (Math.random() - 0.5) * 0.1;
+                let len = Math.random() * 90 + 35;
+                let endX = Math.cos(angle - Math.PI/2) * len;
+                let endY = Math.sin(angle - Math.PI/2) * len;
+                decPaths.push({ 
+                    d: getOrganicPath(0, 0, endX, endY), 
+                    depth: 0 
+                });
+            }
+
+            // Дополнительные усики от дочерних узлов
             root.descendants().forEach(node => {
-                if (node.depth > 1) return; 
-                const numSprouts = node.depth === 0 ? 15 : 5; 
-                for(let i=0; i < numSprouts; i++) {
-                    let angle = node.x + (Math.random() - 0.5) * 1.2; 
-                    let len = Math.random() * 80 + 30; 
-                    let endX = node.cartX + Math.cos(angle - Math.PI/2) * len;
-                    let endY = node.cartY + Math.sin(angle - Math.PI/2) * len;
-                    decPaths.push({ 
-                        d: getOrganicPath(node.cartX, node.cartY, endX, endY), 
-                        depth: node.depth
-                    });
+                if (node.depth === 1) {
+                    for(let i=0; i < 4; i++) {
+                        let angle = node.x + (Math.random() - 0.5) * 1.0; 
+                        let len = Math.random() * 60 + 25; 
+                        let endX = node.cartX + Math.cos(angle - Math.PI/2) * len;
+                        let endY = node.cartY + Math.sin(angle - Math.PI/2) * len;
+                        decPaths.push({ 
+                            d: getOrganicPath(node.cartX, node.cartY, endX, endY), 
+                            depth: 1 
+                        });
+                    }
                 }
             });
 
@@ -215,7 +223,8 @@
                 .attr("text-anchor", d => d.depth === 0 ? "middle" : (d.cartX > 0 ? "start" : "end"))
                 .text(d => d.depth === 0 ? "Я" : d.data.name)
                 .style("font-size", d => d.depth === 0 ? "36px" : (d.depth === 1 ? "22px" : "16px"))
-                .style("fill", d => d.depth === 0 ? "#de886a" : "#f0f5f1")
+                // ИСПРАВЛЕНИЕ: Для ядра установлен чистый белый цвет (#ffffff)
+                .style("fill", d => d.depth === 0 ? "#ffffff" : "#f0f5f1")
                 .style("font-weight", d => d.depth === 0 ? "900" : "700");
 
         }).catch(err => console.error("Ошибка:", err));

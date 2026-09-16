@@ -21,7 +21,7 @@
 
         .branch { fill: none; filter: url(#glow); stroke-linecap: round; }
         .data-branch { stroke: #6ded51; }
-        .dec-branch { stroke: #3bb02e; opacity: 0.5; }
+        .dec-branch { stroke: #3bb02e; opacity: 0.4; }
         
         .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
         .node circle:hover { filter: brightness(1.5) drop-shadow(0 0 15px #87ff47); r: 16; }
@@ -101,7 +101,6 @@
         const svg = d3.select("#canvas-container").append("svg").attr("width", widthD3).attr("height", heightD3);
         
         const defs = svg.append("defs");
-        // ПАТЧ ФИЛЬТРА: userSpaceOnUse гарантирует, что фильтр не пропадет при нулевом BoundingBox
         const filter = defs.append("filter")
             .attr("id", "glow")
             .attr("filterUnits", "userSpaceOnUse")
@@ -115,59 +114,78 @@
         const g = svg.append("g");
         const zoom = d3.zoom().scaleExtent([0.2, 4]).on("zoom", (event) => { g.attr("transform", event.transform); });
         svg.call(zoom);
-        // Камера отъехала чуть дальше (0.65), чтобы граф влез на любой монитор
         svg.call(zoom.transform, d3.zoomIdentity.translate(widthD3 / 2, heightD3 / 2).scale(0.65)); 
 
         const treeLayer = g.append("g").attr("class", "tree-layer");
 
+        // Математика органических S-образных кривых с контрольными точками
+        const lineGen = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
+        function getOrganicPath(x1, y1, x2, y2) {
+            let dx = x2 - x1; let dy = y2 - y1;
+            let dist = Math.hypot(dx, dy);
+            let perpX = -dy / dist; let perpY = dx / dist;
+
+            // Естественный изгиб стебля
+            let bow = dist * 0.12 * (Math.sin(x1 * 0.05) > 0 ? 1 : -1);
+
+            let p1x = x1 + dx * 0.35 + perpX * bow;
+            let p1y = y1 + dy * 0.35 + perpY * bow;
+            let p2x = x1 + dx * 0.65 - perpX * bow;
+            let p2y = y1 + dy * 0.65 - perpY * bow;
+
+            return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
+        }
+
         d3.json("data.json").then(data => {
-            const root = d3.hierarchy(data);
+            const root = data instanceof Object ? d3.hierarchy(data) : data;
             
+            // Расчет симметричных позиций
             root.eachBefore(d => {
                 if (d.depth === 0) {
                     d.x = 0; d.y = 0;
+                    d.cartX = 0; d.cartY = 0;
                 } else if (d.depth === 1) {
                     const count = d.parent.children.length;
                     const i = d.parent.children.indexOf(d);
-                    // ПАТЧ ГЕОМЕТРИИ: Добавлено смещение +0.001 радиана для сбоя SVG-схлапывания
-                    d.x = (i / count) * 2 * Math.PI + 0.001; 
-                    d.y = 220; 
+                    d.x = (i / count) * 2 * Math.PI + 0.001;
+                    d.y = 220;
+                    d.cartX = Math.cos(d.x - Math.PI/2) * d.y;
+                    d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
                 } else {
                     const count = d.parent.children.length;
                     const i = d.parent.children.indexOf(d);
                     const rootSiblingsCount = d.parent.parent.children.length; 
                     const availableSector = (2 * Math.PI) / rootSiblingsCount;
-                    const spread = availableSector * 0.75; 
+                    const spread = availableSector * 0.7; 
                     
                     d.x = count === 1 ? d.parent.x : d.parent.x - spread/2 + (i / (count - 1)) * spread;
-                    d.x += 0.001; // Смещение для дочерних веток
-                    d.y = d.depth * 220; 
+                    d.x += 0.001;
+                    d.y = d.parent.y + 160; // Фиксированный шаг наружу от родителя
+                    d.cartX = Math.cos(d.x - Math.PI/2) * d.y;
+                    d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
                 }
-                
-                d.cartX = Math.cos(d.x - Math.PI/2) * d.y;
-                d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
             });
 
-            const linkGenerator = d3.linkRadial().angle(d => d.x).radius(d => d.y);
+            // Отрисовка основных ветвей через органические сплайны
+            const links = root.links();
+            treeLayer.selectAll(".data-branch")
+                .data(links).join("path")
+                .attr("class", "branch data-branch")
+                .attr("d", d => getOrganicPath(d.source.cartX, d.source.cartY, d.target.cartX, d.target.cartY))
+                .style("stroke-width", d => Math.max(2, 8 - (d.target.depth * 2)) + "px");
 
-            // Функция, принудительно направляющая линии ядра строго в цель
-            function getPath(d) {
-                if (d.source.depth === 0) {
-                    return linkGenerator({ source: {x: d.target.x, y: d.source.y}, target: d.target });
-                }
-                return linkGenerator(d);
-            }
-
+            // Декоративные фоновые усики
             const decPaths = [];
             root.descendants().forEach(node => {
                 if (node.depth > 1) return; 
-                const numSprouts = node.depth === 0 ? 15 : 6; 
+                const numSprouts = node.depth === 0 ? 15 : 5; 
                 for(let i=0; i < numSprouts; i++) {
-                    let targetAngle = node.x + (Math.random() - 0.5) * 0.9; 
-                    let targetRadius = node.y + (Math.random() * 80 + 30); 
+                    let angle = node.x + (Math.random() - 0.5) * 1.2; 
+                    let len = Math.random() * 80 + 30; 
+                    let endX = node.cartX + Math.cos(angle - Math.PI/2) * len;
+                    let endY = node.cartY + Math.sin(angle - Math.PI/2) * len;
                     decPaths.push({ 
-                        source: { x: node.depth === 0 ? targetAngle : node.x, y: node.y, depth: node.depth }, 
-                        target: { x: targetAngle, y: targetRadius },
+                        d: getOrganicPath(node.cartX, node.cartY, endX, endY), 
                         depth: node.depth
                     });
                 }
@@ -176,19 +194,8 @@
             treeLayer.selectAll(".dec-branch")
                 .data(decPaths).join("path")
                 .attr("class", "branch dec-branch")
-                .attr("d", d => {
-                    if (d.source.depth === 0) {
-                        return linkGenerator({ source: {x: d.target.x, y: d.source.y}, target: d.target });
-                    }
-                    return linkGenerator(d);
-                })
+                .attr("d", d => d.d)
                 .style("stroke-width", d => Math.max(1, 3 - d.depth) + "px");
-
-            treeLayer.selectAll(".data-branch")
-                .data(root.links()).join("path")
-                .attr("class", "branch data-branch")
-                .attr("d", getPath)
-                .style("stroke-width", d => Math.max(2, 8 - (d.target.depth * 2)) + "px");
 
             const node = treeLayer.selectAll(".node")
                 .data(root.descendants()).join("g")

@@ -117,7 +117,7 @@
         d3.json("data.json").then(data => {
             const root = d3.hierarchy(data);
             
-            // Фиксация симметричных орбит
+            // --- ДИНАМИЧЕСКИЙ РАСЧЕТ ОРБИТ И ЗАЩИТА ОТ ПЕРЕСЕЧЕНИЙ ---
             root.eachBefore(d => {
                 if (d.depth === 0) {
                     d.x = 0; d.y = 0;
@@ -129,7 +129,14 @@
                 } else {
                     const count = d.parent.children.length;
                     const i = d.parent.children.indexOf(d);
-                    const spread = Math.PI / 2.5; 
+                    
+                    // Узнаем, сколько всего главных веток (в твоем случае 8)
+                    const rootSiblingsCount = d.parent.parent.children.length; 
+                    // Вычисляем доступный сектор для одной ветви (360 градусов / 8 = 45 градусов)
+                    const availableSector = (2 * Math.PI) / rootSiblingsCount;
+                    // Забираем только 75% сектора, оставляя 25% пустого пространства между соседями
+                    const spread = availableSector * 0.75; 
+                    
                     d.x = count === 1 ? d.parent.x : d.parent.x - spread/2 + (i / (count - 1)) * spread;
                     d.y = d.depth * 220; 
                 }
@@ -138,23 +145,20 @@
                 d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
             });
 
-            // ПАТЧ КРИВЫХ БЕЗЬЕ: Переопределяем источник (source) для веток из ядра.
-            // Если стартуем из центра (depth 0), подменяем угол на угол цели, 
-            // чтобы линия радиально шла прямиком в сторону цели без искажений.
             const linkGenerator = d3.linkRadial()
                 .angle(d => d.x)
                 .radius(d => d.y)
                 .source(d => d.source.depth === 0 ? {x: d.target.x, y: d.source.y, depth: d.source.depth} : d.source)
                 .target(d => d.target);
 
-            // Декоративные ветки
+            // Декоративные ветки (уменьшен разброс, чтобы не перекрывали текст)
             const decPaths = [];
             root.descendants().forEach(node => {
                 if (node.depth > 1) return; 
                 const numSprouts = node.depth === 0 ? 15 : 6; 
                 for(let i=0; i < numSprouts; i++) {
-                    let targetAngle = node.x + (Math.random() - 0.5) * 1.5; 
-                    let targetRadius = node.y + (Math.random() * 100 + 40);
+                    let targetAngle = node.x + (Math.random() - 0.5) * 0.9; // Сужен угол разброса
+                    let targetRadius = node.y + (Math.random() * 80 + 30); // Укорочены усики
                     decPaths.push({ 
                         source: { x: node.depth === 0 ? targetAngle : node.x, y: node.y, depth: node.depth }, 
                         target: { x: targetAngle, y: targetRadius },
@@ -189,7 +193,7 @@
 
             node.append("text")
                 .attr("dy", d => d.depth === 0 ? "40px" : "0.31em")
-                .attr("x", d => d.depth === 0 ? 0 : (d.cartX > 0 ? 25 : -25))
+                .attr("x", d => d.depth === 0 ? 0 : (d.cartX > 0 ? 30 : -30)) // Чуть отодвинул текст от узлов
                 .attr("text-anchor", d => d.depth === 0 ? "middle" : (d.cartX > 0 ? "start" : "end"))
                 .text(d => d.depth === 0 ? "Я" : d.data.name)
                 .style("font-size", d => d.depth === 0 ? "36px" : (d.depth === 1 ? "22px" : "16px"))

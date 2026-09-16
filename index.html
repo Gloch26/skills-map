@@ -35,12 +35,13 @@
         .floating-node > * { animation: floatNode 5s ease-in-out infinite; }
         .floating-node:nth-child(even) > * { animation-delay: -2s; animation-duration: 6s; }
 
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; }
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 25px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; }
         #modal.active { display: block; }
         #modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; color: #5a7560; font-size: 24px; font-weight: bold; }
         #modal-close:hover { color: #87ff47; }
         #modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 99; backdrop-filter: blur(5px); }
         #modal-bg.active { display: block; }
+        #modal-desc { color: #a3b8a8; font-size: 1rem; line-height: 1.5; margin-top: 10px; }
         .media-item { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #1a291e; }
     </style>
 </head>
@@ -114,8 +115,6 @@
         const g = svg.append("g");
         const zoom = d3.zoom().scaleExtent([0.2, 4]).on("zoom", (event) => { g.attr("transform", event.transform); });
         svg.call(zoom);
-        
-        // Камера приближена ближе к схеме при старте (масштаб увеличен до 0.95 вместо 0.65)
         svg.call(zoom.transform, d3.zoomIdentity.translate(widthD3 / 2, heightD3 / 2).scale(0.95)); 
 
         const treeLayer = g.append("g").attr("class", "tree-layer");
@@ -233,7 +232,7 @@
                 .style("fill", d => d.depth === 0 ? "#ffffff" : "#f0f5f1")
                 .style("font-weight", d => d.depth === 0 ? "900" : "700");
 
-        }).catch(err => console.error("Ошибка:", err));
+        }).catch(err => console.error("Ошибка загрузки data.json:", err));
 
         function animateGrowth() {
             d3.selectAll(".branch").each(function() {
@@ -247,16 +246,23 @@
             d3.selectAll(".node").transition().delay(d => 1200 + d.depth * 600).duration(1000).style("opacity", 1);
         }
 
+        // Защищенная логика модального окна (исправлен показ описаний)
         function showModal(data) {
-            document.getElementById('modal-title').innerText = data.name;
-            document.getElementById('modal-desc').innerText = data.desc || "";
+            document.getElementById('modal-title').innerText = data.name || "Без названия";
+            document.getElementById('modal-desc').innerText = data.desc || "Описание скоро появится...";
+            
             const gallery = document.getElementById('modal-gallery');
             gallery.innerHTML = ""; 
-            if (data.media) {
+            
+            if (data.media && Array.isArray(data.media)) {
                 data.media.forEach(item => {
-                    if (item.type === "image") gallery.innerHTML += `<img src="${item.url}" class="media-item">`;
-                    else if (item.type === "video") gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
-                    else if (item.type === "link") gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link" style="display: block; margin-top: 15px; padding: 12px; background-color: #2ea043; color: #000; text-decoration: none; border-radius: 6px; font-weight: bold;">Перейти ↗</a>`;
+                    if (item.type === "image") {
+                        gallery.innerHTML += `<img src="${item.url}" class="media-item">`;
+                    } else if (item.type === "video") {
+                        gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
+                    } else if (item.type === "link") {
+                        gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link" style="display: block; margin-top: 15px; padding: 12px; background-color: #2ea043; color: #000; text-decoration: none; border-radius: 6px; font-weight: bold;">${item.text || "Перейти ↗"}</a>`;
+                    }
                 });
             }
             document.getElementById('modal').classList.add('active');

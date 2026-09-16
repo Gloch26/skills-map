@@ -1,17 +1,21 @@
 {
   "name": "ЯДРО: Мультизадачность",
-  "desc": "Балансирую между проектами.",
+  "desc": "Балансирую между жизнью.",
+  "media": [
+    { "type": "image", "url": "https://placehold.co/600x600/ff7b72/FFF?text=Твое+Фото+Для+Ядра" }
+  ],
   "children": [
     {
-      "name": "Видео",
+      "name": "Видеопродакшн",
       "children": [
         {
-          "name": "Монтаж",
-          "desc": "Сборка мастер-секвенции и эффекты.",
+          "name": "Монтаж & Динамика",
+          "desc": "Собираю ролики, делаю цветокоррекцию и настраиваю темп.",
+          "category": "Adobe Premiere",
           "media": [
-            { "type": "image", "url": "https://placehold.co/600x400/8957e5/FFF?text=Скриншот+таймлайна" },
-            { "type": "video", "url": "https://www.w3schools.com/html/mov_bbb.mp4" },
-            { "type": "link", "url": "https://vk.com/", "text": "Смотреть пост с бэкстейджем в паблике" }
+            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Таймлайн+проекта+1" },
+            { "type": "image", "url": "https://placehold.co/600x350/23272e/abb2bf?text=Таймлайн+проекта+2" },
+            { "type": "link", "url": "https://vk.com/", "text": "Пост в паблике про этот ролик ↗" }
           ]
         }
       ]
@@ -25,6 +29,44 @@
           "media": [
             { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Событие+1" },
             { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Событие+2" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Музыка",
+      "children": [
+        {
+          "name": "Релизы",
+          "desc": "Что делал.",
+          "media": [
+            { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Трек+1" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Психология",
+      "children": [
+        {
+          "name": "Инсайты",
+          "desc": "Важные мысли.",
+          "media": [
+            { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Статья+1" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Кодинг",
+      "children": [
+        {
+          "name": "Web / JS",
+          "desc": "Создаю интерактивные интерфейсы вроде этой диаграммы.",
+          "category": "Frontend",
+          "media": [
+            { "type": "image", "url": "https://placehold.co/600x800/d29922/FFF?text=Скриншот+Кода" },
+            { "type": "video", "url": "https://www.w3schools.com/html/mov_bbb.mp4" }
           ]
         }
       ]

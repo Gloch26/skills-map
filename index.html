@@ -3,68 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skills Universe</title>
+    <title>Творческое убежище</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        body { margin: 0; background-color: #0d1117; color: #c9d1d9; font-family: sans-serif; overflow: hidden; }
-        #canvas-container { width: 100vw; height: 100vh; cursor: grab; }
-        #canvas-container:active { cursor: grabbing; }
-        .node circle { stroke: #0d1117; stroke-width: 3px; cursor: pointer; transition: r 0.2s; }
-        .node circle:hover { filter: brightness(1.2); r: 10; }
-        .node text { font-family: sans-serif; font-size: 14px; fill: #c9d1d9; pointer-events: none; }
-        .link { fill: none; stroke: #30363d; stroke-width: 2px; opacity: 0.8; }
-        
-        #modal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 100; width: 90%; max-width: 500px;
-            max-height: 80vh; overflow-y: auto; text-align: center;
+        /* Имитация иллюминатора Synplant: радиальный градиент в абсолютный черный */
+        body { 
+            margin: 0; 
+            background: radial-gradient(circle at center, #111a14 0%, #000000 80%);
+            color: #c9d1d9; 
+            font-family: sans-serif; 
+            overflow: hidden; 
         }
-        #modal.active { display: block; }
-        #modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; color: #8b949e; font-size: 24px; font-weight: bold; }
-        #modal-close:hover { color: #ff7b72; }
-        #modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(13, 17, 23, 0.8); z-index: 99; backdrop-filter: blur(5px); }
-        #modal-bg.active { display: block; }
+        
+        #canvas-container { 
+            width: 100vw; height: 100vh; cursor: grab; 
+            filter: blur(15px); transform: scale(1.05); 
+            transition: filter 1s ease, transform 1s ease; 
+        }
+        #canvas-container:active { cursor: grabbing; }
+        #canvas-container.ready { filter: blur(0px); transform: scale(1); }
 
-        /* Стили для галереи пруфов */
-        .media-item { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #30363d; }
-        .media-link { display: block; margin-top: 15px; padding: 12px; background-color: #238636; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
-        .media-link:hover { background-color: #2ea043; }
+        /* Стартовый экран */
+        #welcome-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 1000; text-align: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+        #welcome-screen.hidden { opacity: 0; visibility: hidden; }
+        #welcome-screen h1 { color: #87ff47; font-size: 3rem; margin-bottom: 10px; font-weight: 800; text-shadow: 0 0 20px rgba(135, 255, 71, 0.5); }
+        #welcome-screen p { max-width: 600px; font-size: 1.2rem; line-height: 1.6; margin-bottom: 40px; color: #a3b8a8; }
+        #welcome-btn {
+            padding: 15px 40px; font-size: 1.1rem; font-weight: bold;
+            background-color: #2ea043; color: #000; border: none; border-radius: 30px;
+            cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(46, 160, 67, 0.6);
+        }
+        #welcome-btn:hover { background-color: #47ff69; box-shadow: 0 0 30px rgba(71, 255, 105, 0.8); transform: translateY(-2px); }
+
+        /* Узлы (семечко и почки) */
+        .node circle { 
+            stroke: #000; 
+            stroke-width: 2px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+        }
+        .node circle:hover { 
+            filter: brightness(1.5) drop-shadow(0 0 10px #87ff47); 
+            r: 12; 
+        }
+        
+        /* Стили текста (с легким зеленым оттенком) */
+        .node text { 
+            font-family: monospace, sans-serif; 
+            font-size: 14px; 
+            fill: #8fe69d; 
+            pointer-events: none; 
+            text-shadow: 0 0 5px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,1); 
+        }
+
+        /* Линии (ветви) */
+        .link { 
+            fill: none; 
+            /* Применяем свечение к линиям */
+            filter: url(#glow); 
+            opacity: 0.85; 
+            transition: stroke-width 0.3s ease;
+        }
+
+        /* Модальное окно (оставил строгим, чтобы контент читался) */
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; }
+        #modal.active { display: block; }
+        #modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; color: #5a7560; font-size: 24px; font-weight: bold; }
+        #modal-close:hover { color: #87ff47; }
+        #modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 99; backdrop-filter: blur(5px); }
+        #modal-bg.active { display: block; }
+        .media-item { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #1a291e; }
+        .media-link { display: block; margin-top: 15px; padding: 12px; background-color: #2ea043; color: #000; text-decoration: none; border-radius: 6px; font-weight: bold; }
+        .media-link:hover { background-color: #47ff69; box-shadow: 0 0 15px rgba(71, 255, 105, 0.4); }
     </style>
 </head>
 <body>
+
+    <div id="welcome-screen">
+        <h1>Творческое убежище</h1>
+        <p>Используйте скролл мыши для масштабирования, перетаскивайте холст и кликайте на ответвления, чтобы изучить данные.</p>
+        <button id="welcome-btn" onclick="enterUniverse()">Прорастить</button>
+    </div>
+
     <div id="canvas-container"></div>
+    
     <div id="modal-bg" onclick="closeModal()"></div>
     <div id="modal">
         <span id="modal-close" onclick="closeModal()">&times;</span>
-        <h2 id="modal-title" style="margin-top: 0;"></h2>
+        <h2 id="modal-title" style="margin-top: 0; color: #87ff47;"></h2>
         <p id="modal-desc"></p>
         <div id="modal-gallery"></div>
     </div>
 
     <script>
+        function enterUniverse() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('canvas-container').classList.add('ready');
+        }
+
         const width = window.innerWidth;
         const height = window.innerHeight;
         const svg = d3.select("#canvas-container").append("svg").attr("width", width).attr("height", height);
+        
+        // --- Создание SVG-фильтра для свечения (Neon Glow) ---
+        const defs = svg.append("defs");
+        const filter = defs.append("filter").attr("id", "glow");
+        filter.append("feGaussianBlur").attr("stdDeviation", "4").attr("result", "coloredBlur");
+        const feMerge = filter.append("feMerge");
+        feMerge.append("feMergeNode").attr("in", "coloredBlur");
+        feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+        // -----------------------------------------------------
+
         const g = svg.append("g");
         
         const zoom = d3.zoom().scaleExtent([0.2, 4]).on("zoom", (event) => { g.attr("transform", event.transform); });
         svg.call(zoom);
         svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, height / 2).scale(0.8));
 
-        // Асинхронная загрузка
         d3.json("data.json").then(data => {
             const root = d3.hierarchy(data);
-            const tree = d3.tree().size([2 * Math.PI, 500]);
+            const tree = d3.tree().size([2 * Math.PI, 500]); // 500 - длина ветвей
             tree(root);
 
             const linkGenerator = d3.linkRadial().angle(d => d.x).radius(d => d.y);
 
+            // Отрисовка ветвей (линий)
             g.selectAll(".link")
                 .data(root.links())
                 .join("path")
                 .attr("class", "link")
-                .attr("d", linkGenerator);
+                .attr("d", linkGenerator)
+                // Динамическая толщина ветви: чем ближе к центру, тем толще
+                .style("stroke-width", d => Math.max(1.5, 8 - (d.target.depth * 2)) + "px")
+                // Органический зеленый цвет ветвей
+                .style("stroke", d => {
+                    if (d.target.depth === 1) return "#3bb02e"; // Темно-зеленый у основания
+                    if (d.target.depth === 2) return "#6ded51"; // Ярко-зеленый дальше
+                    return "#aeff96"; // Салатовый на самых кончиках
+                });
 
             const node = g.selectAll(".node")
                 .data(root.descendants())
@@ -72,30 +155,33 @@
                 .attr("class", "node")
                 .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
 
+            // Отрисовка "почек" (узлов)
             node.append("circle")
-                .attr("r", d => d.depth === 0 ? 15 : (d.depth === 1 ? 10 : 7))
-                .style("fill", d => d.depth === 0 ? "#ff7b72" : (d.children ? "#d2a8ff" : "#1f6feb"))
+                .attr("r", d => d.depth === 0 ? 20 : (d.depth === 1 ? 8 : 5))
+                .style("fill", d => {
+                    if (d.depth === 0) return "#9e5c43"; // Терракотовое семечко ядра (Synplant core)
+                    if (d.children) return "#2ea043"; // Зеленые узлы с ветвлением
+                    return "#baf5a9"; // Светлые кончики-листья
+                })
                 .on("click", (event, d) => showModal(d.data));
 
             node.append("text")
                 .attr("dy", "0.31em")
-                .attr("x", d => d.x < Math.PI === !d.children ? 20 : -20)
+                .attr("x", d => d.x < Math.PI === !d.children ? (d.depth === 0 ? 30 : 15) : (d.depth === 0 ? -30 : -15))
                 .attr("text-anchor", d => d.x < Math.PI === !d.children ? "start" : "end")
                 .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
                 .text(d => d.name)
-                .style("font-size", d => d.depth === 0 ? "24px" : (d.depth === 1 ? "18px" : "14px"))
-                .style("fill", "#c9d1d9")
-                .style("font-weight", d => d.depth === 0 ? "bold" : "normal")
-                .style("text-shadow", "0 2px 4px rgba(0,0,0,0.9)");
+                .style("font-size", d => d.depth === 0 ? "20px" : (d.depth === 1 ? "16px" : "12px"))
+                .style("font-weight", d => d.depth === 0 ? "bold" : "normal");
+                
         }).catch(err => console.error("Ошибка загрузки data.json:", err));
 
-        // Рендер галереи в модалке
         function showModal(data) {
             document.getElementById('modal-title').innerText = data.name;
             document.getElementById('modal-desc').innerText = data.desc || "";
             
             const gallery = document.getElementById('modal-gallery');
-            gallery.innerHTML = ""; // Очищаем старый контент
+            gallery.innerHTML = ""; 
 
             if (data.media && data.media.length > 0) {
                 data.media.forEach(item => {
@@ -104,7 +190,7 @@
                     } else if (item.type === "video") {
                         gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
                     } else if (item.type === "link") {
-                        gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link">${item.text || "Перейти по ссылке"}</a>`;
+                        gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link">${item.text || "Перейти ↗"}</a>`;
                     }
                 });
             }
@@ -113,12 +199,9 @@
             document.getElementById('modal-bg').classList.add('active');
         }
 
-        // Очистка и закрытие
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
             document.getElementById('modal-bg').classList.remove('active');
-            
-            // Останавливаем видео при закрытии
             const videos = document.querySelectorAll('#modal-gallery video');
             videos.forEach(vid => vid.pause());
         }

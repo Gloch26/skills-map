@@ -1,74 +1,63 @@
 {
-  "name": "ЯДРО: Мультизадачность",
-  "desc": "Балансирую между жизнью.",
+  "name": "ЯДРО",
+  "desc": "Главный интерфейс",
   "media": [
-    { "type": "image", "url": "https://placehold.co/600x600/ff7b72/FFF?text=Твое+Фото+Для+Ядра" }
+    { "type": "image", "url": "https://placehold.co/600x400/050508/00f0ff?text=Аватар+Ядра" }
   ],
   "children": [
     {
       "name": "Видеопродакшн",
       "children": [
         {
-          "name": "Монтаж & Динамика",
-          "desc": "Собираю ролики, делаю цветокоррекцию и настраиваю темп.",
-          "category": "Adobe Premiere",
-          "media": [
-            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Таймлайн+проекта+1" },
-            { "type": "image", "url": "https://placehold.co/600x350/23272e/abb2bf?text=Таймлайн+проекта+2" },
-            { "type": "link", "url": "https://vk.com/", "text": "Пост в паблике про этот ролик ↗" }
-          ]
+          "name": "Свет",
+          "desc": "Постановка киноосвещения, работа с RGB.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Схема+Света" }]
+        },
+        {
+          "name": "Съемка",
+          "desc": "Операторская работа, композиция.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Бэкстейдж" }]
+        },
+        {
+          "name": "Монтаж",
+          "desc": "Сборка, ритм, цветокоррекция.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Таймлайн" }]
+        },
+        {
+          "name": "Нейросети",
+          "desc": "Генерация, апскейл, ротоскопинг.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Stable+Diffusion" }]
         }
       ]
     },
     {
-      "name": "Лайф",
+      "name": "Фотограф",
+      "desc": "Портреты, репортажи, студия.",
+      "media": [
+        { "type": "image", "url": "https://placehold.co/600x400/ff0055/FFF?text=Фотосессия+1" },
+        { "type": "image", "url": "https://placehold.co/600x400/ff0055/FFF?text=Фотосессия+2" }
+      ]
+    },
+    {
+      "name": "Косплейщик",
       "children": [
         {
-          "name": "Доска событий",
-          "desc": "Мои хайлайты за прошлый месяц.",
-          "media": [
-            { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Событие+1" },
-            { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Событие+2" }
-          ]
+          "name": "Визажист",
+          "desc": "Бьюти-мейкап, контуринг.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x400/ff0055/FFF?text=Мейкап" }]
+        },
+        {
+          "name": "Гример",
+          "desc": "Пластический грим, шрамы, текстуры.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x400/ff0055/FFF?text=SFX+Грим" }]
         }
       ]
     },
     {
-      "name": "Музыка",
-      "children": [
-        {
-          "name": "Релизы",
-          "desc": "Что делал.",
-          "media": [
-            { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Трек+1" }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Психология",
-      "children": [
-        {
-          "name": "Инсайты",
-          "desc": "Важные мысли.",
-          "media": [
-            { "type": "image", "url": "https://placehold.co/600x400/ea4aaa/FFF?text=Статья+1" }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Кодинг",
-      "children": [
-        {
-          "name": "Web / JS",
-          "desc": "Создаю интерактивные интерфейсы вроде этой диаграммы.",
-          "category": "Frontend",
-          "media": [
-            { "type": "image", "url": "https://placehold.co/600x800/d29922/FFF?text=Скриншот+Кода" },
-            { "type": "video", "url": "https://www.w3schools.com/html/mov_bbb.mp4" }
-          ]
-        }
+      "name": "Ремонтник",
+      "desc": "Сборка ПК, пайка, хардвер.",
+      "media": [
+        { "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Ремонт+Железа" }
       ]
     }
   ]

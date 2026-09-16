@@ -6,7 +6,6 @@
     <title>Творческое убежище</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        /* Имитация иллюминатора Synplant: радиальный градиент в абсолютный черный */
         body { 
             margin: 0; 
             background: radial-gradient(circle at center, #111a14 0%, #000000 80%);
@@ -14,19 +13,17 @@
             font-family: sans-serif; 
             overflow: hidden; 
         }
-        
         #canvas-container { 
             width: 100vw; height: 100vh; cursor: grab; 
             filter: blur(15px); transform: scale(1.05); 
-            transition: filter 1s ease, transform 1s ease; 
+            transition: filter 1.5s ease, transform 1.5s ease; 
         }
         #canvas-container:active { cursor: grabbing; }
         #canvas-container.ready { filter: blur(0px); transform: scale(1); }
 
-        /* Стартовый экран */
         #welcome-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 1000; text-align: center;
             transition: opacity 0.8s ease, visibility 0.8s;
@@ -42,37 +39,18 @@
         }
         #welcome-btn:hover { background-color: #47ff69; box-shadow: 0 0 30px rgba(71, 255, 105, 0.8); transform: translateY(-2px); }
 
-        /* Узлы (семечко и почки) */
-        .node circle { 
-            stroke: #000; 
-            stroke-width: 2px; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-        }
-        .node circle:hover { 
-            filter: brightness(1.5) drop-shadow(0 0 10px #87ff47); 
-            r: 12; 
-        }
+        /* Ветви и свечение */
+        .branch { fill: none; filter: url(#glow); stroke-linecap: round; }
+        .data-branch { stroke: #6ded51; }
+        .dec-branch { stroke: #3bb02e; opacity: 0.4; }
         
-        /* Стили текста (с легким зеленым оттенком) */
+        .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
+        .node circle:hover { filter: brightness(1.5) drop-shadow(0 0 10px #87ff47); r: 12; }
         .node text { 
-            font-family: monospace, sans-serif; 
-            font-size: 14px; 
-            fill: #8fe69d; 
-            pointer-events: none; 
-            text-shadow: 0 0 5px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,1); 
+            font-family: monospace, sans-serif; font-size: 14px; fill: #8fe69d; 
+            pointer-events: none; text-shadow: 0 0 5px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,1); 
         }
 
-        /* Линии (ветви) */
-        .link { 
-            fill: none; 
-            /* Применяем свечение к линиям */
-            filter: url(#glow); 
-            opacity: 0.85; 
-            transition: stroke-width 0.3s ease;
-        }
-
-        /* Модальное окно (оставил строгим, чтобы контент читался) */
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; }
         #modal.active { display: block; }
         #modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; color: #5a7560; font-size: 24px; font-weight: bold; }
@@ -88,7 +66,7 @@
 
     <div id="welcome-screen">
         <h1>Творческое убежище</h1>
-        <p>Используйте скролл мыши для масштабирования, перетаскивайте холст и кликайте на ответвления, чтобы изучить данные.</p>
+        <p>Нажмите для генерации органической структуры.</p>
         <button id="welcome-btn" onclick="enterUniverse()">Прорастить</button>
     </div>
 
@@ -103,23 +81,24 @@
     </div>
 
     <script>
+        let isGrown = false;
+
         function enterUniverse() {
             document.getElementById('welcome-screen').classList.add('hidden');
             document.getElementById('canvas-container').classList.add('ready');
+            if (!isGrown) { animateGrowth(); isGrown = true; }
         }
 
         const width = window.innerWidth;
         const height = window.innerHeight;
         const svg = d3.select("#canvas-container").append("svg").attr("width", width).attr("height", height);
         
-        // --- Создание SVG-фильтра для свечения (Neon Glow) ---
         const defs = svg.append("defs");
         const filter = defs.append("filter").attr("id", "glow");
-        filter.append("feGaussianBlur").attr("stdDeviation", "4").attr("result", "coloredBlur");
+        filter.append("feGaussianBlur").attr("stdDeviation", "3").attr("result", "coloredBlur");
         const feMerge = filter.append("feMerge");
         feMerge.append("feMergeNode").attr("in", "coloredBlur");
         feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-        // -----------------------------------------------------
 
         const g = svg.append("g");
         
@@ -127,74 +106,137 @@
         svg.call(zoom);
         svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, height / 2).scale(0.8));
 
+        // Генератор органического сплайна с шумом
+        const lineGen = d3.line().x(d => d[0]).y(d => d[1]).curve(d3.curveCatmullRom.alpha(0.5));
+        function getOrganicPath(x1, y1, x2, y2, jitter) {
+            let points = [[x1, y1]];
+            let dist = Math.hypot(x2 - x1, y2 - y1);
+            let segments = Math.max(2, Math.floor(dist / 25));
+            let dx = x2 - x1;
+            let dy = y2 - y1;
+            
+            // Задаем случайную дугу искривления для всей ветки
+            let curveDir = Math.random() > 0.5 ? 1 : -1;
+            let curveIntensity = dist * (0.1 + Math.random() * 0.15);
+
+            for(let i=1; i<segments; i++) {
+                let t = i / segments;
+                let perpX = -dy / dist;
+                let perpY = dx / dist;
+                let bow = Math.sin(t * Math.PI) * curveDir * curveIntensity;
+                
+                let bx = x1 + dx * t + perpX * bow;
+                let by = y1 + dy * t + perpY * bow;
+
+                points.push([
+                    bx + (Math.random() - 0.5) * jitter,
+                    by + (Math.random() - 0.5) * jitter
+                ]);
+            }
+            points.push([x2, y2]);
+            return lineGen(points);
+        }
+
         d3.json("data.json").then(data => {
             const root = d3.hierarchy(data);
-            const tree = d3.tree().size([2 * Math.PI, 500]); // 500 - длина ветвей
+            const tree = d3.tree().size([2 * Math.PI, 450]); 
             tree(root);
 
-            const linkGenerator = d3.linkRadial().angle(d => d.x).radius(d => d.y);
+            // Конвертация полярных координат D3 в декартовы
+            root.descendants().forEach(d => {
+                d.cartX = Math.cos(d.x - Math.PI/2) * d.y;
+                d.cartY = Math.sin(d.x - Math.PI/2) * d.y;
+            });
 
-            // Отрисовка ветвей (линий)
-            g.selectAll(".link")
+            // 1. Генерация декоративных веток (для плотности куста)
+            const decPaths = [];
+            root.descendants().forEach(node => {
+                const numSprouts = node.depth === 0 ? 12 : (node.depth === 1 ? 5 : 2);
+                for(let i=0; i < numSprouts; i++) {
+                    const angle = node.x + (Math.random() - 0.5) * 2; // Разброс угла
+                    const len = Math.random() * 200 + 50;
+                    const endX = node.cartX + Math.cos(angle - Math.PI/2) * len;
+                    const endY = node.cartY + Math.sin(angle - Math.PI/2) * len;
+                    decPaths.push({
+                        d: getOrganicPath(node.cartX, node.cartY, endX, endY, 20),
+                        depth: node.depth
+                    });
+                }
+            });
+
+            g.selectAll(".dec-branch")
+                .data(decPaths)
+                .join("path")
+                .attr("class", "branch dec-branch")
+                .attr("d", d => d.d)
+                .style("stroke-width", d => Math.max(1, 4 - d.depth) + "px");
+
+            // 2. Отрисовка основных веток (несущих данные)
+            g.selectAll(".data-branch")
                 .data(root.links())
                 .join("path")
-                .attr("class", "link")
-                .attr("d", linkGenerator)
-                // Динамическая толщина ветви: чем ближе к центру, тем толще
-                .style("stroke-width", d => Math.max(1.5, 8 - (d.target.depth * 2)) + "px")
-                // Органический зеленый цвет ветвей
-                .style("stroke", d => {
-                    if (d.target.depth === 1) return "#3bb02e"; // Темно-зеленый у основания
-                    if (d.target.depth === 2) return "#6ded51"; // Ярко-зеленый дальше
-                    return "#aeff96"; // Салатовый на самых кончиках
-                });
+                .attr("class", "branch data-branch")
+                .attr("d", d => getOrganicPath(d.source.cartX, d.source.cartY, d.target.cartX, d.target.cartY, 15))
+                .style("stroke-width", d => Math.max(2, 8 - (d.target.depth * 2)) + "px");
 
+            // 3. Отрисовка узлов (скрыты до окончания роста)
             const node = g.selectAll(".node")
                 .data(root.descendants())
                 .join("g")
                 .attr("class", "node")
-                .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+                .attr("transform", d => `translate(${d.cartX},${d.cartY})`)
+                .style("opacity", 0); // Прячем
 
-            // Отрисовка "почек" (узлов)
             node.append("circle")
                 .attr("r", d => d.depth === 0 ? 20 : (d.depth === 1 ? 8 : 5))
-                .style("fill", d => {
-                    if (d.depth === 0) return "#9e5c43"; // Терракотовое семечко ядра (Synplant core)
-                    if (d.children) return "#2ea043"; // Зеленые узлы с ветвлением
-                    return "#baf5a9"; // Светлые кончики-листья
-                })
+                .style("fill", d => d.depth === 0 ? "#9e5c43" : (d.children ? "#2ea043" : "#baf5a9"))
                 .on("click", (event, d) => showModal(d.data));
 
             node.append("text")
                 .attr("dy", "0.31em")
-                .attr("x", d => d.x < Math.PI === !d.children ? (d.depth === 0 ? 30 : 15) : (d.depth === 0 ? -30 : -15))
-                .attr("text-anchor", d => d.x < Math.PI === !d.children ? "start" : "end")
-                .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
-                .text(d => d.name)
+                .attr("x", d => d.cartX > 0 ? 15 : -15)
+                .attr("text-anchor", d => d.cartX > 0 ? "start" : "end")
+                .text(d => d.data.name)
                 .style("font-size", d => d.depth === 0 ? "20px" : (d.depth === 1 ? "16px" : "12px"))
                 .style("font-weight", d => d.depth === 0 ? "bold" : "normal");
-                
+
         }).catch(err => console.error("Ошибка загрузки data.json:", err));
 
+        // Вызов анимации роста веток
+        function animateGrowth() {
+            // Анимируем все пути (stroke-dashoffset)
+            d3.selectAll(".branch").each(function() {
+                const length = this.getTotalLength();
+                d3.select(this)
+                    .attr("stroke-dasharray", length)
+                    .attr("stroke-dashoffset", length)
+                    .transition()
+                    .duration(1500 + Math.random() * 1000) // Случайная скорость роста
+                    .ease(d3.easeCubicOut)
+                    .attr("stroke-dashoffset", 0);
+            });
+
+            // Проявляем узлы с задержкой (когда ветки доросли)
+            d3.selectAll(".node")
+                .transition()
+                .delay(d => 1000 + d.depth * 500) // Ядро появляется первым
+                .duration(800)
+                .style("opacity", 1);
+        }
+
+        // Логика модального окна
         function showModal(data) {
             document.getElementById('modal-title').innerText = data.name;
             document.getElementById('modal-desc').innerText = data.desc || "";
-            
             const gallery = document.getElementById('modal-gallery');
             gallery.innerHTML = ""; 
-
-            if (data.media && data.media.length > 0) {
+            if (data.media) {
                 data.media.forEach(item => {
-                    if (item.type === "image") {
-                        gallery.innerHTML += `<img src="${item.url}" class="media-item">`;
-                    } else if (item.type === "video") {
-                        gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
-                    } else if (item.type === "link") {
-                        gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link">${item.text || "Перейти ↗"}</a>`;
-                    }
+                    if (item.type === "image") gallery.innerHTML += `<img src="${item.url}" class="media-item">`;
+                    else if (item.type === "video") gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
+                    else if (item.type === "link") gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link">${item.text || "Перейти ↗"}</a>`;
                 });
             }
-
             document.getElementById('modal').classList.add('active');
             document.getElementById('modal-bg').classList.add('active');
         }
@@ -202,8 +244,7 @@
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
             document.getElementById('modal-bg').classList.remove('active');
-            const videos = document.querySelectorAll('#modal-gallery video');
-            videos.forEach(vid => vid.pause());
+            document.querySelectorAll('#modal-gallery video').forEach(vid => vid.pause());
         }
     </script>
 </body>

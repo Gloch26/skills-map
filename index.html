@@ -209,23 +209,26 @@
                 .style("fill", d => d.depth === 0 ? "#9e5c43" : (d.children ? "#2ea043" : "#baf5a9"))
                 .on("click", (event, d) => showModal(d.data));
 
-            // --- УМНАЯ СИСТЕМА АНХОРОВ (АНТИ-КОЛЛИЗИЯ И ПОЗИЦИОНИРОВАНИЕ) ---
+            // --- ИДЕАЛЬНОЕ ВЕКТОРНОЕ РАЗВЕДЕНИЕ ТЕКСТА БЕЗ КОЛЛИЗИЙ ---
             node.append("text")
                 .attr("dy", d => {
                     if (d.depth === 0) return "40px";
-                    // Если узел в верхней полусфере (над горизонтом), сдвигаем текст выше попки
-                    return d.cartY < -50 ? "-12px" : "0.31em";
+                    // Верхняя полусфера — текст поднимаем выше
+                    if (d.cartY < -120) return "-10px";
+                    // Нижняя полусфера — текст опускаем ниже
+                    if (d.cartY > 120) return "1.2em";
+                    return "0.31em";
                 })
                 .attr("x", d => {
                     if (d.depth === 0) return 0;
-                    // Если узел сильно сверху или снизу, центрируем текст ровно по X
-                    if (Math.abs(d.cartX) < 80) return 0;
-                    // Справа от центра — текст справа от круга, слева — слева
+                    // Если узел строго наверху или внизу, центрируем текст
+                    if (Math.abs(d.cartX) < 70) return 0;
+                    // Справа от центра — текст справа, слева — слева
                     return d.cartX > 0 ? 18 : -18;
                 })
                 .attr("text-anchor", d => {
                     if (d.depth === 0) return "middle";
-                    if (Math.abs(d.cartX) < 80) return "middle";
+                    if (Math.abs(d.cartX) < 70) return "middle";
                     return d.cartX > 0 ? "start" : "end";
                 })
                 .text(d => d.depth === 0 ? "Я" : d.data.name)

@@ -1,8 +1,8 @@
 {
-  "name": "ЯДРО",
-  "desc": "Главный интерфейс",
+  "name": "ЯДРО: Мультизадачность",
+  "desc": "Симбиоз навыков и проектов.",
   "media": [
-    { "type": "image", "url": "https://placehold.co/600x400/050508/00f0ff?text=Аватар+Ядра" }
+    { "type": "image", "url": "https://placehold.co/600x600/ff7b72/FFF?text=Аватар" }
   ],
   "children": [
     {
@@ -10,32 +10,49 @@
       "children": [
         {
           "name": "Свет",
-          "desc": "Постановка киноосвещения, работа с RGB.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Схема+Света" }]
+          "desc": "Постановка киноосвещения.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }]
         },
         {
           "name": "Съемка",
-          "desc": "Операторская работа, композиция.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Бэкстейдж" }]
+          "desc": "Операторская работа.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }]
         },
         {
           "name": "Монтаж",
-          "desc": "Сборка, ритм, цветокоррекция.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Таймлайн" }]
+          "desc": "Сборка, ритм.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }]
         },
         {
           "name": "Нейросети",
-          "desc": "Генерация, апскейл, ротоскопинг.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Stable+Diffusion" }]
+          "desc": "Генерация, апскейл.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }]
         }
       ]
     },
     {
-      "name": "Фотограф",
-      "desc": "Портреты, репортажи, студия.",
-      "media": [
-        { "type": "image", "url": "https://placehold.co/600x400/ff0055/FFF?text=Фотосессия+1" },
-        { "type": "image", "url": "https://placehold.co/600x400/ff0055/FFF?text=Фотосессия+2" }
+      "name": "Ремонтник",
+      "children": [
+        {
+          "name": "Компы",
+          "desc": "Сборка ПК, пайка, хардвер.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Компы" }]
+        },
+        {
+          "name": "Телефоны",
+          "desc": "Модульный ремонт, экраны.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Телефоны" }]
+        },
+        {
+          "name": "ТВ",
+          "desc": "Ремонт подсветки и плат.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=ТВ" }]
+        },
+        {
+          "name": "Сисадмин",
+          "desc": "Настройка сетей и серверов.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Сисадмин" }]
+        }
       ]
     },
     {
@@ -43,21 +60,69 @@
       "children": [
         {
           "name": "Визажист",
-          "desc": "Бьюти-мейкап, контуринг.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x400/ff0055/FFF?text=Мейкап" }]
+          "desc": "Бьюти-мейкап.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Мейкап" }]
         },
         {
           "name": "Гример",
-          "desc": "Пластический грим, шрамы, текстуры.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x400/ff0055/FFF?text=SFX+Грим" }]
+          "desc": "Пластический грим, шрамы.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Грим" }]
         }
       ]
     },
     {
-      "name": "Ремонтник",
-      "desc": "Сборка ПК, пайка, хардвер.",
-      "media": [
-        { "type": "image", "url": "https://placehold.co/600x400/00f0ff/000?text=Ремонт+Железа" }
+      "name": "Фотограф",
+      "children": [
+        {
+          "name": "Портреты",
+          "desc": "Студийная съемка.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Портреты" }]
+        },
+        {
+          "name": "Репортаж",
+          "desc": "Событийная фотография.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ea4aaa/FFF?text=Репортаж" }]
+        }
+      ]
+    },
+    {
+      "name": "Кодинг",
+      "children": [
+        {
+          "name": "Web / JS",
+          "desc": "Интерактивные интерфейсы.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/d29922/FFF?text=Код" }]
+        }
+      ]
+    },
+    {
+      "name": "Музыка",
+      "children": [
+        {
+          "name": "Релизы",
+          "desc": "Сведение и звук.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Музыка" }]
+        }
+      ]
+    },
+    {
+      "name": "Психология",
+      "children": [
+        {
+          "name": "Инсайты",
+          "desc": "Важные мысли.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/d2a8ff/000?text=Инсайты" }]
+        }
+      ]
+    },
+    {
+      "name": "Лайф",
+      "children": [
+        {
+          "name": "События",
+          "desc": "Хайлайты.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/1f6feb/FFF?text=События" }]
+        }
       ]
     }
   ]

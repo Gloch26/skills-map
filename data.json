@@ -42,7 +42,7 @@
           "name": "3D",
           "desc": "Чуть 3д хрючева.",
           "media": [{ "type": "video", "url": "./assets/vid/7 courtney just relax - 16.mp4" }]
-          "media": [{ "type": "video", "url": "./assets/vid/NITTØ Animatic 25 10 25_2.mp4" }]
+          "media": [{ "type": "link", "url": "https://youtu.be/wyb7uFEdDH4", "text": "Невышедший сниппет (unreal и фотосканы лиц) ↗" }]
         }
       ]
     },
@@ -162,6 +162,12 @@
           "name": "Идеи",
           "desc": "Потоки сознания и концепты, которые иногда даже доходят до реализации.",
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/d2a8ff/000?text=Идеи" }]
+        },
+        {
+          "name": "Канальчики",
+          "desc": "Перед открытием - умыться святой водой.",
+          "media": [{ "type": "link", "url": "https://www.youtube.com/@aptemsk8296", "text": "Ютубчик ↗" }]
+          "media": [{ "type": "link", "url": "https://www.instagram.com/gloomycharm/", "text": "Инстаграмчик ↗" }]
         },
         {
           "name": "Стишки",

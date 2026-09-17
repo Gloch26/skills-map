@@ -25,7 +25,7 @@
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }]
         },
         {
-          "name": "AI",
+          "name": "Нейросети / AI",
           "desc": "Пытаюсь заставить искусственный интеллект работать за меня, пока я сплю.",
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }]
         },
@@ -121,16 +121,7 @@
       "children": [
         {
           "name": "Кавера",
-          "desc": "Порой собственные интерпретации.",
-          "media": [
-            { "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Кавера" },
-            { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", "title": "Демо трека #1 (Кавер)" },
-            { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", "title": "Демо трека #2 (Эксперимент)" }
-          ]
-        }
-                {
-          "name": "Демки",
-          "desc": "Чето можно послушать.",
+          "desc": "Собственные интерпретации, кавера и живые адаптации известных треков.",
           "media": [
             { "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Кавера" },
             { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", "title": "Демо трека #1 (Кавер)" },

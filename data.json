@@ -28,7 +28,10 @@
         {
           "name": "Монтаж",
           "desc": "Режу правду матку и лишние 40 дублей молчания на таймлайне.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }]
+          "media": [{ "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12 2.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_3_2026-09-18_01-32-12.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_2_2026-09-18_01-32-12.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" }]
         },
         {
           "name": "AI",

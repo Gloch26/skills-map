@@ -2,6 +2,7 @@
   "name": "Я",
   "desc": "Симбиоз размышлений, сентиментальности и сомнительных жизненных решений.",
   "media": [
+    { "type": "image", "url": "./assets/after Screenshot_204.webp" },
     { "type": "image", "url": "https://placehold.co/600x600/ff7b72/FFF?text=Аватар" }
   ],
   "children": [
@@ -12,27 +13,52 @@
         {
           "name": "Свет",
           "desc": "Выставляю так, чтобы тени скрывали экзистенциальный кризис.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_4_2026-09-18_01-12-34.webp" },
+            { "type": "image", "url": "./assets/photo_3_2026-09-18_01-12-34.webp" },
+            { "type": "image", "url": "./assets/photo_2_2026-09-18_01-12-34.webp" },
+            { "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" },
+            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }
+          ]
         },
         {
           "name": "Съемка",
           "desc": "Ловлю кадры до того, как техника скажет «ошибка карты памяти».",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-11.webp" },
+            { "type": "image", "url": "./assets/photo_3_2026-09-17_22-46-05.webp" },
+            { "type": "image", "url": "./assets/photo_24_2026-09-17_22-45-10.webp" },
+            { "type": "image", "url": "./assets/photo_6_2025-04-28_08-03-04.webp" },
+            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }
+          ]
         },
         {
           "name": "Монтаж",
           "desc": "Режу правду матку и лишние 40 дублей молчания на таймлайне.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12 2.webp" },
+            { "type": "image", "url": "./assets/photo_3_2026-09-18_01-32-12.webp" },
+            { "type": "image", "url": "./assets/photo_2_2026-09-18_01-32-12.webp" },
+            { "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" },
+            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }
+          ]
         },
         {
           "name": "AI",
           "desc": "Пытаюсь заставить искусственный интеллект работать за меня, пока я сплю.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }]
+          "media": [
+            { "type": "link", "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A", "text": "Хлебнуть нейрохрючева ↗" },
+            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }
+          ]
         },
         {
           "name": "3D",
-          "desc": "Чуть 3D в Unreal и Blender.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=3D+Unreal" }]
+          "desc": "Чуть 3д хрючева.",
+          "media": [
+            { "type": "video", "url": "./assets/vid/7 courtney just relax - 16.mp4" },
+            { "type": "link", "url": "https://youtu.be/wyb7uFEdDH4", "text": "Невышедший сниппет (unreal и фотосканы лиц) ↗" },
+            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=3D+Unreal" }
+          ]
         }
       ]
     },
@@ -152,6 +178,14 @@
           "name": "Идеи",
           "desc": "Потоки сознания и концепты, которые иногда даже доходят до реализации.",
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/d2a8ff/000?text=Идеи" }]
+        },
+        {
+          "name": "Канальчики",
+          "desc": "Перед открытием - умыться святой водой.",
+          "media": [
+            { "type": "link", "url": "https://www.youtube.com/@aptemsk8296", "text": "Ютубчик ↗" },
+            { "type": "link", "url": "https://www.instagram.com/gloomycharm/", "text": "Инстаграмчик ↗" }
+          ]
         },
         {
           "name": "Стишки",

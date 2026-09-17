@@ -2,7 +2,7 @@
   "name": "Я",
   "desc": "Симбиоз размышлений, сентиментальности и сомнительных жизненных решений.",
   "media": [
-    { "type": "image", "url": "./assets/after Screenshot_204.webp" }
+    { "type": "image", "url": "./assets/after%20Screenshot_204.webp" }
   ],
   "children": [
     {
@@ -33,7 +33,7 @@
           "name": "Монтаж",
           "desc": "Режу правду матку и лишние 40 дублей молчания на таймлайне.",
           "media": [
-            { "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12 2.webp" },
+            { "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12%202.webp" },
             { "type": "image", "url": "./assets/photo_3_2026-09-18_01-32-12.webp" },
             { "type": "image", "url": "./assets/photo_2_2026-09-18_01-32-12.webp" },
             { "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" }
@@ -50,7 +50,7 @@
           "name": "3D",
           "desc": "Чуть 3д хрючева.",
           "media": [
-            { "type": "video", "url": "./assets/vid/7 courtney just relax - 16.mp4" },
+            { "type": "video", "url": "./assets/vid/7%20courtney%20just%20relax%20-%2016.mp4" },
             { "type": "link", "url": "https://youtu.be/wyb7uFEdDH4", "text": "Невышедший сниппет (unreal и фотосканы лиц) ↗" }
           ]
         }
@@ -166,12 +166,12 @@
         {
           "name": "Психология",
           "desc": "Балуюсь с маккартами и всякой странной хернёй,чтобы аишки не ставили диагнозы.",
-          "media": [{ "type": "image", "url": "/assets/IMG20260915212051.webp" }]
+          "media": [{ "type": "image", "url": "./assets/IMG20260915212051.webp" }]
         },
         {
           "name": "Идеи",
           "desc": "Потоки сознания и концепты, которые иногда даже доходят до реализации.",
-          "media": [{ "type": "image", "url": "/assets/photo_12_2026-09-18_01-32-12.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_12_2026-09-18_01-32-12.webp" }]
         },
         {
           "name": "Канальчики",

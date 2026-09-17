@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Творческое уeбежище</title>
+    <title>Творческое уебежище</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000000 80%); color: #c9d1d9; font-family: system-ui, -apple-system, sans-serif; overflow: hidden; width: 100vw; height: 100vh; }
@@ -26,6 +26,32 @@
         .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
         .node circle:hover { filter: brightness(1.5); }
         .node text { pointer-events: none; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; }
+
+        /* Мягкое неоновое дыхание ядра */
+        @keyframes coreGlow {
+            0%, 100% { filter: drop-shadow(0 0 6px rgba(222, 136, 106, 0.4)); }
+            50% { filter: drop-shadow(0 0 16px rgba(222, 136, 106, 0.95)) brightness(1.15); }
+        }
+        .core-circle {
+            animation: coreGlow 3s ease-in-out infinite;
+        }
+
+        /* Плавное, уменьшенное в 2 раза покачивание ветвей (без отрывов) */
+        @keyframes sway0 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(0.45deg); } }
+        @keyframes sway1 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-0.4deg); } }
+        @keyframes sway2 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(0.35deg) scale(1.003); } }
+        @keyframes sway3 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-0.45deg) scale(0.997); } }
+
+        .cluster-0 { animation: sway0 7.5s ease-in-out infinite; transform-origin: 0px 0px; }
+        .cluster-1 { animation: sway1 9s ease-in-out infinite; transform-origin: 0px 0px; }
+        .cluster-2 { animation: sway2 6.8s ease-in-out infinite; transform-origin: 0px 0px; }
+        .cluster-3 { animation: sway3 8.2s ease-in-out infinite; transform-origin: 0px 0px; }
+
+        /* Легкое колыхание центральных фоновых усиков */
+        @keyframes centerWhiskers1 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(0.8deg); } }
+        @keyframes centerWhiskers2 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-0.8deg); } }
+        .center-dec-odd { animation: centerWhiskers1 6.5s ease-in-out infinite; transform-origin: 0px 0px; }
+        .center-dec-even { animation: centerWhiskers2 8.5s ease-in-out infinite; transform-origin: 0px 0px; }
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 25px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; box-sizing: border-box; }
         #modal.active { display: block; }
@@ -171,82 +197,120 @@
                 }
             });
 
-            const links = root.links();
-            treeLayer.selectAll(".data-branch")
-                .data(links).join("path")
-                .attr("class", "branch data-branch")
-                .attr("d", d => getStaticOrganicPath(d.source.cartX, d.source.cartY, d.target.cartX, d.target.cartY))
-                .style("stroke-width", d => Math.max(2, 8 - (d.target.depth * 2)) + "px");
-
-            const decPaths = [];
-            const totalDec = window.innerWidth < 768 ? 20 : 40;
+            // 1. Центральные фоновые усики
+            const centerDecGroup = treeLayer.append("g").attr("class", "center-dec-container");
+            const totalDec = window.innerWidth < 768 ? 20 : 36;
             for(let i=0; i < totalDec; i++) {
                 let angle = (i / totalDec) * 2 * Math.PI + (Math.random() - 0.5) * 0.1;
-                let len = Math.random() * 100 + 40;
+                let len = Math.random() * 90 + 35;
                 let endX = Math.cos(angle - Math.PI/2) * len;
                 let endY = Math.sin(angle - Math.PI/2) * len;
-                decPaths.push({ d: getStaticOrganicPath(0, 0, endX, endY) });
+                centerDecGroup.append("path")
+                    .attr("class", "branch dec-branch " + (i % 2 === 0 ? "center-dec-even" : "center-dec-odd"))
+                    .attr("d", getStaticOrganicPath(0, 0, endX, endY))
+                    .style("stroke-width", "1.5px");
             }
 
-            root.descendants().forEach(node => {
-                if (node.depth === 1) {
-                    for(let i=0; i < 2; i++) {
-                        let angle = node.x + (Math.random() - 0.5) * 1.2; 
-                        let len = Math.random() * 55 + 25; 
-                        let endX = node.cartX + Math.cos(angle - Math.PI/2) * len;
-                        let endY = node.cartY + Math.sin(angle - Math.PI/2) * len;
-                        decPaths.push({ d: getStaticOrganicPath(node.cartX, node.cartY, endX, endY) });
-                    }
+            // 2. Ветви-кластеры (каждая главная ветвь + подусы + усики колышутся синхронно без отрывов)
+            root.children.forEach((mainNode, i) => {
+                const cluster = treeLayer.append("g")
+                    .attr("class", `branch-cluster cluster-${i % 4}`);
+
+                // Главный ус от центра
+                cluster.append("path")
+                    .attr("class", "branch data-branch")
+                    .attr("d", getStaticOrganicPath(0, 0, mainNode.cartX, mainNode.cartY))
+                    .style("stroke-width", "6px");
+
+                // Мелкие усики вокруг главного узла
+                for(let j=0; j < 2; j++) {
+                    let angle = mainNode.x + (Math.random() - 0.5) * 1.2; 
+                    let len = Math.random() * 55 + 25; 
+                    let endX = mainNode.cartX + Math.cos(angle - Math.PI/2) * len;
+                    let endY = mainNode.cartY + Math.sin(angle - Math.PI/2) * len;
+                    cluster.append("path")
+                        .attr("class", "branch dec-branch")
+                        .attr("d", getStaticOrganicPath(mainNode.cartX, mainNode.cartY, endX, endY))
+                        .style("stroke-width", "1.5px");
                 }
+
+                // Подусы (дочерние ветки)
+                if (mainNode.children) {
+                    mainNode.children.forEach(subNode => {
+                        cluster.append("path")
+                            .attr("class", "branch data-branch")
+                            .attr("d", getStaticOrganicPath(mainNode.cartX, mainNode.cartY, subNode.cartX, subNode.cartY))
+                            .style("stroke-width", "4px");
+                    });
+                }
+
+                // Узлы и подписи внутри кластера
+                const clusterNodes = [mainNode, ...(mainNode.children || [])];
+                const nodeSel = cluster.selectAll(".node")
+                    .data(clusterNodes).join("g")
+                    .attr("class", "node")
+                    .attr("transform", d => `translate(${d.cartX},${d.cartY})`)
+                    .style("opacity", 0);
+
+                nodeSel.append("circle")
+                    .attr("r", d => d.depth === 1 ? 10 : 7)
+                    .style("fill", d => d.children ? "#2ea043" : "#baf5a9")
+                    .on("click", (event, d) => showModal(d.data));
+
+                nodeSel.append("text")
+                    .attr("dy", d => {
+                        if (d.cartY < -80) {
+                            const idx = d.parent ? d.parent.children.indexOf(d) : 0;
+                            return (idx % 2 === 0) ? "-24px" : "-8px";
+                        }
+                        if (d.cartY > 80) return "1.35em";
+                        return "0.35em";
+                    })
+                    .attr("x", d => {
+                        if (Math.abs(d.cartX) < 110 && d.cartY < 0) {
+                            const idx = d.parent ? d.parent.children.indexOf(d) : 0;
+                            const total = d.parent ? d.parent.children.length : 1;
+                            return (idx - (total - 1) / 2) * 32; 
+                        }
+                        return d.cartX > 0 ? 18 : -18;
+                    })
+                    .attr("text-anchor", d => {
+                        if (Math.abs(d.cartX) < 110 && d.cartY < 0) return "middle";
+                        return d.cartX > 0 ? "start" : "end";
+                    })
+                    .text(d => d.data.name)
+                    .style("font-size", d => d.depth === 1 ? "22px" : "16px")
+                    .style("fill", "#f0f5f1")
+                    .style("font-weight", "700");
             });
 
-            treeLayer.selectAll(".dec-branch")
-                .data(decPaths).join("path")
-                .attr("class", "branch dec-branch")
-                .attr("d", d => d.d)
-                .style("stroke-width", "1.5px");
-
-            const node = treeLayer.selectAll(".node")
-                .data(root.descendants()).join("g")
-                .attr("class", d => "node " + (d.depth > 0 ? "floating-node" : ""))
-                .attr("transform", d => `translate(${d.cartX},${d.cartY})`)
+            // 3. Центральное ядро «Я» (пульсирует строго на месте)
+            const coreGroup = treeLayer.append("g")
+                .attr("class", "node core-node")
                 .style("opacity", 0);
 
-            node.append("circle")
-                .attr("class", d => d.depth === 0 ? "core-circle" : "")
-                .attr("r", d => d.depth === 0 ? 22 : (d.depth === 1 ? 10 : 7))
-                .style("fill", d => d.depth === 0 ? "#9e5c43" : (d.children ? "#2ea043" : "#baf5a9"))
-                .on("click", (event, d) => showModal(d.data));
+            const coreCircle = coreGroup.append("circle")
+                .attr("class", "core-circle")
+                .attr("r", 22)
+                .style("fill", "#9e5c43")
+                .on("click", () => showModal(root.data));
 
-            // Буква "Я" ставится строго по центру с нулевым смещением
-            node.append("text")
-                .attr("dy", d => {
-                    if (d.depth === 0) return "0.35em";
-                    if (d.cartY < -80) {
-                        const idx = d.parent ? d.parent.children.indexOf(d) : 0;
-                        return (idx % 2 === 0) ? "-24px" : "-8px";
-                    }
-                    if (d.cartY > 80) return "1.35em";
-                    return "0.35em";
-                })
-                .attr("x", d => {
-                    if (d.depth === 0) return 0;
-                    if (Math.abs(d.cartX) < 110 && d.cartY < 0) {
-                        const idx = d.parent ? d.parent.children.indexOf(d) : 0;
-                        const total = d.parent ? d.parent.children.length : 1;
-                        return (idx - (total - 1) / 2) * 32; 
-                    }
-                    return d.cartX > 0 ? 18 : -18;
-                })
-                .attr("text-anchor", d => {
-                    if (d.depth === 0) return "middle";
-                    if (Math.abs(d.cartX) < 110 && d.cartY < 0) return "middle";
-                    return d.cartX > 0 ? "start" : "end";
-                })
-                .text(d => d.depth === 0 ? "Я" : d.data.name)
-                .style("font-size", d => d.depth === 0 ? "24px" : (d.depth === 1 ? "22px" : "16px"))
-                .style("fill", d => d.depth === 0 ? "#ffffff" : "#f0f5f1")
-                .style("font-weight", d => d.depth === 0 ? "900" : "700");
+            // Нативная плавная SVG-пульсация радиуса без смещений
+            coreCircle.append("animate")
+                .attr("attributeName", "r")
+                .attr("values", "21; 24.5; 21")
+                .attr("dur", "2.8s")
+                .attr("repeatCount", "indefinite")
+                .attr("calcMode", "spline")
+                .attr("keySplines", "0.4 0 0.2 1; 0.4 0 0.2 1");
+
+            coreGroup.append("text")
+                .attr("dy", "0.36em")
+                .attr("text-anchor", "middle")
+                .text("Я")
+                .style("font-size", "26px")
+                .style("fill", "#ffffff")
+                .style("font-weight", "900");
 
         }).catch(err => console.error("Ошибка загрузки data.json:", err));
 
@@ -263,7 +327,12 @@
         }
 
         function showModal(data) {
-            document.getElementById('modal-title').innerText = data.name || "Без названия";
+            // В модалке ядра отображаем строго "Я"
+            let title = data.name || "Без названия";
+            if (title.includes("ЯДРО") || title === "Я") {
+                title = "Я";
+            }
+            document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-desc').innerText = data.desc || "";
             
             const gallery = document.getElementById('modal-gallery');

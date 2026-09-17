@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Творческое уебежище</title>
+    <title>Творческое убежище</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000000 80%); color: #c9d1d9; font-family: system-ui, -apple-system, sans-serif; overflow: hidden; width: 100vw; height: 100vh; }
@@ -24,11 +24,8 @@
         .dec-branch { stroke: #3bb02e; opacity: 0.35; }
 
         .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
-        .node circle:hover { filter: brightness(1.5); r: 16; }
+        .node circle:hover { filter: brightness(1.5); }
         .node text { pointer-events: none; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; }
-
-        @keyframes heartbeat { 0% { transform: scale(1); } 15% { transform: scale(1.1); } 30% { transform: scale(1); } 100% { transform: scale(1); } }
-        .core-circle { animation: heartbeat 4s infinite; transform-origin: center; }
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 25px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; box-sizing: border-box; }
         #modal.active { display: block; }
@@ -145,7 +142,6 @@
             return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
         }
 
-        // Загружаем данные из внешнего data.json
         d3.json("data.json").then(data => {
             const root = d3.hierarchy(data);
             
@@ -222,9 +218,10 @@
                 .style("fill", d => d.depth === 0 ? "#9e5c43" : (d.children ? "#2ea043" : "#baf5a9"))
                 .on("click", (event, d) => showModal(d.data));
 
+            // Буква "Я" ставится строго по центру с нулевым смещением
             node.append("text")
                 .attr("dy", d => {
-                    if (d.depth === 0) return "40px";
+                    if (d.depth === 0) return "0.35em";
                     if (d.cartY < -80) {
                         const idx = d.parent ? d.parent.children.indexOf(d) : 0;
                         return (idx % 2 === 0) ? "-24px" : "-8px";
@@ -247,7 +244,7 @@
                     return d.cartX > 0 ? "start" : "end";
                 })
                 .text(d => d.depth === 0 ? "Я" : d.data.name)
-                .style("font-size", d => d.depth === 0 ? "36px" : (d.depth === 1 ? "22px" : "16px"))
+                .style("font-size", d => d.depth === 0 ? "24px" : (d.depth === 1 ? "22px" : "16px"))
                 .style("fill", d => d.depth === 0 ? "#ffffff" : "#f0f5f1")
                 .style("font-weight", d => d.depth === 0 ? "900" : "700");
 

@@ -21,9 +21,8 @@
 
         .branch { fill: none; filter: url(#glow); stroke-linecap: round; }
         .data-branch { stroke: #6ded51; }
-        .dec-branch { stroke: #3bb02e; opacity: 0.45; }
         
-        /* Живая волновая анимация для веток, убирающая статичность */
+        /* Динамика для основных веток */
         @keyframes branchWiggle {
             0% { transform: skewX(0deg) skewY(0deg) scale(1); }
             25% { transform: skewX(0.8deg) skewY(-0.6deg) scale(1.005); }
@@ -32,8 +31,21 @@
             100% { transform: skewX(0deg) skewY(0deg) scale(1); }
         }
         .data-branch { animation: branchWiggle 8s ease-in-out infinite; transform-origin: center; }
-        .data-branch:nth-child(odd) { animation-duration: 11s; animation-delay: -2s; }
-        .data-branch:nth-child(3n) { animation-duration: 7s; animation-delay: -4s; }
+
+        /* Живая динамика для фоновых мелких усиков (колыхание + пульсация яркости) */
+        @keyframes decWiggle {
+            0% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+            33% { transform: rotate(0.6deg) scale(1.02); opacity: 0.55; }
+            66% { transform: rotate(-0.5deg) scale(0.98); opacity: 0.25; }
+            100% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+        }
+        .dec-branch { 
+            stroke: #3bb02e; 
+            animation: decWiggle 12s ease-in-out infinite; 
+            transform-origin: center; 
+        }
+        .dec-branch:nth-child(even) { animation-duration: 9s; animation-delay: -3s; }
+        .dec-branch:nth-child(3n) { animation-duration: 15s; animation-delay: -6s; }
 
         .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
         .node circle:hover { filter: brightness(1.5) drop-shadow(0 0 15px #87ff47); r: 16; }

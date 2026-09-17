@@ -111,7 +111,6 @@
         {
           "name": "Web / JS",
           "desc": "Адын новый сайт и вот это чудо.",
-          "media": [{ "type": "link", "url": "https://github.com/Gloch26/skills-map", "text": "Открыть репозиторий ↗" }]
           "media": [{ "type": "link", "url": "https://xn----gtbe1amgsd4b2b.xn--p1ai/", "text": "Открыть сайт ↗" }]
         }
       ]

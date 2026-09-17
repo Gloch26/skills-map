@@ -121,7 +121,16 @@
       "children": [
         {
           "name": "Кавера",
-          "desc": "Собственные интерпретации, кавера и живые адаптации известных треков.",
+          "desc": "Кавера и порой свои интерпретации.",
+          "media": [
+            { "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Кавера" },
+            { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", "title": "Демо трека #1 (Кавер)" },
+            { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", "title": "Демо трека #2 (Эксперимент)" }
+          ]
+        }
+                {
+          "name": "Демки",
+          "desc": "Чето назаписывал.",
           "media": [
             { "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Кавера" },
             { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", "title": "Демо трека #1 (Кавер)" },

@@ -21,31 +21,7 @@
 
         .branch { fill: none; filter: url(#glow); stroke-linecap: round; }
         .data-branch { stroke: #6ded51; }
-        
-        /* Динамика для основных веток */
-        @keyframes branchWiggle {
-            0% { transform: skewX(0deg) skewY(0deg) scale(1); }
-            25% { transform: skewX(0.8deg) skewY(-0.6deg) scale(1.005); }
-            50% { transform: skewX(-0.6deg) skewY(0.8deg) scale(0.995); }
-            75% { transform: skewX(0.4deg) skewY(0.5deg) scale(1.002); }
-            100% { transform: skewX(0deg) skewY(0deg) scale(1); }
-        }
-        .data-branch { animation: branchWiggle 8s ease-in-out infinite; transform-origin: center; }
-
-        /* Живая динамика для фоновых мелких усиков (колыхание + пульсация яркости) */
-        @keyframes decWiggle {
-            0% { transform: rotate(0deg) scale(1); opacity: 0.3; }
-            33% { transform: rotate(0.6deg) scale(1.02); opacity: 0.55; }
-            66% { transform: rotate(-0.5deg) scale(0.98); opacity: 0.25; }
-            100% { transform: rotate(0deg) scale(1); opacity: 0.3; }
-        }
-        .dec-branch { 
-            stroke: #3bb02e; 
-            animation: decWiggle 12s ease-in-out infinite; 
-            transform-origin: center; 
-        }
-        .dec-branch:nth-child(even) { animation-duration: 9s; animation-delay: -3s; }
-        .dec-branch:nth-child(3n) { animation-duration: 15s; animation-delay: -6s; }
+        .dec-branch { stroke: #3bb02e; opacity: 0.45; }
 
         .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
         .node circle:hover { filter: brightness(1.5) drop-shadow(0 0 15px #87ff47); r: 16; }
@@ -54,17 +30,20 @@
         @keyframes heartbeat { 0% { transform: scale(1); filter: brightness(1); } 15% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 20px #de886a); } 30% { transform: scale(1); filter: brightness(1); } 100% { transform: scale(1); filter: brightness(1); } }
         .core-circle { animation: heartbeat 4s infinite; }
         
+        /* Единое дыхание и покачивание всей структуры (амплитуда уменьшена в 2 раза) */
         @keyframes treeBreathe { 
             0% { transform: scale(1) rotate(0deg) translate(0px, 0px); } 
-            33% { transform: scale(1.015) rotate(0.3deg) translate(1px, -1px); } 
-            66% { transform: scale(0.995) rotate(-0.2deg) translate(-1px, 1px); } 
+            25% { transform: scale(1.008) rotate(0.4deg) translate(2px, -1px); } 
+            75% { transform: scale(0.992) rotate(-0.4deg) translate(-2px, 1px); } 
             100% { transform: scale(1) rotate(0deg) translate(0px, 0px); } 
         }
-        .tree-layer { animation: treeBreathe 16s ease-in-out infinite; transform-origin: 0px 0px; }
+        /* Применяем анимацию только к контейнеру, чтобы усы не отрывались */
+        .tree-layer { animation: treeBreathe 14s ease-in-out infinite; transform-origin: 0px 0px; }
 
-        @keyframes floatNode { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
-        .floating-node > * { animation: floatNode 6s ease-in-out infinite; }
-        .floating-node:nth-child(even) > * { animation-delay: -2.5s; animation-duration: 7s; }
+        /* Плавное покачивание самих узлов (кружочков с текстом) */
+        @keyframes floatNode { 0% { transform: translateY(0px); } 50% { transform: translateY(-4px); } 100% { transform: translateY(0px); } }
+        .floating-node > * { animation: floatNode 7s ease-in-out infinite; }
+        .floating-node:nth-child(even) > * { animation-delay: -3s; animation-duration: 8s; }
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 25px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; }
         #modal.active { display: block; }

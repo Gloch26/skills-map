@@ -40,8 +40,9 @@
         },
         {
           "name": "3D",
-          "desc": "Чуть 3д в unreal и blender.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=3D+Unreal" }]
+          "desc": "Чуть 3д хрючева.",
+          "media": [{ "type": "video", "url": "./assets/vid/7 courtney just relax - 16.mp4" }]
+          "media": [{ "type": "video", "url": "./assets/vid/NITTØ Animatic 25 10 25_2.mp4" }]
         }
       ]
     },

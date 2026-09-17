@@ -111,7 +111,7 @@
         {
           "name": "Web / JS",
           "desc": "Интерактивные интерфейсы и ссылки на репозитории.",
-          "media": [{ "type": "link", "url": "https://github.com", "text": "Открыть репозиторий ↗" }]
+          "media": [{ "type": "link", "url": "https://github.com/Gloch26/skills-map", "text": "Открыть репозиторий ↗" }]
         }
       ]
     },

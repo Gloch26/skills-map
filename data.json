@@ -12,12 +12,18 @@
         {
           "name": "Свет",
           "desc": "Выставляю так, чтобы тени скрывали экзистенциальный кризис.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }]
+          "media": [{ "type": "image", "url": "./assets/photo_4_2026-09-18_01-12-34.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_3_2026-09-18_01-12-34.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_2_2026-09-18_01-12-34.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" }]
         },
         {
           "name": "Съемка",
           "desc": "Ловлю кадры до того, как техника скажет «ошибка карты памяти».",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }]
+          "media": [{ "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-11.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_3_2026-09-17_22-46-05.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_24_2026-09-17_22-45-10.webp" }]
+          "media": [{ "type": "image", "url": "./assets/photo_6_2025-04-28_08-03-04.webp" }]
         },
         {
           "name": "Монтаж",
@@ -27,7 +33,7 @@
         {
           "name": "AI",
           "desc": "Пытаюсь заставить искусственный интеллект работать за меня, пока я сплю.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }]
+          "media": [{ "type": "link", "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A", "text": "Хлебнуть нейрохрючева ↗" }]
         },
         {
           "name": "3D",

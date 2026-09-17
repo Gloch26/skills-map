@@ -43,6 +43,9 @@
         #modal-bg.active { display: block; }
         #modal-desc { color: #a3b8a8; font-size: 1rem; line-height: 1.5; margin-top: 10px; }
         .media-item { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #1a291e; }
+        .media-audio-container { margin-top: 15px; background: #121f15; padding: 12px; border-radius: 8px; border: 1px solid #233827; }
+        .media-audio-title { font-size: 0.9rem; color: #87ff47; margin-bottom: 6px; font-weight: bold; }
+        audio { width: 100%; height: 35px; }
     </style>
 </head>
 <body>
@@ -131,7 +134,7 @@
             let p2x = x1 + dx * 0.65 - perpX * bow;
             let p2y = y1 + dy * 0.65 - perpY * bow;
 
-            return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
+            return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2 }]);
         }
 
         d3.json("data.json").then(data => {
@@ -153,7 +156,8 @@
                     const i = d.parent.children.indexOf(d);
                     const rootSiblingsCount = d.parent.parent.children.length; 
                     const availableSector = (2 * Math.PI) / rootSiblingsCount;
-                    const spread = availableSector * 0.7; 
+                    // Расширяем сектор веера до 82%, чтобы много элементов не лепились друг к другу
+                    const spread = availableSector * 0.82; 
                     
                     d.x = count === 1 ? d.parent.x : d.parent.x - spread/2 + (i / (count - 1)) * spread;
                     d.x += 0.001;
@@ -210,21 +214,22 @@
                 .style("fill", d => d.depth === 0 ? "#9e5c43" : (d.children ? "#2ea043" : "#baf5a9"))
                 .on("click", (event, d) => showModal(d.data));
 
+            // Умный развод текста, исключающий наложение длинных названий вверху
             node.append("text")
                 .attr("dy", d => {
                     if (d.depth === 0) return "40px";
-                    if (d.cartY < -120) return "-10px";
+                    if (d.cartY < -120) return "-12px";
                     if (d.cartY > 120) return "1.2em";
                     return "0.31em";
                 })
                 .attr("x", d => {
                     if (d.depth === 0) return 0;
-                    if (Math.abs(d.cartX) < 70) return 0;
+                    if (Math.abs(d.cartX) < 60) return 0;
                     return d.cartX > 0 ? 18 : -18;
                 })
                 .attr("text-anchor", d => {
                     if (d.depth === 0) return "middle";
-                    if (Math.abs(d.cartX) < 70) return "middle";
+                    if (Math.abs(d.cartX) < 60) return "middle";
                     return d.cartX > 0 ? "start" : "end";
                 })
                 .text(d => d.depth === 0 ? "Я" : d.data.name)
@@ -246,10 +251,9 @@
             d3.selectAll(".node").transition().delay(d => 1200 + d.depth * 600).duration(1000).style("opacity", 1);
         }
 
-        // Защищенная логика модального окна (исправлен показ описаний)
         function showModal(data) {
             document.getElementById('modal-title').innerText = data.name || "Без названия";
-            document.getElementById('modal-desc').innerText = data.desc || "Описание скоро появится...";
+            document.getElementById('modal-desc').innerText = data.desc || "";
             
             const gallery = document.getElementById('modal-gallery');
             gallery.innerHTML = ""; 
@@ -260,6 +264,12 @@
                         gallery.innerHTML += `<img src="${item.url}" class="media-item">`;
                     } else if (item.type === "video") {
                         gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
+                    } else if (item.type === "audio") {
+                        gallery.innerHTML += `
+                            <div class="media-audio-container">
+                                <div class="media-audio-title">${item.title || "Аудио демо"}</div>
+                                <audio controls src="${item.url}"></audio>
+                            </div>`;
                     } else if (item.type === "link") {
                         gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link" style="display: block; margin-top: 15px; padding: 12px; background-color: #2ea043; color: #000; text-decoration: none; border-radius: 6px; font-weight: bold;">${item.text || "Перейти ↗"}</a>`;
                     }
@@ -272,7 +282,9 @@
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
             document.getElementById('modal-bg').classList.remove('active');
-            document.querySelectorAll('#modal-gallery video').forEach(vid => vid.pause());
+            document.querySelectorAll('#modal-gallery video, #modal-gallery audio').forEach(media => {
+                media.pause();
+            });
         }
     </script>
 </body>

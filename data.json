@@ -17,8 +17,7 @@
             { "type": "image", "url": "./assets/photo_4_2026-09-18_01-12-34.webp" },
             { "type": "image", "url": "./assets/photo_3_2026-09-18_01-12-34.webp" },
             { "type": "image", "url": "./assets/photo_2_2026-09-18_01-12-34.webp" },
-            { "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" },
-            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }
+            { "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" }
           ]
         },
         {
@@ -28,8 +27,7 @@
             { "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-11.webp" },
             { "type": "image", "url": "./assets/photo_3_2026-09-17_22-46-05.webp" },
             { "type": "image", "url": "./assets/photo_24_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_6_2025-04-28_08-03-04.webp" },
-            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }
+            { "type": "image", "url": "./assets/photo_6_2025-04-28_08-03-04.webp" }
           ]
         },
         {
@@ -39,16 +37,14 @@
             { "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12 2.webp" },
             { "type": "image", "url": "./assets/photo_3_2026-09-18_01-32-12.webp" },
             { "type": "image", "url": "./assets/photo_2_2026-09-18_01-32-12.webp" },
-            { "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" },
-            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }
+            { "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" }
           ]
         },
         {
           "name": "AI",
           "desc": "Пытаюсь заставить искусственный интеллект работать за меня, пока я сплю.",
           "media": [
-            { "type": "link", "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A", "text": "Хлебнуть нейрохрючева ↗" },
-            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }
+            { "type": "link", "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A", "text": "Хлебнуть нейрохрючева ↗" }
           ]
         },
         {
@@ -56,8 +52,7 @@
           "desc": "Чуть 3д хрючева.",
           "media": [
             { "type": "video", "url": "./assets/vid/7 courtney just relax - 16.mp4" },
-            { "type": "link", "url": "https://youtu.be/wyb7uFEdDH4", "text": "Невышедший сниппет (unreal и фотосканы лиц) ↗" },
-            { "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=3D+Unreal" }
+            { "type": "link", "url": "https://youtu.be/wyb7uFEdDH4", "text": "Невышедший сниппет (unreal и фотосканы лиц) ↗" }
           ]
         }
       ]

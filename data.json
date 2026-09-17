@@ -39,13 +39,26 @@
             { "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" }
           ]
         },
-        {
+       {
           "name": "AI",
           "desc": "Пытаюсь заставить искусственный интеллект работать за меня, пока я сплю.",
           "media": [
-            { "type": "link", "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A", "text": "Хлебнуть нейрохрючева ↗" }
+            { "type": "link", "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A", "text": "Хлебнуть нейрохрючева ↗" },
+            {
+              "type": "comparison",
+              "pairs": [
+                {
+                  "before": "./assets/IMG_1494.webp",
+                  "after": "./assets/flux2-2026-08-22_011657_00001_.webp"
+                },
+                {
+                  "before": "./assets/IMG_1443.webp",
+                  "after": "./assets/flux2-2026-08-22_012900_00001_.webp"
+                }
+              ]
+            }
           ]
-        },
+        }
         {
           "name": "3D",
           "desc": "Чуть 3д хрючева.",

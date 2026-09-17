@@ -2,7 +2,7 @@
   "name": "Я",
   "desc": "Симбиоз размышлений, сентиментальности и сомнительных жизненных решений.",
   "media": [
-    { "type": "image", "url": "./assets/after Screenshot_204.webp" }
+    { "type": "image", "url": "https://placehold.co/600x600/ff7b72/FFF?text=Аватар" }
   ],
   "children": [
     {
@@ -12,37 +12,27 @@
         {
           "name": "Свет",
           "desc": "Выставляю так, чтобы тени скрывали экзистенциальный кризис.",
-          "media": [{ "type": "image", "url": "./assets/photo_4_2026-09-18_01-12-34.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_3_2026-09-18_01-12-34.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_2_2026-09-18_01-12-34.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" }]
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Свет" }]
         },
         {
           "name": "Съемка",
           "desc": "Ловлю кадры до того, как техника скажет «ошибка карты памяти».",
-          "media": [{ "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-11.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_3_2026-09-17_22-46-05.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_24_2026-09-17_22-45-10.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_6_2025-04-28_08-03-04.webp" }]
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Съемка" }]
         },
         {
           "name": "Монтаж",
           "desc": "Режу правду матку и лишние 40 дублей молчания на таймлайне.",
-          "media": [{ "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12 2.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_3_2026-09-18_01-32-12.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_2_2026-09-18_01-32-12.webp" }]
-          "media": [{ "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" }]
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Монтаж" }]
         },
         {
           "name": "AI",
           "desc": "Пытаюсь заставить искусственный интеллект работать за меня, пока я сплю.",
-          "media": [{ "type": "link", "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A", "text": "Хлебнуть нейрохрючева ↗" }]
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=Нейросети" }]
         },
         {
           "name": "3D",
-          "desc": "Чуть 3д хрючева.",
-          "media": [{ "type": "video", "url": "./assets/vid/7 courtney just relax - 16.mp4" }]
-          "media": [{ "type": "link", "url": "https://youtu.be/wyb7uFEdDH4", "text": "Невышедший сниппет (unreal и фотосканы лиц) ↗" }]
+          "desc": "Чуть 3D в Unreal и Blender.",
+          "media": [{ "type": "image", "url": "https://placehold.co/600x350/8957e5/FFF?text=3D+Unreal" }]
         }
       ]
     },
@@ -52,7 +42,7 @@
       "children": [
         {
           "name": "Компы",
-          "desc": "Сборка ПК и тд.",
+          "desc": "Сборка ПК и т.д.",
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Компы" }]
         },
         {
@@ -62,7 +52,7 @@
         },
         {
           "name": "ТВ",
-          "desc": "Вид,что ты шаришь за платы,и ремонт подсветки.",
+          "desc": "Вид, что ты шаришь за платы, и ремонт подсветки.",
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Ремонт+ТВ" }]
         },
         {
@@ -88,12 +78,12 @@
         },
         {
           "name": "Визажист",
-          "desc": "Крупный план с...моими лицами.",
+          "desc": "Крупный план с... моими лицами.",
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Визаж" }]
         },
         {
           "name": "Гример",
-          "desc": "Один раз пощупал грим,испугался и убежал.",
+          "desc": "Один раз пощупал грим, испугался и убежал.",
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Грим" }]
         }
       ]
@@ -127,7 +117,7 @@
     },
     {
       "name": "Музыка",
-      "desc": "Звуковые эксперименты изада.",
+      "desc": "Звуковые эксперименты из ада.",
       "children": [
         {
           "name": "Кавера",
@@ -142,7 +132,7 @@
           "name": "Демки",
           "desc": "Чето назаписывал.",
           "media": [
-            { "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Кавера" },
+            { "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Демки" },
             { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", "title": "Демо трека #1 (Кавер)" },
             { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", "title": "Демо трека #2 (Эксперимент)" }
           ]
@@ -151,7 +141,7 @@
     },
     {
       "name": "Рефлексия",
-      "desc": "Гипербализированные мысли о всяком,в перемешку с идеями и концептами.",
+      "desc": "Гиперболизированные мысли о всяком, вперемешку с идеями и концептами.",
       "children": [
         {
           "name": "Психология",
@@ -162,12 +152,6 @@
           "name": "Идеи",
           "desc": "Потоки сознания и концепты, которые иногда даже доходят до реализации.",
           "media": [{ "type": "image", "url": "https://placehold.co/600x350/d2a8ff/000?text=Идеи" }]
-        },
-        {
-          "name": "Канальчики",
-          "desc": "Перед открытием - умыться святой водой.",
-          "media": [{ "type": "link", "url": "https://www.youtube.com/@aptemsk8296", "text": "Ютубчик ↗" }]
-          "media": [{ "type": "link", "url": "https://www.instagram.com/gloomycharm/", "text": "Инстаграмчик ↗" }]
         },
         {
           "name": "Стишки",

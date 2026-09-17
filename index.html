@@ -74,9 +74,7 @@
         window.addEventListener('resize', () => { 
             w = canvas.width = window.innerWidth; 
             h = canvas.height = window.innerHeight; 
-            if(svg) {
-                svg.attr("width", w).attr("height", h);
-            }
+            if(svg) { svg.attr("width", w).attr("height", h); }
         });
 
         const particles = Array.from({length: 80}, () => ({
@@ -124,7 +122,6 @@
         const zoom = d3.zoom().scaleExtent([0.15, 4]).on("zoom", (event) => { g.attr("transform", event.transform); });
         svg.call(zoom);
         
-        // Автоматический адаптивный масштаб под мобильные и десктоп
         const initialScale = window.innerWidth < 768 ? 0.75 : 0.95;
         svg.call(zoom.transform, d3.zoomIdentity.translate(widthD3 / 2, heightD3 / 2).scale(initialScale)); 
 
@@ -133,16 +130,15 @@
         const lineGen = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
         
         let time = 0;
-        // Живой органический генератор с непрерывным мягким покачиванием (динамика без отрывов)
         function getOrganicPath(x1, y1, x2, y2, index = 0) {
             let dx = x2 - x1; let dy = y2 - y1;
             let dist = Math.hypot(dx, dy);
+            if (dist === 0) return lineGen([[x1, y1], [x2, y2]]);
             let perpX = -dy / dist; let perpY = dx / dist;
             let seed = Math.sin(x1 * 12.9898 + y1 * 78.233) * 43758.5453;
             let noise = (seed - Math.floor(seed)) - 0.5;
             
-            // Добавляем плавную синусоиду времени для живого дыхания усов
-            let wave = Math.sin(time + index * 0.5) * 4; 
+            let wave = Math.sin(time + index * 0.4) * 2.5; 
             let bow = dist * 0.18 * noise + wave;
 
             let p1x = x1 + dx * 0.3 + perpX * bow;
@@ -153,13 +149,13 @@
             return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
         }
 
-        let rawData = null;
-        let linkSelection, decSelection;
+        let linkSelection = null;
+        let decSelection = null;
 
         d3.json("data.json").then(data => {
-            rawData = data instanceof Object ? d3.hierarchy(data) : data;
+            const root = data instanceof Object ? d3.hierarchy(data) : data;
             
-            rawData.eachBefore(d => {
+            root.eachBefore(d => {
                 if (d.depth === 0) {
                     d.x = 0; d.y = 0;
                     d.cartX = 0; d.cartY = 0;
@@ -185,7 +181,7 @@
                 }
             });
 
-            const links = rawData.links();
+            const links = root.links();
             linkSelection = treeLayer.selectAll(".data-branch")
                 .data(links).join("path")
                 .attr("class", "branch data-branch")
@@ -199,17 +195,17 @@
                 let len = Math.random() * 100 + 40;
                 let endX = Math.cos(angle - Math.PI/2) * len;
                 let endY = Math.sin(angle - Math.PI/2) * len;
-                decPaths.push({ x1: 0, y1: 0, x2: endX, y2: endY, id: i });
+                decPaths.push({ x1: 0, y1: 0, x2: endX, y2: endY, id: i + 100 });
             }
 
-            rawData.descendants().forEach(node => {
+            root.descendants().forEach(node => {
                 if (node.depth === 1) {
                     for(let i=0; i < 3; i++) {
                         let angle = node.x + (Math.random() - 0.5) * 1.2; 
                         let len = Math.random() * 55 + 25; 
                         let endX = node.cartX + Math.cos(angle - Math.PI/2) * len;
                         let endY = node.cartY + Math.sin(angle - Math.PI/2) * len;
-                        decPaths.push({ x1: node.cartX, y1: node.cartY, x2: endX, y2: endY, id: node.cartX + i });
+                        decPaths.push({ x1: node.cartX, y1: node.cartY, x2: endX, y2: endY, id: node.cartX + i + 200 });
                     }
                 }
             });
@@ -221,7 +217,7 @@
                 .style("stroke-width", "1.5px");
 
             const node = treeLayer.selectAll(".node")
-                .data(rawData.descendants()).join("g")
+                .data(root.descendants()).join("g")
                 .attr("class", d => "node " + (d.depth > 0 ? "floating-node" : ""))
                 .attr("transform", d => `translate(${d.cartX},${d.cartY})`)
                 .style("opacity", 0);
@@ -263,9 +259,8 @@
 
         }).catch(err => console.error("Ошибка загрузки data.json:", err));
 
-        // Цикл живой анимации усов через JS без конфликтов с зумом
         function updateLiveBranches() {
-            time += 0.015;
+            time += 0.01;
             if (linkSelection) {
                 linkSelection.attr("d", d => getOrganicPath(d.source.cartX, d.source.cartY, d.target.cartX, d.target.cartY, d.target.depth + d.target.x));
             }

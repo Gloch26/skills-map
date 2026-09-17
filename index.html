@@ -134,7 +134,7 @@
             let p2x = x1 + dx * 0.65 - perpX * bow;
             let p2y = y1 + dy * 0.65 - perpY * bow;
 
-            return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2 }]);
+            return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
         }
 
         d3.json("data.json").then(data => {
@@ -156,7 +156,6 @@
                     const i = d.parent.children.indexOf(d);
                     const rootSiblingsCount = d.parent.parent.children.length; 
                     const availableSector = (2 * Math.PI) / rootSiblingsCount;
-                    // Расширяем сектор веера до 82%, чтобы много элементов не лепились друг к другу
                     const spread = availableSector * 0.82; 
                     
                     d.x = count === 1 ? d.parent.x : d.parent.x - spread/2 + (i / (count - 1)) * spread;
@@ -214,22 +213,33 @@
                 .style("fill", d => d.depth === 0 ? "#9e5c43" : (d.children ? "#2ea043" : "#baf5a9"))
                 .on("click", (event, d) => showModal(d.data));
 
-            // Умный развод текста, исключающий наложение длинных названий вверху
+            // Продвинутая антиколлизия текста для верхнего и нижних кластеров
             node.append("text")
                 .attr("dy", d => {
                     if (d.depth === 0) return "40px";
-                    if (d.cartY < -120) return "-12px";
+                    if (d.cartY < -120) {
+                        // Шахматный порядок по вертикали для верхних подписей
+                        const idx = d.parent ? d.parent.children.indexOf(d) : 0;
+                        return idx % 2 === 0 ? "-18px" : "-6px";
+                    }
                     if (d.cartY > 120) return "1.2em";
                     return "0.31em";
                 })
                 .attr("x", d => {
                     if (d.depth === 0) return 0;
-                    if (Math.abs(d.cartX) < 60) return 0;
+                    if (Math.abs(d.cartX) < 40) {
+                        // Принудительно разводим центральные элементы влево/вправо
+                        const idx = d.parent ? d.parent.children.indexOf(d) : 0;
+                        return idx % 2 === 0 ? -15 : 15;
+                    }
                     return d.cartX > 0 ? 18 : -18;
                 })
                 .attr("text-anchor", d => {
                     if (d.depth === 0) return "middle";
-                    if (Math.abs(d.cartX) < 60) return "middle";
+                    if (Math.abs(d.cartX) < 40) {
+                        const idx = d.parent ? d.parent.children.indexOf(d) : 0;
+                        return idx % 2 === 0 ? "end" : "start";
+                    }
                     return d.cartX > 0 ? "start" : "end";
                 })
                 .text(d => d.depth === 0 ? "Я" : d.data.name)

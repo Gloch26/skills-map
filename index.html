@@ -29,11 +29,19 @@
 
         @keyframes heartbeat { 0% { transform: scale(1); filter: brightness(1); } 15% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 20px #de886a); } 30% { transform: scale(1); filter: brightness(1); } 100% { transform: scale(1); filter: brightness(1); } }
         .core-circle { animation: heartbeat 4s infinite; }
-        @keyframes treeBreathe { 0% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.02) rotate(0.5deg); } 100% { transform: scale(1) rotate(0deg); } }
-        .tree-layer { animation: treeBreathe 14s ease-in-out infinite; transform-origin: 0px 0px; }
-        @keyframes floatNode { 0% { transform: translateY(0px); } 50% { transform: translateY(-4px); } 100% { transform: translateY(0px); } }
-        .floating-node > * { animation: floatNode 5s ease-in-out infinite; }
-        .floating-node:nth-child(even) > * { animation-delay: -2s; animation-duration: 6s; }
+        
+        /* Живое органическое покачивание и дыхание всей структуры */
+        @keyframes treeBreathe { 
+            0% { transform: scale(1) rotate(0deg) translate(0px, 0px); } 
+            33% { transform: scale(1.015) rotate(0.3deg) translate(1px, -1px); } 
+            66% { transform: scale(0.995) rotate(-0.2deg) translate(-1px, 1px); } 
+            100% { transform: scale(1) rotate(0deg) translate(0px, 0px); } 
+        }
+        .tree-layer { animation: treeBreathe 16s ease-in-out infinite; transform-origin: 0px 0px; }
+
+        @keyframes floatNode { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+        .floating-node > * { animation: floatNode 6s ease-in-out infinite; }
+        .floating-node:nth-child(even) > * { animation-delay: -2.5s; animation-duration: 7s; }
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 25px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; }
         #modal.active { display: block; }
@@ -123,16 +131,22 @@
         const treeLayer = g.append("g").attr("class", "tree-layer");
 
         const lineGen = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
+        
+        // Генератор живых органических кривых с уникальным процедурным шумом для каждой ветки
         function getOrganicPath(x1, y1, x2, y2) {
             let dx = x2 - x1; let dy = y2 - y1;
             let dist = Math.hypot(dx, dy);
             let perpX = -dy / dist; let perpY = dx / dist;
-            let bow = dist * 0.12 * (Math.sin(x1 * 0.05) > 0 ? 1 : -1);
+            
+            // Псевдослучайный органический изгиб на основе позиций точек, чтобы линии не выглядели геометрически правильными
+            let seed = Math.sin(x1 * 12.9898 + y1 * 78.233) * 43758.5453;
+            let noise = (seed - Math.floor(seed)) - 0.5; // от -0.5 до 0.5
+            let bow = dist * 0.15 * noise;
 
-            let p1x = x1 + dx * 0.35 + perpX * bow;
-            let p1y = y1 + dy * 0.35 + perpY * bow;
-            let p2x = x1 + dx * 0.65 - perpX * bow;
-            let p2y = y1 + dy * 0.65 - perpY * bow;
+            let p1x = x1 + dx * 0.33 + perpX * bow;
+            let p1y = y1 + dy * 0.33 + perpY * bow;
+            let p2x = x1 + dx * 0.66 - perpX * (bow * 0.8);
+            let p2y = y1 + dy * 0.66 - perpY * (bow * 0.8);
 
             return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
         }
@@ -213,12 +227,10 @@
                 .style("fill", d => d.depth === 0 ? "#9e5c43" : (d.children ? "#2ea043" : "#baf5a9"))
                 .on("click", (event, d) => showModal(d.data));
 
-            // Продвинутая антиколлизия текста для верхнего и нижних кластеров
             node.append("text")
                 .attr("dy", d => {
                     if (d.depth === 0) return "40px";
                     if (d.cartY < -120) {
-                        // Шахматный порядок по вертикали для верхних подписей
                         const idx = d.parent ? d.parent.children.indexOf(d) : 0;
                         return idx % 2 === 0 ? "-18px" : "-6px";
                     }
@@ -228,7 +240,6 @@
                 .attr("x", d => {
                     if (d.depth === 0) return 0;
                     if (Math.abs(d.cartX) < 40) {
-                        // Принудительно разводим центральные элементы влево/вправо
                         const idx = d.parent ? d.parent.children.indexOf(d) : 0;
                         return idx % 2 === 0 ? -15 : 15;
                     }

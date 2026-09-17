@@ -2,7 +2,7 @@
   "name": "Я",
   "desc": "Симбиоз размышлений, сентиментальности и сомнительных жизненных решений.",
   "media": [
-    { "type": "image", "url": "https://placehold.co/600x600/ff7b72/FFF?text=Аватар" }
+    { "type": "image", "url": "./assets/after Screenshot_204.webp" }
   ],
   "children": [
     {

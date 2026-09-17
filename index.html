@@ -203,7 +203,7 @@ function getStaticOrganicPath(x1, y1, x2, y2) {
   return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
 }
 
-d3.json("data.json").then(data => {
+d3.json("data.json?v=" + Date.now()).then(data => {
   const root = d3.hierarchy(data);
 
   root.eachBefore(d => {

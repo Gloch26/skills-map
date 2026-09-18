@@ -16,7 +16,7 @@
             { "type": "image", "url": "./assets/photo_4_2026-09-18_01-12-34.webp" },
             { "type": "image", "url": "./assets/photo_3_2026-09-18_01-12-34.webp" },
             { "type": "image", "url": "./assets/photo_2_2026-09-18_01-12-34.webp" },
-            { "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" },
+            { "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" }
           ]
         },
         {
@@ -78,22 +78,36 @@
         {
           "name": "Компы",
           "desc": "Сборка ПК и т.д.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Компы" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_25_2026-09-17_22-45-10.webp" },
+            { "type": "image", "url": "./assets/photo_21_2026-09-17_22-45-10.webp" },
+            { "type": "image", "url": "./assets/photo_13_2026-09-18_01-32-12.webp" }
+          ]
         },
         {
           "name": "Телефоны",
           "desc": "Модульный ремонт.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Телефоны" }]
+          "media": [{ "type": "image", "url": "./assets/photo_35_2026-09-17_22-45-10.webp" }]
         },
         {
           "name": "ТВ",
           "desc": "Вид, что ты шаришь за платы, и ремонт подсветки.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Ремонт+ТВ" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_30_2026-09-17_22-45-10.webp" },
+            { "type": "image", "url": "./assets/photo_31_2026-09-17_22-45-10.webp" },
+            { "type": "image", "url": "./assets/photo_32_2026-09-17_22-45-10.webp" }
+          ]
         },
         {
           "name": "Сисадмин",
           "desc": "Протру вам экран, куплю тряпочки, почищу ваш сервер и сделаю вид, что так и надо.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/00f0ff/000?text=Сисадмин" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_6_2026-09-18_01-32-12.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-36-43.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-36-56.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-36-58.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-37-00.webp" }
+          ]
         }
       ]
     },
@@ -210,7 +224,14 @@
         {
           "name": "Выпечка",
           "desc": "Тесто, духовка и съедобные результаты.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/1f6feb/FFF?text=Выпечка" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_13_2026-09-17_22-45-10.webp" },
+            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-45-10.webp" },
+            { "type": "image", "url": "./assets/photo_2_2026-09-17_22-45-10.webp" },
+            { "type": "image", "url": "./assets/photo_4_2026-09-17_22-45-51.webp" },
+            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-45-59.webp" },
+            { "type": "image", "url": "./assets/photo_5_2026-09-17_22-45-10.webp" }
+          ]
         }
       ]
     }

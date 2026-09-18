@@ -149,6 +149,7 @@ audio {
 .badge-before { color: #c9d1d9; border: 1px solid #444; }
 .badge-after { color: #87ff47; border: 1px solid rgba(135, 255, 71, 0.4); }
 .link-duration { font-weight: 400; opacity: 0.75; font-size: 0.9em; }
+.link-caption { font-size: 0.85rem; color: #a3b8a8; line-height: 1.4; margin-top: 15px; margin-bottom: 0; text-align: left; }
 
 /* Интерактивный полноэкранный слайдер До/После */
 #compare-lightbox { display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(12px); z-index: 2000; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -717,11 +718,17 @@ function renderMediaElements(items, gallery) {
     } else if (item.type === "video") {
       gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
     } else if (item.type === "link") {
-      const durationHtml = item.duration
-        ? ` <span class="link-duration">(${item.duration})</span>`
-        : ` <span class="link-duration" data-url="${item.url}"></span>`;
-      gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link" style="display: block; margin-top: 15px; padding: 12px; background-color: #2ea043; color: #000; text-decoration: none; border-radius: 6px; font-weight: bold;">${item.text || "Перейти ↗"}${durationHtml}</a>`;
-    } else if (item.type === "comparison" && item.pairs) {
+  const durationHtml = item.duration
+    ? ` <span class="link-duration">(${item.duration})</span>`
+    : ` <span class="link-duration" data-url="${item.url}"></span>`;
+  const topMargin = item.caption ? "6px" : "15px";
+  const linkHtml = `<a href="${item.url}" target="_blank" class="media-link" style="display: block; margin-top: ${topMargin}; padding: 12px; background-color: #2ea043; color: #000; text-decoration: none; border-radius: 6px; font-weight: bold;">${item.text || "Перейти ↗"}${durationHtml}</a>`;
+  if (item.caption) {
+    gallery.innerHTML += `<div class="link-caption">${item.caption}</div>${linkHtml}`;
+  } else {
+    gallery.innerHTML += linkHtml;
+  }
+} else if (item.type === "comparison" && item.pairs) {
       let compHtml = `<div class="compare-container">`;
       item.pairs.forEach(pair => {
         compHtml += `

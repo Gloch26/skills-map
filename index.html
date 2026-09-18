@@ -499,9 +499,18 @@ function renderMediaElements(items, gallery) {
 }
 
 function renderAudioElement(item, gallery) {
+  // Если title не задан в data.json, вытаскиваем имя файла из url
+  let autoTitle = item.title;
+  if (!autoTitle && item.url) {
+    let cleanName = item.url.split('/').pop().split('?')[0]; // получаем "track1.mp3"
+    autoTitle = cleanName.substring(0, cleanName.lastIndexOf('.')) || cleanName; // убираем ".mp3" -> "track1"
+    // Делаем первую букву заглавной для красоты
+    autoTitle = autoTitle.charAt(0).toUpperCase() + autoTitle.slice(1);
+  }
+
   gallery.innerHTML += `
     <div class="media-audio-container">
-      <div class="media-audio-title">${item.title || "Аудио демо"}</div>
+      <div class="media-audio-title">${autoTitle || "Аудио демо"}</div>
       <audio controls src="${item.url}"></audio>
     </div>`;
 }

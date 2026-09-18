@@ -65,7 +65,7 @@ audio { width: 100%; height: 35px; }
 .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; cursor: pointer; border-radius: 8px; padding: 3px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .compare-row:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(135, 255, 71, 0.25); }
 .compare-card { position: relative; border-radius: 6px; overflow: hidden; border: 1px solid #1a291e; background: #0e1410; }
-.compare-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+.compare-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; user-select: none; pointer-events: none; }
 .compare-badge { position: absolute; bottom: 6px; left: 6px; background: rgba(0, 0, 0, 0.75); font-size: 0.72rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; pointer-events: none; }
 .badge-before { color: #c9d1d9; border: 1px solid #444; }
 .badge-after { color: #87ff47; border: 1px solid rgba(135, 255, 71, 0.4); }
@@ -77,8 +77,29 @@ audio { width: 100%; height: 35px; }
 #compare-lightbox.active .compare-lightbox-content { transform: scale(1); }
 .compare-close-btn { position: absolute; top: -42px; right: 0; color: #87ff47; font-size: 34px; font-weight: bold; cursor: pointer; line-height: 1; }
 
-.slider-stage { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid #2ea043; box-shadow: 0 0 35px rgba(46, 160, 67, 0.35); user-select: none; touch-action: none; --pos: 50%; }
-.slider-stage img { display: block; max-width: 90vw; max-height: 80vh; width: auto; height: auto; object-fit: contain; }
+.slider-stage { 
+  position: relative; 
+  overflow: hidden; 
+  border-radius: 12px; 
+  border: 1px solid #2ea043; 
+  box-shadow: 0 0 35px rgba(46, 160, 67, 0.35); 
+  user-select: none; 
+  touch-action: none; 
+  cursor: ew-resize;
+  --pos: 50%; 
+}
+.slider-stage img { 
+  display: block; 
+  max-width: 90vw; 
+  max-height: 80vh; 
+  width: auto; 
+  height: auto; 
+  object-fit: contain; 
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none; /* Запрещает браузеру перетаскивать картинку как файл */
+}
 .slider-img-top { position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
 .slider-divider { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; background: #87ff47; box-shadow: 0 0 10px #87ff47; pointer-events: none; }
 .slider-handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 38px; height: 38px; background: #0a0d0b; border: 2px solid #87ff47; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #87ff47; font-size: 16px; box-shadow: 0 0 15px rgba(135, 255, 71, 0.6); }
@@ -119,8 +140,8 @@ audio { width: 100%; height: 35px; }
   <div class="compare-lightbox-content" onclick="event.stopPropagation()">
     <span class="compare-close-btn" onclick="closeCompareSlider()">&times;</span>
     <div class="slider-stage" id="slider-stage">
-      <img id="slider-img-after" src="" alt="AI">
-      <img id="slider-img-before" class="slider-img-top" src="" alt="Исходник">
+      <img id="slider-img-after" src="" alt="AI" draggable="false">
+      <img id="slider-img-before" class="slider-img-top" src="" alt="Исходник" draggable="false">
       <div class="slider-divider">
         <div class="slider-handle">↔</div>
       </div>
@@ -471,14 +492,21 @@ function setSliderPos(clientX) {
 
 const sliderStage = document.getElementById('slider-stage');
 if (sliderStage) {
+  // Намертво глушим браузерный drag-and-drop картинки на рабочий стол
+  sliderStage.addEventListener('dragstart', (e) => e.preventDefault());
+
   sliderStage.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
     isSliding = true;
     sliderStage.setPointerCapture(e.pointerId);
     setSliderPos(e.clientX);
   });
 
   sliderStage.addEventListener('pointermove', (e) => {
-    if (isSliding) setSliderPos(e.clientX);
+    if (isSliding) {
+      e.preventDefault();
+      setSliderPos(e.clientX);
+    }
   });
 
   sliderStage.addEventListener('pointerup', (e) => {

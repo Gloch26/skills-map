@@ -317,8 +317,6 @@ function scheduleRareSpore() {
 }
 
 function showRareSpore() {
-  // Не показываем поверх приветствия, открытой модалки или свёрнутой вкладки —
-  // просто переносим попытку на попозже.
   const welcomeHidden = document.getElementById('welcome-screen').classList.contains('hidden');
   const modalOpen = document.getElementById('modal').classList.contains('active');
   const compareOpen = document.getElementById('compare-lightbox').classList.contains('active');
@@ -328,19 +326,35 @@ function showRareSpore() {
   }
 
   const margin = 50;
-  const x = margin + Math.random() * (window.innerWidth - margin * 2);
-  const y = margin + Math.random() * (window.innerHeight - margin * 2);
-  rareSporeEl.style.left = x + 'px';
-  rareSporeEl.style.top = y + 'px';
+  const startX = margin + Math.random() * (window.innerWidth - margin * 2);
+  const startY = margin + Math.random() * (window.innerHeight - margin * 2);
+
+  const driftAngle = Math.random() * Math.PI * 2;
+  const driftDist = 80 + Math.random() * 160;
+  const endX = Math.max(margin, Math.min(window.innerWidth - margin, startX + Math.cos(driftAngle) * driftDist));
+  const endY = Math.max(margin, Math.min(window.innerHeight - margin, startY + Math.sin(driftAngle) * driftDist));
+
+  const lifeTime = 2400 + Math.random() * 1400;
+
+  rareSporeEl.style.transition = 'opacity 0.28s ease, transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  rareSporeEl.style.left = startX + 'px';
+  rareSporeEl.style.top = startY + 'px';
   rareSporeEl.classList.add('visible');
   rareSporeVisible = true;
 
-  const lifeTime = 2000 + Math.random() * 1000; // видна 2-3 сек
+  void rareSporeEl.offsetWidth;
+
+  const driftSeconds = (lifeTime / 1000).toFixed(2);
+  rareSporeEl.style.transition += `, left ${driftSeconds}s linear, top ${driftSeconds}s linear`;
+  rareSporeEl.style.left = endX + 'px';
+  rareSporeEl.style.top = endY + 'px';
+
   rareSporeTimer = setTimeout(() => hideRareSpore(false), lifeTime);
 }
 
 function hideRareSpore(caught) {
   rareSporeEl.classList.remove('visible');
+  rareSporeEl.style.transition = 'opacity 0.28s ease, transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)';
   rareSporeVisible = false;
   if (!caught) scheduleRareSpore();
 }

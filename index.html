@@ -60,7 +60,7 @@ body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000
 .media-audio-title { font-size: 0.9rem; color: #87ff47; margin-bottom: 6px; font-weight: bold; }
 audio { width: 100%; height: 35px; }
 
-/* Сетка сравнения в модалке */
+/* Карточки сравнения в модалке */
 .compare-container { margin-top: 15px; width: 100%; }
 .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; cursor: pointer; border-radius: 8px; padding: 3px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .compare-row:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(135, 255, 71, 0.25); }
@@ -114,7 +114,7 @@ audio { width: 100%; height: 35px; }
   <div id="modal-gallery"></div>
 </div>
 
-<!-- Окно интерактивного сравнения До/После -->
+<!-- Окно сравнения До/После (расположено до скрипта) -->
 <div id="compare-lightbox" onclick="closeCompareSlider()">
   <div class="compare-lightbox-content" onclick="event.stopPropagation()">
     <span class="compare-close-btn" onclick="closeCompareSlider()">&times;</span>
@@ -438,7 +438,7 @@ function closeModal() {
   });
 }
 
-// Управление сравнением До/После
+// Управление интерактивным сравнением До/После
 let isSliding = false;
 
 function openCompareSlider(beforeUrl, afterUrl) {

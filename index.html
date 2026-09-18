@@ -48,7 +48,41 @@ body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000
 .center-dec-odd { animation: centerWhiskers1 6.5s ease-in-out infinite; transform-origin: 0px 0px; }
 .center-dec-even { animation: centerWhiskers2 8.5s ease-in-out infinite; transform-origin: 0px 0px; }
 
-#modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a0d0b; border: 1px solid #2ea043; border-radius: 12px; padding: 25px; box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); z-index: 100; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center; color: #e6f0e8; box-sizing: border-box; }
+#modal { 
+  display: none; 
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  background: #0a0d0b; 
+  border: 1px solid #2ea043; 
+  border-radius: 12px; 
+  padding: 25px; 
+  box-shadow: 0 0 40px rgba(46, 160, 67, 0.3); 
+  z-index: 100; 
+  width: 90%; 
+  max-width: 500px; 
+  max-height: 85vh; /* Чуть увеличили запас по высоте */
+  overflow-y: auto; 
+  text-align: center; 
+  color: #e6f0e8; 
+  box-sizing: border-box; 
+  scrollbar-width: thin; /* Тонкий скроллбар для Firefox */
+  scrollbar-width: auto;
+}
+#modal::-webkit-scrollbar {
+  width: 6px; /* Тонкий скроллбар для Chrome/Safari */
+}
+#modal::-webkit-scrollbar-track {
+  background: #0a0d0b;
+}
+#modal::-webkit-scrollbar-thumb {
+  background: #233827;
+  border-radius: 3px;
+}
+#modal::-webkit-scrollbar-thumb:hover {
+  background: #2ea043;
+}
 #modal.active { display: block; }
 #modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; color: #5a7560; font-size: 24px; font-weight: bold; }
 #modal-close:hover { color: #87ff47; }
@@ -579,6 +613,18 @@ if (sliderStage) {
 
   sliderStage.addEventListener('pointercancel', () => { isSliding = false; });
 }
+
+  // Автоматическая пауза остальных треков при старте нового
+document.addEventListener('play', (e) => {
+  if (e.target.tagName === 'AUDIO') {
+    document.querySelectorAll('audio').forEach(audio => {
+      if (audio !== e.target) {
+        audio.pause();
+      }
+    });
+  }
+}, true);
+  
 </script>
 </body>
 </html>

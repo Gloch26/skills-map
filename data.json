@@ -16,7 +16,7 @@
             { "type": "image", "url": "./assets/photo_4_2026-09-18_01-12-34.webp" },
             { "type": "image", "url": "./assets/photo_3_2026-09-18_01-12-34.webp" },
             { "type": "image", "url": "./assets/photo_2_2026-09-18_01-12-34.webp" },
-            { "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" }
+            { "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" },
           ]
         },
         {
@@ -37,7 +37,8 @@
             { "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12%202.webp" },
             { "type": "image", "url": "./assets/photo_3_2026-09-18_01-32-12.webp" },
             { "type": "image", "url": "./assets/photo_2_2026-09-18_01-32-12.webp" },
-            { "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" }
+            { "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" },
+            { "type": "video", "url": "./assets/vid/color_1.mp4", "text": "Мой вайб на монтаже" }
           ]
         },
         {

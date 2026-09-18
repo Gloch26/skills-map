@@ -56,9 +56,28 @@ body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000
 #modal-bg.active { display: block; }
 #modal-desc { color: #a3b8a8; font-size: 1rem; line-height: 1.6; margin-top: 10px; white-space: pre-line; text-align: left; }
 .media-item { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #1a291e; }
-.media-audio-container { margin-top: 15px; background: #121f15; padding: 12px; border-radius: 8px; border: 1px solid #233827; }
-.media-audio-title { font-size: 0.9rem; color: #87ff47; margin-bottom: 6px; font-weight: bold; }
-audio { width: 100%; height: 35px; }
+
+/* Кастомизация аудио-плеера с видимым хронометражем */
+.media-audio-container { 
+  margin-top: 15px; 
+  background: #121f15; 
+  padding: 14px; 
+  border-radius: 8px; 
+  border: 1px solid #233827; 
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+.media-audio-title { 
+  font-size: 0.9rem; 
+  color: #87ff47; 
+  margin-bottom: 8px; 
+  font-weight: bold; 
+  letter-spacing: 0.5px;
+}
+audio { 
+  width: 100%; 
+  height: 38px; 
+  filter: invert(90%) hue-rotate(65deg) brightness(0.95); 
+}
 
 /* Карточки сравнения в модалке */
 .compare-container { margin-top: 15px; width: 100%; }
@@ -70,7 +89,7 @@ audio { width: 100%; height: 35px; }
 .badge-before { color: #c9d1d9; border: 1px solid #444; }
 .badge-after { color: #87ff47; border: 1px solid rgba(135, 255, 71, 0.4); }
 
-/* Интерактивный полноэкранный слайдер */
+/* Интерактивный полноэкранный слайдер До/После */
 #compare-lightbox { display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(12px); z-index: 2000; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 #compare-lightbox.active { opacity: 1; pointer-events: auto; }
 .compare-lightbox-content { position: relative; max-width: 92vw; max-height: 85vh; transform: scale(0.75); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -98,11 +117,11 @@ audio { width: 100%; height: 35px; }
   user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
-  pointer-events: none; /* Запрещает браузеру перетаскивать картинку как файл */
+  pointer-events: none;
 }
-.slider-img-top { position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.slider-img-top { position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: inset(0 calc(100% - var(--pos)) 0 0); pointer-events: none; }
 .slider-divider { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; background: #87ff47; box-shadow: 0 0 10px #87ff47; pointer-events: none; }
-.slider-handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 38px; height: 38px; background: #0a0d0b; border: 2px solid #87ff47; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #87ff47; font-size: 16px; box-shadow: 0 0 15px rgba(135, 255, 71, 0.6); }
+.slider-handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 38px; height: 38px; background: #0a0d0b; border: 2px solid #87ff47; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #87ff47; font-size: 16px; box-shadow: 0 0 15px rgba(135, 255, 71, 0.6); pointer-events: none; }
 .slider-tag { position: absolute; top: 15px; background: rgba(0, 0, 0, 0.75); font-size: 0.8rem; font-weight: bold; padding: 4px 10px; border-radius: 6px; pointer-events: none; }
 .tag-before { left: 15px; color: #c9d1d9; border: 1px solid #444; }
 .tag-after { right: 15px; color: #87ff47; border: 1px solid rgba(135, 255, 71, 0.4); }
@@ -135,7 +154,7 @@ audio { width: 100%; height: 35px; }
   <div id="modal-gallery"></div>
 </div>
 
-<!-- Окно сравнения До/После (расположено до скрипта) -->
+<!-- Окно интерактивного сравнения До/После -->
 <div id="compare-lightbox" onclick="closeCompareSlider()">
   <div class="compare-lightbox-content" onclick="event.stopPropagation()">
     <span class="compare-close-btn" onclick="closeCompareSlider()">&times;</span>
@@ -402,6 +421,7 @@ function animateGrowth() {
   d3.selectAll(".node").transition().delay(800).duration(800).style("opacity", 1);
 }
 
+// Модальное окно с авто-сортировкой аудио по длительности
 function showModal(data) {
   let title = data.name || "Без названия";
   if (title.includes("ЯДРО") || title === "Я") {
@@ -413,42 +433,74 @@ function showModal(data) {
   gallery.innerHTML = "";
 
   if (data.media && Array.isArray(data.media)) {
-    data.media.forEach(item => {
-      if (item.type === "image") {
-        gallery.innerHTML += `<img src="${item.url}" class="media-item">`;
-      } else if (item.type === "video") {
-        gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
-      } else if (item.type === "audio") {
-        gallery.innerHTML += `
-          <div class="media-audio-container">
-            <div class="media-audio-title">${item.title || "Аудио демо"}</div>
-            <audio controls src="${item.url}"></audio>
-          </div>`;
-      } else if (item.type === "link") {
-        gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link" style="display: block; margin-top: 15px; padding: 12px; background-color: #2ea043; color: #000; text-decoration: none; border-radius: 6px; font-weight: bold;">${item.text || "Перейти ↗"}</a>`;
-      } else if (item.type === "comparison" && item.pairs) {
-        let compHtml = `<div class="compare-container">`;
-        item.pairs.forEach(pair => {
-          compHtml += `
-            <div class="compare-row" onclick="openCompareSlider('${pair.before}', '${pair.after}')" title="Нажмите для интерактивного сравнения">
-              <div class="compare-card">
-                <img src="${pair.before}" alt="Исходник">
-                <div class="compare-badge badge-before">Исходник</div>
-              </div>
-              <div class="compare-card">
-                <img src="${pair.after}" alt="AI">
-                <div class="compare-badge badge-after">AI ↔</div>
-              </div>
-            </div>`;
+    let audioItems = data.media.filter(item => item.type === "audio");
+    let otherItems = data.media.filter(item => item.type !== "audio");
+
+    if (audioItems.length > 0) {
+      let durationPromises = audioItems.map(item => {
+        return new Promise((resolve) => {
+          const tempAudio = document.createElement('audio');
+          tempAudio.src = item.url;
+          tempAudio.preload = 'metadata';
+          tempAudio.onloadedmetadata = () => {
+            resolve({ item, duration: tempAudio.duration || 0 });
+          };
+          tempAudio.onerror = () => {
+            resolve({ item, duration: 0 });
+          };
         });
-        compHtml += `</div>`;
-        gallery.innerHTML += compHtml;
-      }
-    });
+      });
+
+      Promise.all(durationPromises).then(results => {
+        results.sort((a, b) => a.duration - b.duration);
+        
+        renderMediaElements(otherItems, gallery);
+        results.forEach(res => renderAudioElement(res.item, gallery));
+      });
+    } else {
+      renderMediaElements(data.media, gallery);
+    }
   }
 
   document.getElementById('modal').classList.add('active');
   document.getElementById('modal-bg').classList.add('active');
+}
+
+function renderMediaElements(items, gallery) {
+  items.forEach(item => {
+    if (item.type === "image") {
+      gallery.innerHTML += `<img src="${item.url}" class="media-item">`;
+    } else if (item.type === "video") {
+      gallery.innerHTML += `<video controls src="${item.url}" class="media-item"></video>`;
+    } else if (item.type === "link") {
+      gallery.innerHTML += `<a href="${item.url}" target="_blank" class="media-link" style="display: block; margin-top: 15px; padding: 12px; background-color: #2ea043; color: #000; text-decoration: none; border-radius: 6px; font-weight: bold;">${item.text || "Перейти ↗"}</a>`;
+    } else if (item.type === "comparison" && item.pairs) {
+      let compHtml = `<div class="compare-container">`;
+      item.pairs.forEach(pair => {
+        compHtml += `
+          <div class="compare-row" onclick="openCompareSlider('${pair.before}', '${pair.after}')" title="Нажмите для интерактивного сравнения">
+            <div class="compare-card">
+              <img src="${pair.before}" alt="Исходник">
+              <div class="compare-badge badge-before">Исходник</div>
+            </div>
+            <div class="compare-card">
+              <img src="${pair.after}" alt="AI">
+              <div class="compare-badge badge-after">AI ↔</div>
+            </div>
+          </div>`;
+      });
+      compHtml += `</div>`;
+      gallery.innerHTML += compHtml;
+    }
+  });
+}
+
+function renderAudioElement(item, gallery) {
+  gallery.innerHTML += `
+    <div class="media-audio-container">
+      <div class="media-audio-title">${item.title || "Аудио демо"}</div>
+      <audio controls src="${item.url}"></audio>
+    </div>`;
 }
 
 function closeModal() {
@@ -492,7 +544,6 @@ function setSliderPos(clientX) {
 
 const sliderStage = document.getElementById('slider-stage');
 if (sliderStage) {
-  // Намертво глушим браузерный drag-and-drop картинки на рабочий стол
   sliderStage.addEventListener('dragstart', (e) => e.preventDefault());
 
   sliderStage.addEventListener('pointerdown', (e) => {

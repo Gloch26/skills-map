@@ -164,6 +164,7 @@
           "desc": "Портретные съемки друзей и знакомых.",
           "media": [
             { "type": "image", "url": "./assets/ContactSheet-001.webp" },
+            { "type": "image", "url": "./assets/3000x2000RGB.webp" },
             { "type": "image", "url": "./assets/1 var.webp" }
           ]
         },
@@ -184,22 +185,21 @@
       "children": [
         {
           "name": "Web / JS",
-          "desc": "Адын новый сайт и вот это чудо.",
+          "desc": "Адын новый сайт и вот эта оболочка.",
           "media": [{ "type": "link", "url": "https://xn----gtbe1amgsd4b2b.xn--p1ai/", "text": "Открыть сайт ↗" }]
         }
       ]
     },
     {
       "name": "Музыка",
-      "desc": "Звуковые эксперименты из ада.",
+      "desc": "Звуковые эксперименты изада.",
       "children": [
         {
           "name": "Кавера",
-          "desc": "Кавера и порой свои интерпретации.",
+          "desc": "Кавера и порой свои интерпретации(новые грузятся:).",
           "media": [
-            { "type": "image", "url": "https://placehold.co/600x350/238636/FFF?text=Кавера" },
-            { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", "title": "Демо трека #1 (Кавер)" },
-            { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", "title": "Демо трека #2 (Эксперимент)" }
+            { "type": "link", "url": "https://www.youtube.com/@aptemsk8296", "text": "Либо искать на ютубчике ↗" },
+            { "type": "link", "url": "https://www.youtube.com/shorts/H_Wc62Jcb3M", "text": "Либо там же в shorts ↗" }
           ]
         },
         {

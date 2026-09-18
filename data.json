@@ -205,9 +205,27 @@
           "name": "Демки",
           "desc": "Чето назаписывал.",
           "media": [
-            { "type": "audio", "url": "./assets/aud/track1.mp3", "title": "Демо трека #1 (Кавер)" },
-            { "type": "audio", "url": "./assets/aud/track1.mp3", "title": "Демо трека #1 (Кавер)" },
-            { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", "title": "Демо трека #2 (Эксперимент)" }
+            { "type": "audio", "url": "./assets/aud/Winter Piano Ver 120123.mp3" },
+            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-001_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/02 06 26_minus-001_1(аранжировка под вокал).mp3" },
+            { "type": "audio", "url": "./assets/aud/03 11 25_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-005_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/07 06 25 Acoust_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-008_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-002_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-007_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/11 05 25 Atlas Inspiration-001_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/12 06 26 Masha 2 inst-001(поверх аи скелета дописал мясо гитары)_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/winter horror story-001_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/03 08 26 sentimentality-001_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/Hope(almost) 24 04 26_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/Recording_368_edit (1) (demo to ai).mp3" },
+            { "type": "audio", "url": "./assets/aud/Dialogue at the edge of the forest 22 05 26_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/11 08 26 departure and happiness_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/ref Recording_367_01 (demo to ai).mp3" },
+            { "type": "audio", "url": "./assets/aud/01 08 26 autumn close_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/18 04 26 Perfume_1.mp3" },
+            { "type": "audio", "url": "./assets/aud/04 01 25 alice.mp3" }            
           ]
         }
       ]

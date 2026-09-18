@@ -118,22 +118,40 @@
         {
           "name": "Косплейщик",
           "desc": "Выдача образов за свои собственные.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Косплей" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-26.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-21.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-25.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-29.webp" }
+          ]
         },
         {
           "name": "Модель",
           "desc": "Смотрю на вас как на говно.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Модель" }]
+          "media": [
+            { "type": "image", "url": "./assets/BW cube.webp" },
+            { "type": "image", "url": "./assets/ContactSheet-001 ad.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-28.webp" }
+          ]
         },
         {
           "name": "Визажист",
           "desc": "Крупный план с... моими лицами.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Визаж" }]
+          "media": [
+            { "type": "image", "url": "./assets/IMG_20260909_233917.webp" },
+            { "type": "image", "url": "./assets/IMG_8814.webp" },
+            { "type": "image", "url": "./assets/Add_detail_sharpness_2k_202602221726.webp" }
+          ]
         },
         {
           "name": "Гример",
           "desc": "Один раз пощупал грим, испугался и убежал.",
-          "media": [{ "type": "image", "url": "https://placehold.co/600x350/ff0055/FFF?text=Грим" }]
+          "media": [
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-09.webp" },
+            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-17.webp" },
+            { "type": "image", "url": "./assets/2 IMG_3539-3.webp" },
+            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-29.webp" }
+          ]
         }
       ]
     },

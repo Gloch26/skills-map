@@ -20,11 +20,12 @@ body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000
 #welcome-btn:hover { background-color: #47ff69; box-shadow: 0 0 30px rgba(71, 255, 105, 0.8); transform: translateY(-2px); }
 
 .branch { fill: none; stroke-linecap: round; }
-.data-branch { stroke: #6ded51; filter: url(#glow); }
+.data-branch { stroke: #6ded51; filter: url(#glow) brightness(var(--branch-brightness, 1)); }
 .dec-branch { stroke: #3bb02e; opacity: 0.35; }
 .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
 .node circle:hover { filter: brightness(1.5); }
 .node text { pointer-events: none; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; }
+.level-pips { font-size: 12px; letter-spacing: 3px; fill: #6ded51; opacity: 0.85; font-weight: 400; }
 
 @keyframes coreGlow {
   0%, 100% { filter: drop-shadow(0 0 6px rgba(222, 136, 106, 0.4)); }
@@ -161,7 +162,7 @@ audio {
 .tag-after { right: 15px; color: #87ff47; border: 1px solid rgba(135, 255, 71, 0.4); }
 
 @media (max-width: 768px) {
-  .data-branch { filter: url(#glow-mobile); }
+  .data-branch { filter: url(#glow-mobile) brightness(var(--branch-brightness, 1)); }
   @keyframes sway0 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(1.2deg); } }
   @keyframes sway1 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-1.1deg); } }
   @keyframes sway2 { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(1deg) scale(1.006); } }
@@ -300,6 +301,18 @@ function getStaticOrganicPath(x1, y1, x2, y2) {
   return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
 }
 
+// Прокачанность ветки: явное поле "level" (1-5) в data.json имеет приоритет,
+// иначе считаем автоматически по числу дочерних навыков (тоже 1-5).
+// Чтобы вручную поднять/опустить ветку — просто добавь "level": 4 в её объект в data.json.
+function getLevel(node) {
+  const raw = node.data ? node.data.level : undefined;
+  if (typeof raw === 'number' && !isNaN(raw)) {
+    return Math.max(1, Math.min(5, Math.round(raw)));
+  }
+  const kids = node.children ? node.children.length : 0;
+  return Math.max(1, Math.min(5, kids || 1));
+}
+
 d3.json("data.json?v=" + Date.now()).then(data => {
   const root = d3.hierarchy(data);
 
@@ -345,10 +358,15 @@ d3.json("data.json?v=" + Date.now()).then(data => {
     const cluster = treeLayer.append("g")
       .attr("class", `branch-cluster cluster-${i % 4}`);
 
+    const mainLevel = getLevel(mainNode);
+    const trunkWidth = 4 + mainLevel * 1.4;      // 5.4px (ур.1) .. 11px (ур.5)
+    const trunkBrightness = (0.82 + mainLevel * 0.1).toFixed(2); // 0.92 .. 1.32
+
     cluster.append("path")
       .attr("class", "branch data-branch")
       .attr("d", getStaticOrganicPath(0, 0, mainNode.cartX, mainNode.cartY))
-      .style("stroke-width", "6px");
+      .style("stroke-width", trunkWidth + "px")
+      .style("--branch-brightness", trunkBrightness);
 
     for(let j=0; j < 2; j++) {
       let angle = mainNode.x + (Math.random() - 0.5) * 1.2;
@@ -378,11 +396,11 @@ d3.json("data.json?v=" + Date.now()).then(data => {
       .style("opacity", 0);
 
     nodeSel.append("circle")
-      .attr("r", d => d.depth === 1 ? 10 : 7)
+      .attr("r", d => d.depth === 1 ? (8 + getLevel(d) * 1.4) : 7)
       .style("fill", d => d.children ? "#2ea043" : "#baf5a9")
       .on("click", (event, d) => showModal(d.data));
 
-    nodeSel.append("text")
+    const labelSel = nodeSel.append("text")
       .attr("dy", d => {
         if (d.cartY < -80) {
           const idx = d.parent ? d.parent.children.indexOf(d) : 0;
@@ -403,10 +421,25 @@ d3.json("data.json?v=" + Date.now()).then(data => {
         if (Math.abs(d.cartX) < 110 && d.cartY < 0) return "middle";
         return d.cartX > 0 ? "start" : "end";
       })
-      .text(d => d.data.name)
       .style("font-size", d => d.depth === 1 ? "22px" : "16px")
       .style("fill", "#f0f5f1")
       .style("font-weight", "700");
+
+    // Первая строка — имя ветки. Для главных веток (depth 1) добавляем
+    // вторую строку с пипсами прокачанности (●●●○○), выровненную под тем же x.
+    labelSel.each(function(d) {
+      const sel = d3.select(this);
+      sel.append("tspan").text(d.data.name);
+      if (d.depth === 1) {
+        const level = getLevel(d);
+        const pips = "●".repeat(level) + "○".repeat(5 - level);
+        sel.append("tspan")
+          .attr("class", "level-pips")
+          .attr("x", sel.attr("x"))
+          .attr("dy", "1.3em")
+          .text(pips);
+      }
+    });
   });
 
   const coreGroup = treeLayer.append("g")

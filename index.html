@@ -433,10 +433,15 @@ function showModal(data) {
   gallery.innerHTML = "";
 
   if (data.media && Array.isArray(data.media)) {
+    // Проверяем, есть ли аудио именно в ЭТОЙ конкретной ноде
     let audioItems = data.media.filter(item => item.type === "audio");
     let otherItems = data.media.filter(item => item.type !== "audio");
 
-    if (audioItems.length > 0) {
+    // Если музыки в этой ноде нет вообще — выводим медиа как есть (без всяких плеерей)
+    if (audioItems.length === 0) {
+      renderMediaElements(data.media, gallery);
+    } else {
+      // Иначе сортируем треки по длительности, если они тут есть
       let durationPromises = audioItems.map(item => {
         return new Promise((resolve) => {
           const tempAudio = document.createElement('audio');
@@ -457,8 +462,6 @@ function showModal(data) {
         renderMediaElements(otherItems, gallery);
         results.forEach(res => renderAudioElement(res.item, gallery));
       });
-    } else {
-      renderMediaElements(data.media, gallery);
     }
   }
 

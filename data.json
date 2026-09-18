@@ -172,7 +172,6 @@
           "name": "Снаружи",
           "desc": "Природа и прочее окружение за 4 стенами.",
           "media": [
-            { "type": "image", "url": "./assets/ContactSheet-001.webp" },
             { "type": "image", "url": "./assets/2.webp" },
             { "type": "image", "url": "./assets/flux2-2026-09-13_130054_00001 (0-00-00-00).webp" }
           ]

@@ -33,6 +33,7 @@
           "name": "Монтаж",
           "desc": "Режу правду матку и лишние 40 дублей молчания на таймлайне.",
           "media": [
+            { "type": "link", "url": "https://disk.yandex.ru/i/lqvZRvWqQtVfRA", "text": "Хлебнуть кофе при просмотре ↗" },
             { "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12%202.webp" },
             { "type": "image", "url": "./assets/photo_3_2026-09-18_01-32-12.webp" },
             { "type": "image", "url": "./assets/photo_2_2026-09-18_01-32-12.webp" },

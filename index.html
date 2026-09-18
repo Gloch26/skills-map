@@ -25,7 +25,8 @@ body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000
 .node circle { stroke: #000; stroke-width: 2px; cursor: pointer; transition: all 0.3s ease; }
 .node circle:hover { filter: brightness(1.5); }
 .node text { pointer-events: none; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; }
-.level-pips { font-size: 12px; letter-spacing: 3px; fill: #6ded51; opacity: 0.85; font-weight: 400; }
+.level-pips { font-size: 11px; letter-spacing: 1.5px; fill: #6ded51; opacity: 0.95; font-weight: 400; }
+.level-pips-bg { fill: rgba(4, 9, 5, 0.75); pointer-events: none; }
 
 @keyframes coreGlow {
   0%, 100% { filter: drop-shadow(0 0 6px rgba(222, 136, 106, 0.4)); }
@@ -301,16 +302,16 @@ function getStaticOrganicPath(x1, y1, x2, y2) {
   return lineGen([[x1, y1], [p1x, p1y], [p2x, p2y], [x2, y2]]);
 }
 
-// Прокачанность ветки: явное поле "level" (1-5) в data.json имеет приоритет,
-// иначе считаем автоматически по числу дочерних навыков (тоже 1-5).
-// Чтобы вручную поднять/опустить ветку — просто добавь "level": 4 в её объект в data.json.
+// Прокачанность ветки: явное поле "level" (5-10) в data.json имеет приоритет,
+// иначе считаем автоматически по числу дочерних навыков — но не ниже 5 и не выше 10.
+// Чтобы вручную поднять/опустить ветку — добавь "level": 8 в её объект в data.json.
 function getLevel(node) {
   const raw = node.data ? node.data.level : undefined;
   if (typeof raw === 'number' && !isNaN(raw)) {
-    return Math.max(1, Math.min(5, Math.round(raw)));
+    return Math.max(5, Math.min(10, Math.round(raw)));
   }
   const kids = node.children ? node.children.length : 0;
-  return Math.max(1, Math.min(5, kids || 1));
+  return Math.max(5, Math.min(10, 4 + (kids || 1)));
 }
 
 d3.json("data.json?v=" + Date.now()).then(data => {
@@ -359,8 +360,9 @@ d3.json("data.json?v=" + Date.now()).then(data => {
       .attr("class", `branch-cluster cluster-${i % 4}`);
 
     const mainLevel = getLevel(mainNode);
-    const trunkWidth = 4 + mainLevel * 1.4;      // 5.4px (ур.1) .. 11px (ур.5)
-    const trunkBrightness = (0.82 + mainLevel * 0.1).toFixed(2); // 0.92 .. 1.32
+    const levelT = (mainLevel - 5) / 5; // 0 (ур.5) .. 1 (ур.10)
+    const trunkWidth = 6 + levelT * 6;           // 6px (ур.5) .. 12px (ур.10)
+    const trunkBrightness = (0.95 + levelT * 0.35).toFixed(2); // 0.95 .. 1.30
 
     cluster.append("path")
       .attr("class", "branch data-branch")
@@ -396,7 +398,7 @@ d3.json("data.json?v=" + Date.now()).then(data => {
       .style("opacity", 0);
 
     nodeSel.append("circle")
-      .attr("r", d => d.depth === 1 ? (8 + getLevel(d) * 1.4) : 7)
+      .attr("r", d => d.depth === 1 ? (10 + ((getLevel(d) - 5) / 5) * 6) : 7)
       .style("fill", d => d.children ? "#2ea043" : "#baf5a9")
       .on("click", (event, d) => showModal(d.data));
 
@@ -426,18 +428,30 @@ d3.json("data.json?v=" + Date.now()).then(data => {
       .style("font-weight", "700");
 
     // Первая строка — имя ветки. Для главных веток (depth 1) добавляем
-    // вторую строку с пипсами прокачанности (●●●○○), выровненную под тем же x.
+    // вторую строку с пипсами прокачанности (●●●○○...), плюс тёмную подложку
+    // под них — иначе декоративные усики/линии рядом с узлом иногда проходят
+    // прямо по пипсам и сливаются с точками (это и было на скриншоте).
     labelSel.each(function(d) {
       const sel = d3.select(this);
+      const parentG = d3.select(this.parentNode);
       sel.append("tspan").text(d.data.name);
       if (d.depth === 1) {
         const level = getLevel(d);
-        const pips = "●".repeat(level) + "○".repeat(5 - level);
-        sel.append("tspan")
+        const pips = "●".repeat(level) + "○".repeat(10 - level);
+        const pipsTspan = sel.append("tspan")
           .attr("class", "level-pips")
           .attr("x", sel.attr("x"))
           .attr("dy", "1.3em")
           .text(pips);
+
+        const bbox = pipsTspan.node().getBBox();
+        parentG.insert("rect", "text")
+          .attr("class", "level-pips-bg")
+          .attr("x", bbox.x - 4)
+          .attr("y", bbox.y - 2)
+          .attr("width", bbox.width + 8)
+          .attr("height", bbox.height + 4)
+          .attr("rx", 4);
       }
     });
   });

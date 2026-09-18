@@ -205,7 +205,8 @@
           "name": "Демки",
           "desc": "Чето назаписывал.",
           "media": [
-            { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", "title": "Демо трека #1 (Кавер)" },
+            { "type": "audio", "url": "./assets/aud/track1.mp3", "title": "Демо трека #1 (Кавер)" },
+            { "type": "audio", "url": "./assets/aud/track1.mp3", "title": "Демо трека #1 (Кавер)" },
             { "type": "audio", "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", "title": "Демо трека #2 (Эксперимент)" }
           ]
         }

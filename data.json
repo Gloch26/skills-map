@@ -73,6 +73,7 @@
     },
     {
       "name": "Ремонтник",
+      "level": 5,
       "desc": "Оживляю мертвецов из кремния и пластика.",
       "children": [
         {
@@ -113,6 +114,7 @@
     },
     {
       "name": "Перформанс",
+      "level": 7,
       "desc": "Творю какую-то лютую дичь, которую лучше не видеть близким.",
       "children": [
         {
@@ -131,6 +133,8 @@
           "media": [
             { "type": "image", "url": "./assets/BW cube.webp" },
             { "type": "image", "url": "./assets/ContactSheet-001 ad.webp" },
+            { "type": "image", "url": "./assets/ContactSheet-004.webp" },
+            { "type": "image", "url": "./assets/ContactSheet-003.webp" },
             { "type": "image", "url": "./assets/photo_2026-09-18_08-46-28.webp" }
           ]
         },
@@ -180,6 +184,7 @@
     },
     {
       "name": "Кодинг",
+      "level": 3,
       "desc": "Попытка наебать судьбу с помощью синтаксиса, которая почему-то работает (хоть нейросети и помогают).",
       "children": [
         {
@@ -261,6 +266,7 @@
     },
     {
       "name": "Готовка",
+      "level": 6,
       "desc": "Кулинарные эксперименты на грани выживания.",
       "children": [
         {

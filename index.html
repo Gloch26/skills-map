@@ -233,6 +233,44 @@ audio {
 
 <audio id="bg-music" src="assets/aud/Reverse Tape Swells.mp3" loop preload="none"></audio>
 <button id="music-toggle" onclick="toggleBackgroundMusic()" title="Вкл/выкл музыку">🔊</button>
+
+// ===== Синтезированные звуки при клике по узлам =====
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playNodeSound(kind) {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  let waveType, freqStart, freqEnd, duration, peakGain;
+  if (kind === 'core') {
+    waveType = 'sine'; freqStart = 180; freqEnd = 90; duration = 0.5; peakGain = 0.25;
+  } else if (kind === 'main') {
+    waveType = 'triangle'; freqStart = 420; freqEnd = 260; duration = 0.28; peakGain = 0.18;
+  } else {
+    waveType = 'sine'; freqStart = 720; freqEnd = 980; duration = 0.16; peakGain = 0.14;
+  }
+
+  osc.type = waveType;
+  osc.frequency.setValueAtTime(freqStart, now);
+  osc.frequency.exponentialRampToValueAtTime(freqEnd, now + duration);
+
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(peakGain, now + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + duration + 0.05);
+}
    
  <!-- Редкая "золотая спора" — пасхалка на внимательность. Появляется на пару
      секунд в случайном месте экрана и гаснет, если не поймать. Клик по ней
@@ -314,7 +352,7 @@ function enterUniverse() {
 bgMusic.muted = musicMuted;
 bgMusic.volume = 0.35; // фон не должен перекрикивать остальное
 bgMusic.play().catch(() => {});
-   
+getAudioCtx();   
 }
 
 // ===== Пасхалка "Золотая спора" =====
@@ -559,10 +597,10 @@ d3.json("data.json?v=" + Date.now()).then(data => {
       .attr("transform", d => `translate(${d.cartX},${d.cartY})`)
       .style("opacity", 0);
 
-    nodeSel.append("circle")
-      .attr("r", d => d.depth === 1 ? (10 + ((getLevel(d) - 5) / 5) * 6) : 7)
-      .style("fill", d => d.children ? "#2ea043" : "#baf5a9")
-      .on("click", (event, d) => showModal(d.data));
+nodeSel.append("circle")
+  .attr("r", d => d.depth === 1 ? (10 + ((getLevel(d) - 5) / 5) * 6) : 7)
+  .style("fill", d => d.children ? "#2ea043" : "#baf5a9")
+  .on("click", (event, d) => { playNodeSound(d.children ? 'main' : 'leaf'); showModal(d.data); });
 
     const labelSel = nodeSel.append("text")
       .attr("dy", d => {
@@ -626,7 +664,7 @@ d3.json("data.json?v=" + Date.now()).then(data => {
     .attr("class", "core-circle")
     .attr("r", 22)
     .style("fill", "#9e5c43")
-    .on("click", () => showModal(root.data));
+   .on("click", () => { playNodeSound('core'); showModal(root.data); });
 
   coreCircle.append("animate")
     .attr("attributeName", "r")

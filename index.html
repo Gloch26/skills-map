@@ -52,6 +52,28 @@ body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000
   pointer-events: auto;
 }
 
+   #music-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(10, 13, 11, 0.8);
+  border: 1px solid #2ea043;
+  color: #87ff47;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+#music-toggle:hover { transform: scale(1.08); box-shadow: 0 0 14px rgba(135, 255, 71, 0.5); }
+
+
+
 @keyframes coreGlow {
   0%, 100% { filter: drop-shadow(0 0 6px rgba(222, 136, 106, 0.4)); }
   50% { filter: drop-shadow(0 0 16px rgba(222, 136, 106, 0.95)) brightness(1.15); }
@@ -208,9 +230,13 @@ audio {
 
 <div id="canvas-container"></div>
 
-<!-- Редкая "золотая спора" — пасхалка на внимательность. Появляется на пару
+
+<audio id="bg-music" src="assets/audio/Reverse_Tape_Swells.mp3" loop preload="none"></audio>
+<button id="music-toggle" onclick="toggleBackgroundMusic()" title="Вкл/выкл музыку">🔊</button>
+   
+ <!-- Редкая "золотая спора" — пасхалка на внимательность. Появляется на пару
      секунд в случайном месте экрана и гаснет, если не поймать. Клик по ней
-     открывает подборку лучших видео. -->
+     открывает подборку лучших видео. -->  
 <div id="rare-spore" onclick="catchRareSpore(event)"></div>
 
 <div id="modal-bg" onclick="closeModal()"></div>
@@ -284,6 +310,11 @@ function enterUniverse() {
   document.getElementById('canvas-container').classList.add('ready');
   if (!isGrown) { animateGrowth(); isGrown = true; }
   scheduleRareSpore();
+
+bgMusic.muted = musicMuted;
+bgMusic.volume = 0.35; // фон не должен перекрикивать остальное
+bgMusic.play().catch(() => {});
+   
 }
 
 // ===== Пасхалка "Золотая спора" =====
@@ -304,6 +335,23 @@ const BEST_VIDEOS_NODE = {
      
   ]
 };
+
+   const bgMusic = document.getElementById('bg-music');
+let musicMuted = localStorage.getItem('musicMuted') === 'true';
+
+function updateMusicButton() {
+  document.getElementById('music-toggle').textContent = musicMuted ? '🔇' : '🔊';
+}
+
+function toggleBackgroundMusic() {
+  musicMuted = !musicMuted;
+  bgMusic.muted = musicMuted;
+  try { localStorage.setItem('musicMuted', musicMuted); } catch (_) {}
+  updateMusicButton();
+  if (!musicMuted && bgMusic.paused) bgMusic.play().catch(() => {});
+}
+
+updateMusicButton();
 
  
 const rareSporeEl = document.getElementById('rare-spore');

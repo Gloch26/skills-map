@@ -12,6 +12,25 @@ body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000
 #canvas-container:active { cursor: grabbing; }
 #canvas-container.ready { filter: blur(0px); transform: scale(1); }
 
+   .bg-blob {
+  position: fixed;
+  top: 0; left: 0;
+  width: 40vw;
+  height: 40vw;
+  max-width: 650px;
+  max-height: 650px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+  transition: opacity 4s ease, transform 6s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+@media (max-width: 768px) {
+  .bg-blob { filter: blur(32px); } /* тяжёлый blur на мобилке дороже — режем радиус */
+}
+
 #welcome-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; text-align: center; padding: 20px; box-sizing: border-box; transition: opacity 0.8s ease, visibility 0.8s; }
 #welcome-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 #welcome-screen h1 { color: #87ff47; font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 15px; font-weight: 900; text-shadow: 0 0 20px rgba(135, 255, 71, 0.5); text-transform: uppercase; letter-spacing: 2px;}
@@ -222,6 +241,9 @@ audio {
 <body>
 <canvas id="spores-canvas"></canvas>
 
+   <div class="bg-blob" id="bg-blob-1"></div>
+<div class="bg-blob" id="bg-blob-2"></div>
+
 <div id="welcome-screen">
   <h1>Древа талантов</h1>
   <p>По мотивам видео "кто ты"<br>(Новые ноды в загрузке)</p>
@@ -234,44 +256,6 @@ audio {
 <audio id="bg-music" src="assets/aud/Reverse Tape Swells.mp3" loop preload="none"></audio>
 <button id="music-toggle" onclick="toggleBackgroundMusic()" title="Вкл/выкл музыку">🔊</button>
 
-// ===== Синтезированные звуки при клике по узлам =====
-let audioCtx = null;
-function getAudioCtx() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
-}
-
-function playNodeSound(kind) {
-  const ctx = getAudioCtx();
-  const now = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-
-  let waveType, freqStart, freqEnd, duration, peakGain;
-  if (kind === 'core') {
-    waveType = 'sine'; freqStart = 180; freqEnd = 90; duration = 0.5; peakGain = 0.25;
-  } else if (kind === 'main') {
-    waveType = 'triangle'; freqStart = 420; freqEnd = 260; duration = 0.28; peakGain = 0.18;
-  } else {
-    waveType = 'sine'; freqStart = 720; freqEnd = 980; duration = 0.16; peakGain = 0.14;
-  }
-
-  osc.type = waveType;
-  osc.frequency.setValueAtTime(freqStart, now);
-  osc.frequency.exponentialRampToValueAtTime(freqEnd, now + duration);
-
-  gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(peakGain, now + 0.015);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-  osc.connect(gain).connect(ctx.destination);
-  osc.start(now);
-  osc.stop(now + duration + 0.05);
-}
-   
  <!-- Редкая "золотая спора" — пасхалка на внимательность. Появляется на пару
      секунд в случайном месте экрана и гаснет, если не поймать. Клик по ней
      открывает подборку лучших видео. -->  
@@ -342,17 +326,24 @@ document.addEventListener('visibilitychange', () => {
 });
 drawParticles();
 
-let isGrown = false;
+let treeReady = false;
+let pendingGrowth = false;
+
 function enterUniverse() {
   document.getElementById('welcome-screen').classList.add('hidden');
   document.getElementById('canvas-container').classList.add('ready');
-  if (!isGrown) { animateGrowth(); isGrown = true; }
+  if (treeReady) {
+    if (!isGrown) { animateGrowth(); isGrown = true; }
+  } else {
+    pendingGrowth = true; // дерево ещё не готово — прорастим, как только будет
+  }
   scheduleRareSpore();
 
-bgMusic.muted = musicMuted;
-bgMusic.volume = 0.35; // фон не должен перекрикивать остальное
-bgMusic.play().catch(() => {});
-getAudioCtx();   
+  bgMusic.muted = musicMuted;
+  bgMusic.volume = 0.35;
+  bgMusic.play().catch(() => {});
+  getAudioCtx();
+   startBgBlobs();
 }
 
 // ===== Пасхалка "Золотая спора" =====
@@ -390,6 +381,45 @@ function toggleBackgroundMusic() {
 }
 
 updateMusicButton();
+
+   // ===== Синтезированные звуки при клике по узлам =====
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playNodeSound(kind) {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  let waveType, freqStart, freqEnd, duration, peakGain;
+  if (kind === 'core') {
+    waveType = 'sine'; freqStart = 180; freqEnd = 90; duration = 0.5; peakGain = 0.25;
+  } else if (kind === 'main') {
+    waveType = 'triangle'; freqStart = 420; freqEnd = 260; duration = 0.28; peakGain = 0.18;
+  } else {
+    waveType = 'sine'; freqStart = 720; freqEnd = 980; duration = 0.16; peakGain = 0.14;
+  }
+
+  osc.type = waveType;
+  osc.frequency.setValueAtTime(freqStart, now);
+  osc.frequency.exponentialRampToValueAtTime(freqEnd, now + duration);
+
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(peakGain, now + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + duration + 0.05);
+}
+   
 
  
 const rareSporeEl = document.getElementById('rare-spore');
@@ -682,6 +712,9 @@ nodeSel.append("circle")
     .style("fill", "#ffffff")
     .style("font-weight", "900");
 
+  treeReady = true;
+  if (pendingGrowth) { animateGrowth(); isGrown = true; pendingGrowth = false; }
+   
 }).catch(err => console.error("Ошибка загрузки data.json:", err));
 
 function animateGrowth() {
@@ -942,6 +975,49 @@ document.addEventListener('play', (e) => {
     });
   }
 }, true);
+
+   // ===== Мечтательные вспышки на фоне =====
+const bgBlobEls = [document.getElementById('bg-blob-1'), document.getElementById('bg-blob-2')];
+const bgBlobPalettes = [
+  'radial-gradient(circle, rgba(135,255,71,0.35) 0%, rgba(46,160,67,0.12) 45%, rgba(46,160,67,0) 70%)',
+  'radial-gradient(circle, rgba(222,136,106,0.30) 0%, rgba(158,92,67,0.10) 45%, rgba(158,92,67,0) 70%)',
+  'radial-gradient(circle, rgba(160,220,255,0.25) 0%, rgba(90,150,200,0.10) 45%, rgba(90,150,200,0) 70%)'
+];
+
+function scheduleBgBlob(el) {
+  const delay = 20000 + Math.random() * 20000; // раз в 20-40 сек у каждого блоба своё расписание
+  setTimeout(() => showBgBlob(el), delay);
+}
+
+function showBgBlob(el) {
+  if (document.hidden) { scheduleBgBlob(el); return; }
+
+  const isMobile = window.innerWidth < 768;
+  const size = (isMobile ? 55 : 30) + Math.random() * (isMobile ? 20 : 24);
+  el.style.width = size + 'vw';
+  el.style.height = size + 'vw';
+  el.style.background = bgBlobPalettes[Math.floor(Math.random() * bgBlobPalettes.length)];
+  el.style.left = (15 + Math.random() * 70) + 'vw';
+  el.style.top = (15 + Math.random() * 70) + 'vh';
+
+  el.style.opacity = '1';
+  el.style.transform = 'translate(-50%, -50%) scale(1)';
+
+  const lifeTime = 5000 + Math.random() * 3000;
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translate(-50%, -50%) scale(0.7)';
+  }, lifeTime);
+
+  scheduleBgBlob(el);
+}
+
+let blobsStarted = false;
+function startBgBlobs() {
+  if (blobsStarted) return;
+  blobsStarted = true;
+  bgBlobEls.forEach((el, i) => setTimeout(() => scheduleBgBlob(el), i * 8000));
+}
   
 </script>
 </body>

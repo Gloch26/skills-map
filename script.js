@@ -56,7 +56,8 @@ function enterUniverse() {
   bgMusic.volume = 0.35;
   bgMusic.play().catch(() => {});
   getAudioCtx();
-   startBgBlobs();
+  playNodeSound('core');
+  startBgBlobs();
 }
 
 // ===== Пасхалка "Золотая спора" =====
@@ -505,32 +506,12 @@ function showModal(data) {
     let audioItems = data.media.filter(item => item.type === "audio");
     let otherItems = data.media.filter(item => item.type !== "audio");
 
-    // Если музыки в этой ноде нет вообще — выводим медиа как есть (без всяких плеерей)
-    if (audioItems.length === 0) {
-      renderMediaElements(data.media, gallery);
-    } else {
-      // Иначе сортируем треки по длительности, если они тут есть
-      let durationPromises = audioItems.map(item => {
-        return new Promise((resolve) => {
-          const tempAudio = document.createElement('audio');
-          tempAudio.src = item.url;
-          tempAudio.preload = 'metadata';
-          tempAudio.onloadedmetadata = () => {
-            resolve({ item, duration: tempAudio.duration || 0 });
-          };
-          tempAudio.onerror = () => {
-            resolve({ item, duration: 0 });
-          };
-        });
-      });
-
-      Promise.all(durationPromises).then(results => {
-        results.sort((a, b) => a.duration - b.duration);
-        
-        renderMediaElements(otherItems, gallery);
-        results.forEach(res => renderAudioElement(res.item, gallery));
-      });
-    }
+    // Показываем всё сразу, без ожидания метаданных — раньше здесь была
+    // сортировка по длительности через Promise.all по ВСЕМ трекам, из-за
+    // которой окно с большим числом аудио (например «Демки») подолгу
+    // висело пустым. Порядок теперь как в data.json, зато открывается мгновенно.
+    renderMediaElements(otherItems, gallery);
+    renderAudioElementsPaginated(audioItems, gallery);
   }
 
   document.getElementById('modal').classList.add('active');
@@ -652,6 +633,46 @@ function renderAudioElement(item, gallery) {
       <div class="media-audio-title">${autoTitle || "Аудио демо"}</div>
       <audio controls src="${item.url}"></audio>
     </div>`;
+}
+
+// Листалка для длинных списков аудио (например «Демки» с 20+ треками) —
+// рендерим только текущую страницу, а не всё разом, так модалка не замирает
+// на куче одновременно создаваемых <audio> элементов.
+const AUDIO_PAGE_SIZE = 6;
+
+function renderAudioElementsPaginated(items, gallery) {
+  if (!items.length) return;
+  const pageCount = Math.ceil(items.length / AUDIO_PAGE_SIZE);
+  let currentPage = 0;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'audio-pager';
+  gallery.appendChild(wrapper);
+
+  function renderPage() {
+    wrapper.innerHTML = "";
+    const start = currentPage * AUDIO_PAGE_SIZE;
+    const pageItems = items.slice(start, start + AUDIO_PAGE_SIZE);
+
+    const list = document.createElement('div');
+    pageItems.forEach(item => renderAudioElement(item, list));
+    wrapper.appendChild(list);
+
+    if (pageCount > 1) {
+      const nav = document.createElement('div');
+      nav.className = 'audio-pager-nav';
+      nav.innerHTML = `
+        <button class="pager-btn" id="pager-prev" ${currentPage === 0 ? 'disabled' : ''}>← Назад</button>
+        <span class="pager-label">Стр. ${currentPage + 1} из ${pageCount}</span>
+        <button class="pager-btn" id="pager-next" ${currentPage === pageCount - 1 ? 'disabled' : ''}>Дальше →</button>
+      `;
+      wrapper.appendChild(nav);
+      nav.querySelector('#pager-prev').onclick = () => { currentPage--; renderPage(); };
+      nav.querySelector('#pager-next').onclick = () => { currentPage++; renderPage(); };
+    }
+  }
+
+  renderPage();
 }
 
 function closeModal() {

@@ -217,6 +217,28 @@ audio {
   filter: invert(90%) hue-rotate(65deg) brightness(0.95); 
 }
 
+.audio-pager-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #1a291e;
+}
+.pager-btn {
+  background: none;
+  border: 1px solid #2ea043;
+  color: #87ff47;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: background 0.2s ease;
+}
+.pager-btn:hover:not(:disabled) { background: rgba(46, 160, 67, 0.2); }
+.pager-btn:disabled { opacity: 0.3; cursor: default; }
+.pager-label { font-size: 0.8rem; color: #a3b8a8; }
+
 /* Карточки сравнения в модалке */
 .compare-container { margin-top: 15px; width: 100%; }
 .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; cursor: pointer; border-radius: 8px; padding: 3px; transition: transform 0.2s ease, box-shadow 0.2s ease; }

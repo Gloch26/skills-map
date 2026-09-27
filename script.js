@@ -649,6 +649,23 @@ function renderAudioElementsPaginated(items, gallery) {
   wrapper.className = 'audio-pager';
   gallery.appendChild(wrapper);
 
+  function appendNav() {
+    if (pageCount <= 1) return;
+    const nav = document.createElement('div');
+    nav.className = 'audio-pager-nav';
+    nav.innerHTML = `
+      <button class="pager-btn" id="pager-prev" ${currentPage === 0 ? 'disabled' : ''}>← Назад</button>
+      <span class="pager-label">Стр. ${currentPage + 1} из ${pageCount}</span>
+      <button class="pager-btn" id="pager-next" ${currentPage === pageCount - 1 ? 'disabled' : ''}>Дальше →</button>
+    `;
+    wrapper.appendChild(nav);
+    nav.querySelector('#pager-prev').onclick = () => { currentPage--; renderPage(); };
+    nav.querySelector('#pager-next').onclick = () => { currentPage++; renderPage(); };
+  }
+
+  // Порядок треков берём как есть из data.json (там уже отсортировано
+  // от короткого к длинному вручную) — никаких запросов метаданных
+  // перед рендером не делаем, страница появляется мгновенно.
   function renderPage() {
     wrapper.innerHTML = "";
     const start = currentPage * AUDIO_PAGE_SIZE;
@@ -657,19 +674,7 @@ function renderAudioElementsPaginated(items, gallery) {
     const list = document.createElement('div');
     pageItems.forEach(item => renderAudioElement(item, list));
     wrapper.appendChild(list);
-
-    if (pageCount > 1) {
-      const nav = document.createElement('div');
-      nav.className = 'audio-pager-nav';
-      nav.innerHTML = `
-        <button class="pager-btn" id="pager-prev" ${currentPage === 0 ? 'disabled' : ''}>← Назад</button>
-        <span class="pager-label">Стр. ${currentPage + 1} из ${pageCount}</span>
-        <button class="pager-btn" id="pager-next" ${currentPage === pageCount - 1 ? 'disabled' : ''}>Дальше →</button>
-      `;
-      wrapper.appendChild(nav);
-      nav.querySelector('#pager-prev').onclick = () => { currentPage--; renderPage(); };
-      nav.querySelector('#pager-next').onclick = () => { currentPage++; renderPage(); };
-    }
+    appendNav();
   }
 
   renderPage();

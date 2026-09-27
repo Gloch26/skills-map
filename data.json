@@ -2,7 +2,10 @@
   "name": "Я",
   "desc": "Симбиоз размышлений, сентиментальности и сомнительных жизненных решений.",
   "media": [
-    { "type": "image", "url": "./assets/after%20Screenshot_204.webp" }
+    {
+      "type": "image",
+      "url": "./assets/after%20Screenshot_204.webp"
+    }
   ],
   "children": [
     {
@@ -13,39 +16,87 @@
           "name": "Свет",
           "desc": "Выставляю так, чтобы тени скрывали экзистенциальный кризис.",
           "media": [
-            { "type": "image", "url": "./assets/photo_4_2026-09-18_01-12-34.webp" },
-            { "type": "image", "url": "./assets/photo_3_2026-09-18_01-12-34.webp" },
-            { "type": "image", "url": "./assets/photo_2_2026-09-18_01-12-34.webp" },
-            { "type": "image", "url": "./assets/photo_1_2026-09-18_01-12-34.webp" }
+            {
+              "type": "image",
+              "url": "./assets/photo_4_2026-09-18_01-12-34.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_3_2026-09-18_01-12-34.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2_2026-09-18_01-12-34.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_1_2026-09-18_01-12-34.webp"
+            }
           ]
         },
         {
           "name": "Съемка",
           "desc": "Ловлю кадры до того, как техника скажет «ошибка карты памяти».",
           "media": [
-            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-11.webp" },
-            { "type": "image", "url": "./assets/photo_3_2026-09-17_22-46-05.webp" },
-            { "type": "image", "url": "./assets/photo_24_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_6_2025-04-28_08-03-04.webp" }
+            {
+              "type": "image",
+              "url": "./assets/photo_1_2026-09-17_22-46-11.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_3_2026-09-17_22-46-05.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_24_2026-09-17_22-45-10.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_6_2025-04-28_08-03-04.webp"
+            }
           ]
         },
         {
           "name": "Монтаж",
           "desc": "Режу правду матку и лишние 40 дублей молчания на таймлайне.",
           "media": [
-            { "type": "link", "url": "https://disk.yandex.ru/i/lqvZRvWqQtVfRA", "text": "Хлебнуть кофе при просмотре ↗" },
-            { "type": "image", "url": "./assets/photo_7_2026-09-18_01-32-12%202.webp" },
-            { "type": "image", "url": "./assets/photo_3_2026-09-18_01-32-12.webp" },
-            { "type": "image", "url": "./assets/photo_2_2026-09-18_01-32-12.webp" },
-            { "type": "image", "url": "./assets/photo_8_2026-09-18_01-32-12.webp" },
-            { "type": "video", "url": "./assets/vid/color_1.mp4", "text": "Мой вайб на монтаже" }
+            {
+              "type": "link",
+              "url": "https://disk.yandex.ru/i/lqvZRvWqQtVfRA",
+              "text": "Хлебнуть кофе при просмотре ↗"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_7_2026-09-18_01-32-12%202.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_3_2026-09-18_01-32-12.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2_2026-09-18_01-32-12.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_8_2026-09-18_01-32-12.webp"
+            },
+            {
+              "type": "video",
+              "url": "./assets/vid/color_1.mp4",
+              "text": "Мой вайб на монтаже"
+            }
           ]
         },
         {
           "name": "AI",
           "desc": "Пытаюсь заставить искусственный интеллект работать за меня, пока я сплю.",
           "media": [
-            { "type": "link", "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A", "text": "Хлебнуть нейрохрючева ↗" },
+            {
+              "type": "link",
+              "url": "https://disk.yandex.ru/i/_fV1ciaLhqKz_A",
+              "text": "Хлебнуть нейрохрючева ↗"
+            },
             {
               "type": "comparison",
               "pairs": [
@@ -65,8 +116,15 @@
           "name": "3D",
           "desc": "Чуть 3д хрючева.",
           "media": [
-            { "type": "video", "url": "./assets/vid/7%20courtney%20just%20relax%20-%2016.mp4" },
-            { "type": "link", "url": "https://youtu.be/wyb7uFEdDH4", "text": "Невышедший сниппет (unreal и фотосканы лиц) ↗" }
+            {
+              "type": "video",
+              "url": "./assets/vid/7%20courtney%20just%20relax%20-%2016.mp4"
+            },
+            {
+              "type": "link",
+              "url": "https://youtu.be/wyb7uFEdDH4",
+              "text": "Невышедший сниппет (unreal и фотосканы лиц) ↗"
+            }
           ]
         }
       ]
@@ -80,34 +138,72 @@
           "name": "Компы",
           "desc": "Сборка ПК и т.д.",
           "media": [
-            { "type": "image", "url": "./assets/photo_25_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_21_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_13_2026-09-18_01-32-12.webp" }
+            {
+              "type": "image",
+              "url": "./assets/photo_25_2026-09-17_22-45-10.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_21_2026-09-17_22-45-10.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_13_2026-09-18_01-32-12.webp"
+            }
           ]
         },
         {
           "name": "Телефоны",
           "desc": "Модульный ремонт.",
-          "media": [{ "type": "image", "url": "./assets/photo_35_2026-09-17_22-45-10.webp" }]
+          "media": [
+            {
+              "type": "image",
+              "url": "./assets/photo_35_2026-09-17_22-45-10.webp"
+            }
+          ]
         },
         {
           "name": "ТВ",
           "desc": "Вид, что ты шаришь за платы, и ремонт подсветки.",
           "media": [
-            { "type": "image", "url": "./assets/photo_30_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_31_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_32_2026-09-17_22-45-10.webp" }
+            {
+              "type": "image",
+              "url": "./assets/photo_30_2026-09-17_22-45-10.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_31_2026-09-17_22-45-10.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_32_2026-09-17_22-45-10.webp"
+            }
           ]
         },
         {
           "name": "Сисадмин",
           "desc": "Протру вам экран, куплю тряпочки, почищу ваш сервер и сделаю вид, что так и надо.",
           "media": [
-            { "type": "image", "url": "./assets/photo_6_2026-09-18_01-32-12.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-36-43.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-36-56.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-36-58.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-37-00.webp" }
+            {
+              "type": "image",
+              "url": "./assets/photo_6_2026-09-18_01-32-12.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-36-43.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-36-56.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-36-58.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-37-00.webp"
+            }
           ]
         }
       ]
@@ -121,40 +217,88 @@
           "name": "Косплейщик",
           "desc": "Выдача образов за свои собственные.",
           "media": [
-            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-26.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-21.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-25.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-29.webp" }
+            {
+              "type": "image",
+              "url": "./assets/photo_1_2026-09-17_22-46-26.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-46-21.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-46-25.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-46-29.webp"
+            }
           ]
         },
         {
           "name": "Модель",
           "desc": "Смотрю на вас как на говно.",
           "media": [
-            { "type": "image", "url": "./assets/BW cube.webp" },
-            { "type": "image", "url": "./assets/ContactSheet-001 ad.webp" },
-            { "type": "image", "url": "./assets/ContactSheet-004.webp" },
-            { "type": "image", "url": "./assets/ContactSheet-003.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-28.webp" }
+            {
+              "type": "image",
+              "url": "./assets/BW cube.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/ContactSheet-001 ad.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/ContactSheet-004.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/ContactSheet-003.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-46-28.webp"
+            }
           ]
         },
         {
           "name": "Визажист",
           "desc": "Крупный план с... моими лицами.",
           "media": [
-            { "type": "image", "url": "./assets/IMG_20260909_233917.webp" },
-            { "type": "image", "url": "./assets/IMG_8814.webp" },
-            { "type": "image", "url": "./assets/Add_detail_sharpness_2k_202602221726.webp" }
+            {
+              "type": "image",
+              "url": "./assets/IMG_20260909_233917.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/IMG_8814.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/Add_detail_sharpness_2k_202602221726.webp"
+            }
           ]
         },
         {
           "name": "Гример",
           "desc": "Один раз пощупал грим, испугался и убежал.",
           "media": [
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-09.webp" },
-            { "type": "image", "url": "./assets/photo_2026-09-18_08-46-17.webp" },
-            { "type": "image", "url": "./assets/2 IMG_3539-3.webp" },
-            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-46-29.webp" }
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-46-09.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-18_08-46-17.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/2 IMG_3539-3.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_1_2026-09-17_22-46-29.webp"
+            }
           ]
         }
       ]
@@ -167,17 +311,32 @@
           "name": "Портреты",
           "desc": "Портретные съемки друзей и знакомых.",
           "media": [
-            { "type": "image", "url": "./assets/ContactSheet-001.webp" },
-            { "type": "image", "url": "./assets/3000x2000RGB.webp" },
-            { "type": "image", "url": "./assets/1 var.webp" }
+            {
+              "type": "image",
+              "url": "./assets/ContactSheet-001.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/3000x2000RGB.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/1 var.webp"
+            }
           ]
         },
         {
           "name": "Снаружи",
           "desc": "Природа и прочее окружение за 4 стенами.",
           "media": [
-            { "type": "image", "url": "./assets/2.webp" },
-            { "type": "image", "url": "./assets/flux2-2026-09-13_130054_00001 (0-00-00-00).webp" }
+            {
+              "type": "image",
+              "url": "./assets/2.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/flux2-2026-09-13_130054_00001 (0-00-00-00).webp"
+            }
           ]
         }
       ]
@@ -190,7 +349,13 @@
         {
           "name": "Web / JS",
           "desc": "Адын новый сайт и вот эта оболочка.",
-          "media": [{ "type": "link", "url": "https://xn----gtbe1amgsd4b2b.xn--p1ai/", "text": "Открыть сайт ↗" }]
+          "media": [
+            {
+              "type": "link",
+              "url": "https://xn----gtbe1amgsd4b2b.xn--p1ai/",
+              "text": "Открыть сайт ↗"
+            }
+          ]
         }
       ]
     },
@@ -203,35 +368,106 @@
           "name": "Кавера",
           "desc": "Кавера и порой свои интерпретации(новые грузятся:).",
           "media": [
-            { "type": "link", "url": "https://www.youtube.com/@aptemsk8296", "text": "Либо искать на ютубчике ↗" },
-            { "type": "link", "url": "https://www.youtube.com/shorts/H_Wc62Jcb3M", "text": "Либо там же в shorts ↗" }
+            {
+              "type": "link",
+              "url": "https://www.youtube.com/@aptemsk8296",
+              "text": "Либо искать на ютубчике ↗"
+            },
+            {
+              "type": "link",
+              "url": "https://www.youtube.com/shorts/H_Wc62Jcb3M",
+              "text": "Либо там же в shorts ↗"
+            }
           ]
         },
         {
           "name": "Демки",
           "desc": "Чето назаписывал.",
           "media": [
-            { "type": "audio", "url": "./assets/aud/Winter Piano Ver 120123.mp3" },
-            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-001_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/02 06 26_minus-001_1(аранжировка под вокал).mp3" },
-            { "type": "audio", "url": "./assets/aud/03 11 25_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-005_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/07 06 25 Acoust_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-008_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-002_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/Inspiratio_indie_-007_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/11 05 25 Atlas Inspiration-001_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/12 06 26 Masha 2 inst-001(поверх аи скелета дописал мясо гитары)_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/winter horror story-001_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/03 08 26 sentimentality-001_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/Hope(almost) 24 04 26_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/Recording_368_edit (1) (demo to ai).mp3" },
-            { "type": "audio", "url": "./assets/aud/Dialogue at the edge of the forest 22 05 26_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/11 08 26 departure and happiness_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/ref Recording_367_01 (demo to ai).mp3" },
-            { "type": "audio", "url": "./assets/aud/01 08 26 autumn close_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/18 04 26 Perfume_1.mp3" },
-            { "type": "audio", "url": "./assets/aud/04 01 25 alice.mp3" }            
+            {
+              "type": "audio",
+              "url": "./assets/aud/04 01 25 alice.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/18 04 26 Perfume_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/01 08 26 autumn close_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/ref Recording_367_01 (demo to ai).mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/11 08 26 departure and happiness_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Dialogue at the edge of the forest 22 05 26_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Recording_368_edit (1) (demo to ai).mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Hope(almost) 24 04 26_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/03 08 26 sentimentality-001_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/winter horror story-001_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/12 06 26 Masha 2 inst-001(поверх аи скелета дописал мясо гитары)_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/11 05 25 Atlas Inspiration-001_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Inspiratio_indie_-007_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Inspiratio_indie_-002_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Inspiratio_indie_-008_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/07 06 25 Acoust_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Inspiratio_indie_-005_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/03 11 25_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/02 06 26_minus-001_1(аранжировка под вокал).mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Inspiratio_indie_-001_1.mp3"
+            },
+            {
+              "type": "audio",
+              "url": "./assets/aud/Winter Piano Ver 120123.mp3"
+            }
           ]
         }
       ]
@@ -243,19 +479,37 @@
         {
           "name": "Психология",
           "desc": "Балуюсь с маккартами и всякой странной хернёй,чтобы аишки не ставили диагнозы.",
-          "media": [{ "type": "image", "url": "./assets/IMG20260915212051.webp" }]
+          "media": [
+            {
+              "type": "image",
+              "url": "./assets/IMG20260915212051.webp"
+            }
+          ]
         },
         {
           "name": "Идеи",
           "desc": "Потоки сознания и концепты, которые иногда даже доходят до реализации.",
-          "media": [{ "type": "image", "url": "./assets/photo_12_2026-09-18_01-32-12.webp" }]
+          "media": [
+            {
+              "type": "image",
+              "url": "./assets/photo_12_2026-09-18_01-32-12.webp"
+            }
+          ]
         },
         {
           "name": "Канальчики",
           "desc": "Перед открытием - умыться святой водой.",
           "media": [
-            { "type": "link", "url": "https://www.youtube.com/@aptemsk8296", "text": "Ютубчик ↗" },
-            { "type": "link", "url": "https://www.instagram.com/gloomycharm/", "text": "Инстаграмчик ↗" }
+            {
+              "type": "link",
+              "url": "https://www.youtube.com/@aptemsk8296",
+              "text": "Ютубчик ↗"
+            },
+            {
+              "type": "link",
+              "url": "https://www.instagram.com/gloomycharm/",
+              "text": "Инстаграмчик ↗"
+            }
           ]
         },
         {
@@ -263,12 +517,18 @@
           "desc": "2026\n\nПостоянно стремится все продумать\nВсе узнать и предотвратить\nДо задоринки идеально\nСпрогнозировать или переменить.\nОн на опыте своем — не принимает,\nА Жизнь как она есть — признает,\nОднако либо абсолют, либо никак,\nИ не в силах сделать новый шаг.\n\n— — —\n\nЯ вперёд бегу,\nНо хватаюсь за прошлое\nИ вновь падаю —\nНеимоверно сложно.\n\nНе чувствовать боль,\nНе циклиться на привычках,\nВ любой момент по щелчку\nДерзать и адаптироваться быстро.\n\nПлюнуть мысленно каждому лицу,\nКто тебя парит,\nДействием тревогу подавить —\nИ на место всё встанет.\n\nТакой простой рецепт я предлагаю,\nНо почему-то — этого мало.\n\nТак желанно ответить,\nТак вожделяю узнать\nДо мелочей, что дальше ждёт и как поступать.\n\nНе просрать же, что сеял сам,\nЗачем плохой опыт?\nРазве не ошибки других даются нам,\nЧтобы обойти преграды, грабли, чуя нутром, что дальше будет?\n\nМногие вопросы — без ответа,\nВо многом — полная тьма.\nКак не чувствовать значимым себя\nИ мозг не мастурбировать зазря...\n\n— — —\n\nПросто желаю лететь на дно\nИ разбиться в лепёшку.\nКак провалиться на месте хочу,\nСгинуть в кромешном бреду.\n\nЖалею об утрате возможности.\nПолный ничтожности,\nЖалея об упущенном шансе.\n\nЖалею о каждой ситуации, когда заднюю дал,\nВключил старое я, проигнорил или ждал.\n\nЗабивая в руки ноги гвозди,\nПребывая в абсолютной тишине.\nЗаставляю себя смотреть и ужасаться,\nКак на ровном месте я проебался.\nОт тонны сомнений, бесконечных виляний,\nСтрахов себя проявить.\nНа месте врасти в землю,\nРот плотно зашив,\nЯ желаю прямо сейчас обо всем позабыть,\nИ всё отменить.\n\nЛюбые средства хороши,\nЛишь бы настоящим не жить,\nНе видеть этого позора,\nНе ощущать укора.\nДействия противоречащие\nСамой сути —\nЗабыться навсегда,\nЗадохнуться в тиши.",
           "media": []
         },
-                {
+        {
           "name": "Мемасы",
           "desc": "Какой-то интеллектуальный юмор...",
           "media": [
-            { "type": "image", "url": "./assets/photo_2026-09-24_22-14-33.jpg" },
-            { "type": "image", "url": "./assets/photo_2026-08-17_12-54-38.jpg" }
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-09-24_22-14-33.jpg"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2026-08-17_12-54-38.jpg"
+            }
           ]
         }
       ]
@@ -282,12 +542,30 @@
           "name": "Выпечка",
           "desc": "Тесто, духовка и съедобные результаты.",
           "media": [
-            { "type": "image", "url": "./assets/photo_13_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_2_2026-09-17_22-45-10.webp" },
-            { "type": "image", "url": "./assets/photo_4_2026-09-17_22-45-51.webp" },
-            { "type": "image", "url": "./assets/photo_1_2026-09-17_22-45-59.webp" },
-            { "type": "image", "url": "./assets/photo_5_2026-09-17_22-45-10.webp" }
+            {
+              "type": "image",
+              "url": "./assets/photo_13_2026-09-17_22-45-10.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_1_2026-09-17_22-45-10.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_2_2026-09-17_22-45-10.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_4_2026-09-17_22-45-51.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_1_2026-09-17_22-45-59.webp"
+            },
+            {
+              "type": "image",
+              "url": "./assets/photo_5_2026-09-17_22-45-10.webp"
+            }
           ]
         }
       ]

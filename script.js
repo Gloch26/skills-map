@@ -671,10 +671,10 @@ function renderAudioElementsPaginated(items, gallery) {
     const start = currentPage * AUDIO_PAGE_SIZE;
     const pageItems = items.slice(start, start + AUDIO_PAGE_SIZE);
 
+    appendNav();
     const list = document.createElement('div');
     pageItems.forEach(item => renderAudioElement(item, list));
     wrapper.appendChild(list);
-    appendNav();
   }
 
   renderPage();
@@ -798,4 +798,3 @@ function startBgBlobs() {
   blobsStarted = true;
   bgBlobEls.forEach((el, i) => setTimeout(() => scheduleBgBlob(el), i * 8000));
 }
-  

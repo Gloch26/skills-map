@@ -631,7 +631,7 @@ function renderAudioElement(item, gallery) {
   gallery.innerHTML += `
     <div class="media-audio-container">
       <div class="media-audio-title">${autoTitle || "Аудио демо"}</div>
-      <audio controls src="${item.url}"></audio>
+      <audio controls preload="none" src="${item.url}"></audio>
     </div>`;
 }
 

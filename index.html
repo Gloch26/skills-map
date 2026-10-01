@@ -8,9 +8,9 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Древа талантов">
 <meta property="og:description" content="Интерактивная органическая карта навыков — дерево из веток, которое можно исследовать, кликать по узлам и находить пасхалки.">
-<meta property="og:image" content="https://gloch26.github.io/skills-map/assets/og-image.jpg">
+<meta property="og:image" content="https://gloch26.github.io/skills-map/assets/og-image.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%8C%BF</text></svg>">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/style.css">
 <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
@@ -32,6 +32,24 @@
 <button id="music-toggle" onclick="toggleBackgroundMusic()" title="Вкл/выкл музыку">🔊</button>
 <button id="reset-view-btn" onclick="resetView()" title="Сбросить вид">⟲</button>
 <div id="explore-progress"></div>
+
+<!-- Панель «Характеристики» в стиле Fallout — выезжает справа -->
+<button id="stats-tab-btn" onclick="toggleStatsPanel()" title="Кто ты?">☰</button>
+<div id="stats-overlay" onclick="closeStatsPanel()"></div>
+<div id="stats-panel">
+  <div class="stats-header">
+    <span id="stats-title">ХАРАКТЕРИСТИКИ</span>
+    <span class="stats-close" onclick="closeStatsPanel()">&times;</span>
+  </div>
+  <div class="stats-section">
+    <div class="stats-section-title" id="stats-skills-title">НАВЫКИ</div>
+    <div id="stats-skills-list"></div>
+  </div>
+  <div class="stats-section">
+    <div class="stats-section-title">ДОПОЛНИТЕЛЬНО</div>
+    <div id="stats-extra-list" class="stats-extra-grid"></div>
+  </div>
+</div>
 
  <!-- Редкая "золотая спора" — пасхалка на внимательность. Появляется на пару
      секунд в случайном месте экрана и гаснет, если не поймать. Клик по ней
@@ -62,6 +80,6 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+<script src="js/script.js"></script>
 </body>
 </html>

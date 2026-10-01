@@ -817,15 +817,39 @@ function toggleStatsPanel() {
   }
 }
 
+// Короткий синтезированный "свуш" для выезда/въезда панели — вверх по частоте
+// на открытие, вниз на закрытие. Использует тот же AudioContext, что и клики по узлам.
+function playPanelSound(direction) {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const duration = 0.22;
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(direction === 'open' ? 320 : 520, now);
+  osc.frequency.exponentialRampToValueAtTime(direction === 'open' ? 680 : 200, now + duration);
+
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.14, now + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + duration + 0.05);
+}
+
 function openStatsPanel() {
   populateStatsPanel();
   document.getElementById('stats-panel').classList.add('active');
   document.getElementById('stats-overlay').classList.add('active');
+  playPanelSound('open');
 }
 
 function closeStatsPanel() {
   document.getElementById('stats-panel').classList.remove('active');
   document.getElementById('stats-overlay').classList.remove('active');
+  playPanelSound('close');
 }
 
 function populateStatsPanel() {

@@ -39,6 +39,7 @@ document.addEventListener('visibilitychange', () => {
 drawParticles();
 
 let isGrown = false;
+let treeRootData = null; // сырые данные из data.json — нужны панели «Характеристики»
 let treeReady = false;
 let pendingGrowth = false;
 
@@ -269,6 +270,7 @@ function getLevel(node) {
 }
 
 d3.json("data.json?v=" + Date.now()).then(data => {
+  treeRootData = data;
   const root = d3.hierarchy(data);
 
   root.eachBefore(d => {
@@ -797,4 +799,75 @@ function startBgBlobs() {
   if (blobsStarted) return;
   blobsStarted = true;
   bgBlobEls.forEach((el, i) => setTimeout(() => scheduleBgBlob(el), i * 8000));
+}
+
+// ===== Панель «Характеристики» (Fallout-style) =====
+// «НАВЫКИ» — считаются сами из главных веток дерева и их уровня (5-10),
+// топ-3 по уровню подсвечиваются зелёным квадратиком, как выбранные теги в Fallout.
+// «ДОПОЛНИТЕЛЬНО» — ручной список титулов из корневого поля "titles" в data.json,
+// например: "titles": ["Гитарист", "Пианист", "Коллекционер багов"].
+// Если хочешь, чтобы конкретная ветка отображалась тут под другим словом,
+// а не своим названием из дерева — добавь ей поле "title": "Монтажёр" в data.json.
+function toggleStatsPanel() {
+  const panel = document.getElementById('stats-panel');
+  if (panel.classList.contains('active')) {
+    closeStatsPanel();
+  } else {
+    openStatsPanel();
+  }
+}
+
+function openStatsPanel() {
+  populateStatsPanel();
+  document.getElementById('stats-panel').classList.add('active');
+  document.getElementById('stats-overlay').classList.add('active');
+}
+
+function closeStatsPanel() {
+  document.getElementById('stats-panel').classList.remove('active');
+  document.getElementById('stats-overlay').classList.remove('active');
+}
+
+function populateStatsPanel() {
+  const skillsList = document.getElementById('stats-skills-list');
+  const extraList = document.getElementById('stats-extra-list');
+  skillsList.innerHTML = "";
+  extraList.innerHTML = "";
+  if (!treeRootData) return;
+
+  const branches = (treeRootData.children || []).map(c => {
+    const kids = c.children ? c.children.length : 0;
+    const level = (typeof c.level === 'number')
+      ? Math.max(5, Math.min(10, Math.round(c.level)))
+      : Math.max(5, Math.min(10, 4 + (kids || 1)));
+    return { name: c.title || c.name, level };
+  });
+
+  const topCount = Math.min(3, branches.length);
+  const sorted = [...branches].sort((a, b) => b.level - a.level);
+  const topNames = new Set(sorted.slice(0, topCount).map(b => b.name));
+
+  branches.forEach(b => {
+    const isTop = topNames.has(b.name);
+    const row = document.createElement('div');
+    row.className = 'stats-skill-row';
+    row.innerHTML = `
+      <span class="stats-skill-name ${isTop ? 'top-skill' : ''}">${isTop ? '<span class="pip"></span>' : ''}${b.name}</span>
+      <span class="stats-skill-value ${isTop ? 'top-skill' : ''}">${b.level}</span>`;
+    skillsList.appendChild(row);
+  });
+
+  document.getElementById('stats-skills-title').textContent = `НАВЫКИ: ${topCount}/${topCount} выбрано`;
+
+  const extras = treeRootData.titles || [];
+  if (extras.length === 0) {
+    extraList.innerHTML = `<div class="stats-extra-empty">Добавь "titles": [...] в data.json</div>`;
+  } else {
+    extras.forEach(title => {
+      const item = document.createElement('div');
+      item.className = 'stats-extra-item';
+      item.textContent = title;
+      extraList.appendChild(item);
+    });
+  }
 }

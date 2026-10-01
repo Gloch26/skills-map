@@ -831,9 +831,28 @@ function closeStatsPanel() {
 function populateStatsPanel() {
   const skillsList = document.getElementById('stats-skills-list');
   const extraList = document.getElementById('stats-extra-list');
+  const traitsList = document.getElementById('stats-traits-list');
   skillsList.innerHTML = "";
   extraList.innerHTML = "";
+  traitsList.innerHTML = "";
   if (!treeRootData) return;
+
+  // «ОЧКИ ХАРАКТЕРА» — ручные личные трейты с числом, никак не связаны с
+  // деревом навыков. Задаются в корне data.json:
+  // "traits": [ { "name": "Душнила", "value": 7 }, ... ]
+  const traits = treeRootData.traits || [];
+  if (traits.length === 0) {
+    traitsList.innerHTML = `<div class="stats-extra-empty">Добавь "traits": [...] в data.json</div>`;
+  } else {
+    traits.forEach(t => {
+      const row = document.createElement('div');
+      row.className = 'stats-skill-row';
+      row.innerHTML = `
+        <span class="stats-skill-name">${t.name}</span>
+        <span class="stats-skill-value trait-value">${t.value}</span>`;
+      traitsList.appendChild(row);
+    });
+  }
 
   const branches = (treeRootData.children || []).map(c => {
     const kids = c.children ? c.children.length : 0;

@@ -205,6 +205,7 @@ body { margin: 0; background: radial-gradient(circle at center, #111a14 0%, #000
 }
 .stats-skill-value { color: #5a7560; font-variant-numeric: tabular-nums; }
 .stats-skill-value.top-skill { color: #87ff47; }
+.stats-skill-value.trait-value { color: #87ff47; font-weight: 700; }
 
 .stats-extra-grid {
   display: grid;

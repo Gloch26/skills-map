@@ -853,10 +853,8 @@ function closeStatsPanel() {
 }
 
 function populateStatsPanel() {
-  const skillsList = document.getElementById('stats-skills-list');
   const extraList = document.getElementById('stats-extra-list');
   const traitsList = document.getElementById('stats-traits-list');
-  skillsList.innerHTML = "";
   extraList.innerHTML = "";
   traitsList.innerHTML = "";
   if (!treeRootData) return;
@@ -877,30 +875,6 @@ function populateStatsPanel() {
       traitsList.appendChild(row);
     });
   }
-
-  const branches = (treeRootData.children || []).map(c => {
-    const kids = c.children ? c.children.length : 0;
-    const level = (typeof c.level === 'number')
-      ? Math.max(5, Math.min(10, Math.round(c.level)))
-      : Math.max(5, Math.min(10, 4 + (kids || 1)));
-    return { name: c.title || c.name, level };
-  });
-
-  const topCount = Math.min(3, branches.length);
-  const sorted = [...branches].sort((a, b) => b.level - a.level);
-  const topNames = new Set(sorted.slice(0, topCount).map(b => b.name));
-
-  branches.forEach(b => {
-    const isTop = topNames.has(b.name);
-    const row = document.createElement('div');
-    row.className = 'stats-skill-row';
-    row.innerHTML = `
-      <span class="stats-skill-name ${isTop ? 'top-skill' : ''}">${isTop ? '<span class="pip"></span>' : ''}${b.name}</span>
-      <span class="stats-skill-value ${isTop ? 'top-skill' : ''}">${b.level}</span>`;
-    skillsList.appendChild(row);
-  });
-
-  document.getElementById('stats-skills-title').textContent = `НАВЫКИ: ${topCount}/${topCount} выбрано`;
 
   const extras = treeRootData.titles || [];
   if (extras.length === 0) {
